@@ -1,0 +1,43 @@
+import React from "react";
+import { CircularProgress, Flex, Stack, VStack } from "@chakra-ui/react";
+import { db } from "utils/firebase";
+import { doc } from "firebase/firestore";
+import useDocumentData from "hooks/useDocumentData";
+
+interface Props {
+  type: string;
+  index: number;
+}
+
+const ModuleFieldType = ({ type, index }: Props) => {
+  const [fields] = useDocumentData(doc(db, `modules/${type}`));
+  if (!fields) {
+    return (
+      <Flex width="100%" justifyContent="center">
+        <CircularProgress isIndeterminate />
+      </Flex>
+    );
+  }
+  return (
+    <Stack width="100%">
+      {Object.entries(fields).map(([key, value]) => {
+        const {
+          default: Component,
+        } = require(`components/Fields/${value}.tsx`);
+        return (
+          <VStack
+            key={key}
+            width="100%"
+            border="1px solid"
+            borderColor="gray.200"
+            borderRadius="5"
+          >
+            <Component name={key} index={index} module={type} />
+          </VStack>
+        );
+      })}
+    </Stack>
+  );
+};
+
+export default ModuleFieldType;
