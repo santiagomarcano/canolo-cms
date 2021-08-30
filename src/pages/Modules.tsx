@@ -13,11 +13,11 @@ import { FiArrowRight } from "react-icons/fi";
 interface Props extends RouteComponentProps {}
 
 export default function Modules({}: Props) {
-  const [modules] = useCollection(collection(db, "modules"));
+  const [modules, loading] = useCollection(collection(db, "modules"));
 
   return (
     <Structure>
-      <Loader state={modules}>
+      <Loader state={!loading}>
         <>
           <Flex justifyContent="flex-end">
             <Link to="/dashboard/new-module">

@@ -6,10 +6,16 @@ import { RouteComponentProps } from "@reach/router";
 interface Props extends RouteComponentProps {}
 
 const NewModule = ({}: Props) => {
-        return (
+  return (
     <Structure>
-      <ModuleForm />
+      <ModuleForm
+        type="new"
+        initialState={{
+          name: "",
+          fields: [{ name: "", type: "", alias: "" }],
+        }}
+      />
     </Structure>
   );
-}
-export default NewModule
+};
+export default NewModule;

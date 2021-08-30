@@ -23,6 +23,7 @@ import { useNavigate } from "@reach/router";
 
 interface Props {
   modules: Array<Module>;
+  type: string;
 }
 
 interface ModuleHandlerEvent {
@@ -37,7 +38,7 @@ const itemStyles = {
   width: "100%",
 };
 
-const PageForm = ({ modules }: Props): ReactElement => {
+const PageForm = ({ modules, type }: Props): ReactElement => {
   const navigate = useNavigate();
   const [page, dispatch] = usePage();
   const [loading, setLoading] = useState(false);
@@ -60,7 +61,7 @@ const PageForm = ({ modules }: Props): ReactElement => {
     e.stopPropagation();
     await createPage(page);
     setLoading(false);
-    navigate("pages");
+    navigate("/dashboard/pages");
   }
   return (
     <form onSubmit={handleSubmit}>
@@ -79,7 +80,7 @@ const PageForm = ({ modules }: Props): ReactElement => {
             />
           </FormControl>
         </WrapItem>
-        {page.modules.length > 0 && (
+        {page?.modules?.length > 0 && (
           <Flex
             width="100%"
             background="white"
@@ -135,9 +136,9 @@ const PageForm = ({ modules }: Props): ReactElement => {
             />
             <Button
               type="submit"
-              label={$t("CREATE")}
+              label={type === 'new' ? $t("CREAR") : $t("UPDATE")}
               loading={loading}
-              disabled={page.modules.length === 0 || page.name === ""}
+              disabled={page?.modules?.length === 0 || page?.name === ""}
             ></Button>
           </Flex>
         </WrapItem>

@@ -9,6 +9,7 @@
     "FIELD_TYPE": "Tipo de campo",
     "SELECT_OPTION": "Selecciona",
     "CREATE": "Crear",
+    "UPDATE": "Actualizar",
     "ELEMENTS": {
         "Label": "Etiqueta",
         "Text": "Texto",

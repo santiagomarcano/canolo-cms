@@ -26,17 +26,28 @@ const itemStyles = {
   width: "100%",
 };
 
-const ModuleForm = (): ReactElement => {
+interface Props {
+  initialState: State;
+  type: string;
+}
+
+interface State {
+    name: string;
+    fields: {
+      name: string;
+      type: string;
+      alias: string;
+    }[];
+  };
+
+const ModuleForm = ({ initialState, type }: Props): ReactElement => {
   const FIELDS = $t("FIELDS");
-  const [schema, setSchema] = useState({
-    name: "",
-    fields: [{ name: "", type: "", alias: "" }],
-  });
+  const [schema, setSchema] = useState(initialState);
   const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
   const handleAddField = () => {
-    setSchema((current) => {
+    setSchema((current: any) => {
       const next = [...current.fields, { name: "", type: "", alias: "" }];
       return {
         ...current,
@@ -60,11 +71,11 @@ const ModuleForm = (): ReactElement => {
     setSchema({ ...schema, fields: next });
   };
   const handleRemoveField = (index: number) => {
-    setSchema((current) => {
+    setSchema((current: State) => {
       if (current.fields.length > 1) {
         return {
           ...current,
-          fields: current.fields.filter((_, i) => i !== index),
+          fields: current.fields.filter((_: any, i: number) => i !== index),
         };
       }
       return current;
@@ -107,9 +118,8 @@ const ModuleForm = (): ReactElement => {
             {FIELDS}
           </Heading>
           {schema.fields.map((field: FieldInterface, index: number) => (
-            <Box width="100%">
+            <Box width="100%" key={index}>
               <ModuleField
-                key={index}
                 handleField={handleField}
                 handleRemoveField={handleRemoveField}
                 index={index}
@@ -129,7 +139,7 @@ const ModuleForm = (): ReactElement => {
             />
             <Button
               type="submit"
-              label={"CREAR"}
+              label={type === 'new' ? $t("CREAR") : $t("UPDATE")}
               loading={loading}
               disabled={schema.fields.length === 0 || schema.name === ""}
             ></Button>

@@ -11,7 +11,6 @@ import {
   Divider,
   Flex,
   UnorderedList,
-  useDisclosure,
 } from "@chakra-ui/react";
 import { Module, PageModule } from "interfaces/declarations";
 import { PageProvider } from "store/PageContext";
@@ -24,25 +23,16 @@ interface PageProps extends RouteComponentProps {
   id?: string;
 }
 
-const Page = ({ id }: PageProps) => {
-  // const data = useDocumentData(firebase.firestore().collection("pages").doc(id))
-  // console.log(data)
-  return <div>{id}</div>;
-};
-
 export default function Pages({}: PageProps) {
   const [pages] = useCollection(collection(db, "pages"));
-  const [modules] = useCollection(collection(db, "modules"));
-  const { isOpen, onOpen, onClose } = useDisclosure();
+
   return (
     <Structure>
       <Loader state={pages}>
         <>
           <Flex justifyContent="flex-end">
             <Link to="/dashboard/new-page">
-              <Button colorScheme="blue" onClick={onOpen}>
-                {$t("NEW_PAGE")}
-              </Button>
+              <Button colorScheme="blue">{$t("NEW_PAGE")}</Button>
             </Link>
           </Flex>
           <Divider my="5" />

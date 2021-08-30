@@ -43,10 +43,7 @@ export async function createSchema(schema: Schema) {
 export async function createPage(page: Page) {
   try {
     const pages = collection(db, "pages");
-    // const schemaAsObject = {};
-    // for (let field of schema.fields) {
-    //   schemaAsObject[field.name] = field.type;
-    // }
+    console.log("ON CRETE", page);
     const cleanPage = {
       name: page.name,
       modules: page.modules.map(({ component, props }) => ({

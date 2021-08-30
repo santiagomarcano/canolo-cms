@@ -5,7 +5,7 @@ let ffmpeg: null | any = null;
 
 export const initializeFFMPEG = async () => {
   ffmpeg = createFFmpeg({
-    log: true,
+    log: false,
     corePath: "https://unpkg.com/@ffmpeg/core@0.10.0/dist/ffmpeg-core.js",
   });
   if (!ffmpeg.isLoaded()) {
@@ -16,7 +16,7 @@ export const initializeFFMPEG = async () => {
 interface Resize {
   file: File;
   size: { width: number; height: number };
-  hash: string
+  hash: string;
 }
 
 interface ResizedImage {
@@ -25,9 +25,11 @@ interface ResizedImage {
 }
 
 function toHash(hashBuffer: ArrayBuffer): string {
-  const hashArray = Array.from(new Uint8Array(hashBuffer));                     // convert buffer to byte array
-  const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join(''); //
-  return hashHex
+  const hashArray = Array.from(new Uint8Array(hashBuffer)); // convert buffer to byte array
+  const hashHex = hashArray
+    .map((b) => b.toString(16).padStart(2, "0"))
+    .join(""); //
+  return hashHex;
 }
 
 export const resizeBatch = async (file: File): Promise<any> => {
@@ -35,9 +37,9 @@ export const resizeBatch = async (file: File): Promise<any> => {
   const sizes = [300, 500, 1000, 1500, 2500];
   const resizedImages = [];
   // Hash file to get unique id
-  const arrayBuffer = await file.arrayBuffer()
-  const hashBuffer = await crypto.subtle.digest('SHA-256', arrayBuffer);
-  const hash = toHash(hashBuffer)
+  const arrayBuffer = await file.arrayBuffer();
+  const hashBuffer = await crypto.subtle.digest("SHA-256", arrayBuffer);
+  const hash = toHash(hashBuffer);
   try {
     for await (let size of sizes) {
       const resized = await resize({
@@ -50,7 +52,7 @@ export const resizeBatch = async (file: File): Promise<any> => {
     return { images: resizedImages, name: `${hash}.png` };
   } catch (err) {
     alert(err);
-   // return null
+    // return null
   }
 };
 
@@ -74,18 +76,14 @@ const resize = async ({ file, size, hash }: Resize): Promise<any> => {
       "output.png"
     );
     const data = ffmpeg.FS("readFile", "output.png");
-    const resizedFile = new File(
-      [data.buffer],
-      `${hash}.png`,
-      {
-        type: "image/png",
-      }
-    );
+    const resizedFile = new File([data.buffer], `${hash}.png`, {
+      type: "image/png",
+    });
     ffmpeg.FS("unlink", "output.png");
     return resizedFile;
   } catch (err) {
     alert(err);
     return err;
-  //  return null;
+    //  return null;
   }
 };

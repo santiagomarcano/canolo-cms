@@ -12,6 +12,7 @@ import {
 import { $t } from "store/TranslationsContext";
 import { usePage } from "store/PageContext";
 import { devLog } from "utils/developer";
+import FieldHeader from "./FieldHeader";
 
 interface Props {
   name: string;
@@ -36,9 +37,7 @@ const Label = ({ name, index, alias }: Props) => {
  
   return (
     <Stack width="100%" p={15}>
-      <Heading as="h4" size="md" onMouseEnter={() => devLog(name)} cursor="pointer">
-        {alias}
-      </Heading>
+      <FieldHeader name={name} alias={alias} />
       <Divider />
       <HStack width="100%">
         <FormControl isRequired>

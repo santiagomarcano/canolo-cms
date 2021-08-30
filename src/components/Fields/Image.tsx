@@ -16,6 +16,7 @@ import { $t } from "store/TranslationsContext";
 import { usePage } from "store/PageContext";
 import { resizeBatch } from "utils/ffmpeg";
 import { devLog } from "utils/developer";
+import FieldHeader from "./FieldHeader";
 
 interface Props {
   name: string;
@@ -69,9 +70,7 @@ const Image = ({ name, index, module, alias }: Props) => {
   return (
     <>
       <Stack width="100%" p={15}>
-        <Heading as="h4" size="md" onMouseEnter={() => devLog(name)}>
-          {alias}
-        </Heading>
+        <FieldHeader name={name} alias={alias} />
         <Divider />
         <HStack width="100%">
           <Flex
