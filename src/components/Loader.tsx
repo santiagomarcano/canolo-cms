@@ -1,26 +1,26 @@
-import React, { ReactElement } from "react";
-import {
-  CircularProgress,
-  Container,
-  Center,
-} from "@chakra-ui/react";
+import React, { ReactChild, ReactElement } from "react";
+import { CircularProgress, Container, Center, Flex } from "@chakra-ui/react";
 
 interface Props {
-  children: ReactElement;
+  children: any;
   state: any;
+  height?: string | number;
 }
 
-const Loader = ({ children, state }: Props) => {
+const Loader = ({ children, state, height = "auto" }: Props) => {
   if (!state) {
     return (
-      <Container height="100%" centerContent={true}>
-        <Center>
-          <CircularProgress isIndeterminate />
-        </Center>
-      </Container>
+      <Flex
+        alignItems="center"
+        justifyContent="center"
+        height={height}
+        width="100%"
+      >
+        <CircularProgress isIndeterminate />
+      </Flex>
     );
   }
-  return children
+  return children;
 };
 
 export default Loader;

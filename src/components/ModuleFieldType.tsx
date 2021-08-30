@@ -18,29 +18,35 @@ const ModuleFieldType = ({ type, index }: Props) => {
       </Flex>
     );
   }
+  console.log(fields)
   return (
     <Stack width="100%">
-      {Object.entries(fields).map(([key, value]: [key: string, value: any]) => {
-        const {
-          default: Component,
-        } = require(`components/Fields/${value.type}.tsx`);
-        return (
-          <VStack
-            key={key}
-            width="100%"
-            border="1px solid"
-            borderColor="gray.200"
-            borderRadius="5"
-          >
-            <Component
-              name={key}
-              alias={value.alias}
-              index={index}
-              module={value.type}
-            />
-          </VStack>
-        );
-      })}
+      {Object.entries(fields)
+        .sort((a: any, b: any) => {
+          console.log(a[1].alias, b[1].alias)
+          return (a[1].alias[0] - b[1].alias[0])
+        })
+        .map(([key, value]: [key: string, value: any]) => {
+          const {
+            default: Component,
+          } = require(`components/Fields/${value.type}.tsx`);
+          return (
+            <VStack
+              key={key}
+              width="100%"
+              border="1px solid"
+              borderColor="gray.200"
+              borderRadius="5"
+            >
+              <Component
+                name={key}
+                alias={value.alias}
+                index={index}
+                module={value.type}
+              />
+            </VStack>
+          );
+        })}
     </Stack>
   );
 };

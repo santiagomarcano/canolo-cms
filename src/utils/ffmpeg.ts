@@ -13,6 +13,8 @@ export const initializeFFMPEG = async () => {
   }
 };
 
+export const sizes = [300, 500, 1500];
+
 interface Resize {
   file: File;
   size: { width: number; height: number };
@@ -32,9 +34,14 @@ function toHash(hashBuffer: ArrayBuffer): string {
   return hashHex;
 }
 
-export const resizeBatch = async (file: File): Promise<any> => {
+export const resizeBatch = async ({
+  file,
+  progress,
+}: {
+  file: File;
+  progress: { set: Function; value: number };
+}): Promise<any> => {
   // Available sizes to resize
-  const sizes = [300, 500, 1000, 1500, 2500];
   const resizedImages = [];
   // Hash file to get unique id
   const arrayBuffer = await file.arrayBuffer();
@@ -42,14 +49,18 @@ export const resizeBatch = async (file: File): Promise<any> => {
   const hash = toHash(hashBuffer);
   try {
     for await (let size of sizes) {
+      progress.set(
+        parseInt((progress.value * 100) / (sizes.length * 2) as any)
+      );
       const resized = await resize({
         file,
         size: { width: size, height: -1 },
         hash,
       });
       resizedImages.push(resized);
+      progress.value++;
     }
-    return { images: resizedImages, name: `${hash}.png` };
+    return { images: resizedImages, name: file.name };
   } catch (err) {
     alert(err);
     // return null
@@ -76,7 +87,7 @@ const resize = async ({ file, size, hash }: Resize): Promise<any> => {
       "output.png"
     );
     const data = ffmpeg.FS("readFile", "output.png");
-    const resizedFile = new File([data.buffer], `${hash}.png`, {
+    const resizedFile = new File([data.buffer], `${hash}-${size.width}.png`, {
       type: "image/png",
     });
     ffmpeg.FS("unlink", "output.png");

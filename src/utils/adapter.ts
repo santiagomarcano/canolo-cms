@@ -54,7 +54,7 @@ export async function createPage(page: Page) {
     console.log(page);
     await setDoc(doc(pages, page.name), cleanPage);
     // await pages.doc(page.name).set(cleanPage);
-    alert("Page created!");
+    alert("Page updated!!");
   } catch (err) {
     alert(err);
   }

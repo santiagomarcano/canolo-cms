@@ -8,7 +8,7 @@ const useDocumentData = (dc: any, deps: Array<any>) => {
     setLoading(true);
     (async () => {
       const snapshot = await getDoc(dc);
-      setState(snapshot.data());
+      console.log("snapsho", snapshot.data());
       setLoading(false);
     })();
   }, deps);

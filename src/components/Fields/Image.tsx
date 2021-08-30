@@ -11,6 +11,7 @@ import {
   CircularProgress,
   VStack,
   useDisclosure,
+  Image as ChakraImage,
 } from "@chakra-ui/react";
 import { $t } from "store/TranslationsContext";
 import { usePage } from "store/PageContext";
@@ -27,52 +28,24 @@ interface Props {
   alias: string;
 }
 
-const allowedTypes = ["image/jpeg", "image/png", "image/tiff"];
-
 const Image = ({ name, index, module, alias }: Props) => {
-  const [ffmpegState, setFfmpegState] = useFFMPEG();
+  const [ffmpegState] = useFFMPEG();
   const { isOpen, onOpen, onClose } = useDisclosure();
-  console.log(ffmpegState);
   const [page, dispatch] = usePage();
-  const IMAGE_TYPES_ALLOWED = $t("IMAGE_TYPES_ALLOWED");
-  const [loading, setLoading] = useState(false);
-  const [objectURL, setObjectURL] = useState<string | null>(null);
-  const onDrop = useCallback(async (acceptedFiles) => {
-    const file = acceptedFiles?.[0];
-    if (allowedTypes.includes(file.type)) {
-      setFfmpegState(true);
-      setLoading(true);
-      try {
-        const { images, name: originalName } = await resizeBatch(file);
-        const objectURL = URL.createObjectURL(images[0]);
-        dispatch({
-          type: "MODULE_PROP_IMAGE",
-          payload: {
-            name,
-            value: originalName,
-            index,
-            key: "src",
-            images,
-            module,
-          },
-        });
-        setObjectURL(objectURL);
-        setFfmpegState(false);
-        setLoading(false);
-      } catch (err) {
-        console.error(err);
-      }
-      return;
-    }
-    alert(IMAGE_TYPES_ALLOWED);
-  }, []);
-  const onChange = ({ target }: { target: HTMLInputElement }) => {
+  const handleChange = ({ target }: { target: HTMLInputElement }) => {
     dispatch({
       type: "MODULE_PROP",
       payload: { name, value: target.value, index, key: "alt" },
     });
   };
-  const { getRootProps, getInputProps } = useDropzone({ onDrop });
+
+  const handleGallery = (selected: any) => {
+    console.log(selected);
+    dispatch({
+      type: "MODULE_PROP",
+      payload: { name, value: selected, index, key: "src" },
+    });
+  };
   return (
     <>
       <Overlay
@@ -80,8 +53,14 @@ const Image = ({ name, index, module, alias }: Props) => {
         onClose={onClose}
         headerLabel={$t("MEDIA_GALLERY")}
         cancellable={true}
+        size="2xl"
       >
-        <MediaGallery />
+        <MediaGallery
+          multiple={false}
+          selected={page.modules[index]?.props[name]?.src || ""}
+          onSelect={handleGallery}
+          onClose={onClose}
+        />
       </Overlay>
       <Stack width="100%" p={15}>
         <FieldHeader name={name} alias={alias} />
@@ -94,20 +73,36 @@ const Image = ({ name, index, module, alias }: Props) => {
             cursor={ffmpegState ? "not-allowed" : "pointer"}
             bg="gray.200"
             w="100%"
-            h={125}
+            h={300}
             borderRadius={5}
             overflow="hidden"
             position="relative"
             opacity={ffmpegState ? 0.2 : 1}
             onClick={onOpen}
           >
-            DROP OR CHOOSE
+            {page.modules[index]?.props[name]?.src ? (
+              <>
+                {console.log(
+                  page.modules[index]?.props[name]?.src.replace("{size}", "300")
+                )}
+                <ChakraImage
+                  height={300}
+                  src={page.modules[index]?.props[name]?.src.replace(
+                    "{size}",
+                    "300"
+                  )}
+                  crossOrigin="anonymous"
+                />
+              </>
+            ) : (
+              <p>drop some shitte</p>
+            )}
           </Flex>
           <FormControl isRequired>
             <FormLabel>{$t("ALT_TEXT")}</FormLabel>
             <Input
               value={page.modules[index]?.props[name]?.alt || ""}
-              onChange={onChange}
+              onChange={handleChange}
             />
           </FormControl>
         </VStack>

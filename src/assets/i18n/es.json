@@ -31,12 +31,14 @@
     "PAGE_NAME": "Nombre de página",
     "ADD_MODULE": "Añadir módulo",
     "MODULE_TYPE": "Tipo de módulo",
-    "DROP_ZONE_TEXT_SINGULAR": "Escoge o carga imágen",
+    "DROP_ZONE_TEXT_SINGULAR": "Cargar imágen",
     "DROP_ZONE_TEXT": "Arrastra o escoge imágenes",
     "ALT_TEXT": "Texto alternativo",
     "TEXT": "Texto",
     "SIZE": "Tamaño",
     "IMAGE_TYPES_ALLOWED": "Sólo están permitidas imágenes en formato PNG o JPG",
     "LOADING": "Cargando",
-    "IMG_ALT": "Su imágen"
+    "IMG_ALT": "Su imágen",
+    "MEDIA_GALLERY": "Galería multimedia",
+    "SEARCH_BY_NAME": "Buscar por nombre"
 }

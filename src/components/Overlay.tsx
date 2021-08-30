@@ -30,7 +30,7 @@ export default function Overlay({
   cancellable = true,
 }: Props) {
   return (
-    <Modal isOpen={isOpen} onClose={onClose} size={size}>
+    <Modal isOpen={isOpen} onClose={onClose} size={size} isCentered>
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>{headerLabel}</ModalHeader>
