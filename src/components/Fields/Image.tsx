@@ -10,12 +10,15 @@ import {
   Divider,
   CircularProgress,
   VStack,
+  useDisclosure,
 } from "@chakra-ui/react";
 import { $t } from "store/TranslationsContext";
 import { usePage } from "store/PageContext";
 import { resizeBatch } from "utils/ffmpeg";
 import FieldHeader from "./FieldHeader";
 import { useFFMPEG } from "store/FFMPEGProvider";
+import Overlay from "components/Overlay";
+import MediaGallery from "components/MediaGallery";
 
 interface Props {
   name: string;
@@ -28,6 +31,7 @@ const allowedTypes = ["image/jpeg", "image/png", "image/tiff"];
 
 const Image = ({ name, index, module, alias }: Props) => {
   const [ffmpegState, setFfmpegState] = useFFMPEG();
+  const { isOpen, onOpen, onClose } = useDisclosure();
   console.log(ffmpegState);
   const [page, dispatch] = usePage();
   const IMAGE_TYPES_ALLOWED = $t("IMAGE_TYPES_ALLOWED");
@@ -71,6 +75,14 @@ const Image = ({ name, index, module, alias }: Props) => {
   const { getRootProps, getInputProps } = useDropzone({ onDrop });
   return (
     <>
+      <Overlay
+        isOpen={isOpen}
+        onClose={onClose}
+        headerLabel={$t("MEDIA_GALLERY")}
+        cancellable={true}
+      >
+        <MediaGallery />
+      </Overlay>
       <Stack width="100%" p={15}>
         <FieldHeader name={name} alias={alias} />
         <Divider />
@@ -87,35 +99,9 @@ const Image = ({ name, index, module, alias }: Props) => {
             overflow="hidden"
             position="relative"
             opacity={ffmpegState ? 0.2 : 1}
-            {...getRootProps()}
+            onClick={onOpen}
           >
-            <input
-              {...getInputProps()}
-              required
-              name="image"
-              type="file"
-              style={{
-                display: "inline",
-                position: "absolute",
-                opacity: 0,
-                maxWidth: "100%",
-                cursor: ffmpegState ? "not-allowed" : "pointer"
-              }}
-              disabled={ffmpegState}
-            />
-            {loading ? (
-              <Flex justifyContent="center" flex="1">
-                <CircularProgress isIndeterminate></CircularProgress>
-              </Flex>
-            ) : objectURL ? (
-              <img
-                src={objectURL}
-                style={{ padding: 20 }}
-                alt={$t("IMG_ALT")}
-              />
-            ) : (
-              <Text>{$t("DROP_ZONE_TEXT_SINGULAR")}</Text>
-            )}
+            DROP OR CHOOSE
           </Flex>
           <FormControl isRequired>
             <FormLabel>{$t("ALT_TEXT")}</FormLabel>
