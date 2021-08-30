@@ -5,13 +5,11 @@ import {
   Stack,
   FormControl,
   FormLabel,
-  Heading,
   Divider,
   Select,
 } from "@chakra-ui/react";
 import { $t } from "store/TranslationsContext";
 import { usePage } from "store/PageContext";
-import { devLog } from "utils/developer";
 import FieldHeader from "./FieldHeader";
 
 interface Props {

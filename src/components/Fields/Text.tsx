@@ -4,13 +4,11 @@ import {
   Stack,
   FormControl,
   FormLabel,
-  Heading,
   Divider,
 } from "@chakra-ui/react";
 import { usePage } from "store/PageContext";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
-import { devLog } from "utils/developer";
 import { $t } from "store/TranslationsContext";
 import FieldHeader from "./FieldHeader";
 
@@ -36,7 +34,7 @@ const Text = ({ name, index, alias }: Props) => {
       <Divider />
       <HStack width="100%">
         <FormControl isRequired>
-          <FormLabel onMouseEnter={() => devLog(name)}>{$t("TEXT")}</FormLabel>
+          <FormLabel>{$t("TEXT")}</FormLabel>
           <ReactQuill
             style={{ borderRadius: 5, border: "2px solid lightgray" }}
             value={page.modules[index]?.props[name] || ""}

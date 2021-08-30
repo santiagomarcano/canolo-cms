@@ -4,19 +4,18 @@ import {
   Flex,
   Text,
   Input,
-  HStack,
   Stack,
   FormControl,
   FormLabel,
-  Heading,
   Divider,
   CircularProgress,
+  VStack,
 } from "@chakra-ui/react";
 import { $t } from "store/TranslationsContext";
 import { usePage } from "store/PageContext";
 import { resizeBatch } from "utils/ffmpeg";
-import { devLog } from "utils/developer";
 import FieldHeader from "./FieldHeader";
+import { useFFMPEG } from "store/FFMPEGProvider";
 
 interface Props {
   name: string;
@@ -28,6 +27,8 @@ interface Props {
 const allowedTypes = ["image/jpeg", "image/png", "image/tiff"];
 
 const Image = ({ name, index, module, alias }: Props) => {
+  const [ffmpegState, setFfmpegState] = useFFMPEG();
+  console.log(ffmpegState);
   const [page, dispatch] = usePage();
   const IMAGE_TYPES_ALLOWED = $t("IMAGE_TYPES_ALLOWED");
   const [loading, setLoading] = useState(false);
@@ -35,11 +36,11 @@ const Image = ({ name, index, module, alias }: Props) => {
   const onDrop = useCallback(async (acceptedFiles) => {
     const file = acceptedFiles?.[0];
     if (allowedTypes.includes(file.type)) {
+      setFfmpegState(true);
       setLoading(true);
       try {
         const { images, name: originalName } = await resizeBatch(file);
         const objectURL = URL.createObjectURL(images[0]);
-        console.log(file.name);
         dispatch({
           type: "MODULE_PROP_IMAGE",
           payload: {
@@ -52,6 +53,7 @@ const Image = ({ name, index, module, alias }: Props) => {
           },
         });
         setObjectURL(objectURL);
+        setFfmpegState(false);
         setLoading(false);
       } catch (err) {
         console.error(err);
@@ -72,18 +74,19 @@ const Image = ({ name, index, module, alias }: Props) => {
       <Stack width="100%" p={15}>
         <FieldHeader name={name} alias={alias} />
         <Divider />
-        <HStack width="100%">
+        <VStack width="100%">
           <Flex
-            justify="space-between"
+            justify="center"
             align="center"
             textAlign="center"
-            cursor="pointer"
+            cursor={ffmpegState ? "not-allowed" : "pointer"}
             bg="gray.200"
-            w={250}
+            w="100%"
             h={125}
             borderRadius={5}
             overflow="hidden"
             position="relative"
+            opacity={ffmpegState ? 0.2 : 1}
             {...getRootProps()}
           >
             <input
@@ -96,7 +99,9 @@ const Image = ({ name, index, module, alias }: Props) => {
                 position: "absolute",
                 opacity: 0,
                 maxWidth: "100%",
+                cursor: ffmpegState ? "not-allowed" : "pointer"
               }}
+              disabled={ffmpegState}
             />
             {loading ? (
               <Flex justifyContent="center" flex="1">
@@ -119,7 +124,7 @@ const Image = ({ name, index, module, alias }: Props) => {
               onChange={onChange}
             />
           </FormControl>
-        </HStack>
+        </VStack>
       </Stack>
     </>
   );

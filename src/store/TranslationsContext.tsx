@@ -16,9 +16,6 @@ const Provider = ({ children }: { children: ReactElement }): ReactElement => {
 
 const $t = (label: string): string => {
   const ctx: any = useContext(TranslationsContext);
-  // if (!label) {
-  //     return ctx;
-  // }
   if (ctx[label]) {
     return ctx[label];
   }
