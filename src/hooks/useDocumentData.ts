@@ -1,15 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { getDoc } from "firebase/firestore";
 
-const useDocumentData = (dc: any) => {
-  const [state, setState] = useState<Array<any>>([]);
+const useDocumentData = (dc: any, deps: Array<any>) => {
+  const [state, setState] = useState<any>([]);
+  const [loading, setLoading] = useState(false);
   useEffect(() => {
+    setLoading(true);
     (async () => {
       const snapshot = await getDoc(dc);
-      setState([snapshot.data()]);
+      setState(snapshot.data());
+      setLoading(false);
     })();
-  }, []);
-  return state;
+  }, deps);
+  return [state, loading];
 };
 
 export default useDocumentData;

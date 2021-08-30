@@ -13,7 +13,7 @@ import { FiMinus } from "react-icons/fi";
 import { $t } from "store/TranslationsContext";
 
 interface Callback {
-    (_?: any): void;
+  (_?: any): void;
 }
 
 interface Props {
@@ -65,6 +65,10 @@ const ModuleSelector = ({
             isRequired
             onChange={(e) => {
               e.preventDefault();
+              if (!e.target.value || e.target.value === "") {
+                handleRemoveModule(index);
+                return;
+              }
               handleModule({
                 is: "type",
                 value: e.target.value,

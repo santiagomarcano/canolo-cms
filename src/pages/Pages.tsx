@@ -39,22 +39,12 @@ export default function Pages({}: PageProps) {
       <Loader state={pages}>
         <>
           <Flex justifyContent="flex-end">
-            <Button colorScheme="blue" onClick={onOpen}>
-              {$t("NEW_PAGE")}
-            </Button>
+            <Link to="/dashboard/new-page">
+              <Button colorScheme="blue" onClick={onOpen}>
+                {$t("NEW_PAGE")}
+              </Button>
+            </Link>
           </Flex>
-          <Overlay
-            isOpen={isOpen}
-            onClose={onClose}
-            headerLabel={$t("NEW_PAGE")}
-          >
-            <PageProvider value={{ name: "", modules: [] }}>
-              <PageForm
-                onClose={onClose}
-                modules={modules?.docs as Array<any>}
-              />
-            </PageProvider>
-          </Overlay>
           <Divider my="5" />
           <UnorderedList>
             {pages?.docs.map((page: Module) => (

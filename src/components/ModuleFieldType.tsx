@@ -10,8 +10,8 @@ interface Props {
 }
 
 const ModuleFieldType = ({ type, index }: Props) => {
-  const [fields] = useDocumentData(doc(db, `modules/${type}`));
-  if (!fields) {
+  const [fields, loading] = useDocumentData(doc(db, `modules/${type}`), [type]);
+  if (loading) {
     return (
       <Flex width="100%" justifyContent="center">
         <CircularProgress isIndeterminate />

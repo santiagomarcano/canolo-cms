@@ -4,6 +4,7 @@ import Base from "layouts/Base";
 import Modules from "pages/Modules";
 import Pages from "pages/Pages";
 import Page from "templates/Page";
+import NewPage from "pages/NewPage";
 
 interface DashboardProps extends RouteComponentProps {
   children: ReactChild[];
@@ -16,6 +17,7 @@ const App = () => {
       <Router>
         <Dashboard path="dashboard">
           <Pages path="pages" />
+          <NewPage path="new-page" />
           <Modules path="modules" />
           <Page path="pages/:page" />
         </Dashboard>

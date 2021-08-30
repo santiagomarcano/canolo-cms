@@ -15,7 +15,7 @@ interface State {
 interface Module {
   component: string;
   props: any;
-  images: Array<{ path: Array<string>, images: Array<File>, name: string }>,
+  images: Array<{ path: Array<string>; images: Array<File>; name: string }>;
 }
 
 const reducer = (state: any, action: Action) => {
@@ -36,14 +36,11 @@ const reducer = (state: any, action: Action) => {
       };
     }
     case "REMOVE_MODULE": {
-      if (state.modules.length > 1) {
-        const { index } = action.payload;
-        return {
-          ...state,
-          modules: state.modules.filter((_: Module, i: number) => i !== index),
-        };
-      }
-      return state;
+      const { index } = action.payload;
+      return {
+        ...state,
+        modules: state.modules.filter((_: Module, i: number) => i !== index),
+      };
     }
     case "ADD_MODULE": {
       return {
@@ -95,8 +92,8 @@ const reducer = (state: any, action: Action) => {
         },
         images: {
           ...next[index]?.images,
-          [`${module}/props/${name}/${key}`]: images
-        }
+          [`${module}/props/${name}/${key}`]: images,
+        },
       };
       return {
         ...state,
