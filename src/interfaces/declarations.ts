@@ -4,6 +4,7 @@ export interface onClose {
 
 export interface Field {
   name: string;
+  alias: string;
   type: string;
 }
 

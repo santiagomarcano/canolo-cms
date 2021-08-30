@@ -15,16 +15,18 @@ import {
 import { $t } from "store/TranslationsContext";
 import { usePage } from "store/PageContext";
 import { resizeBatch } from "utils/ffmpeg";
+import { devLog } from "utils/developer";
 
 interface Props {
   name: string;
   index: number;
   module: string;
+  alias: string;
 }
 
 const allowedTypes = ["image/jpeg", "image/png", "image/tiff"];
 
-const Image = ({ name, index, module }: Props) => {
+const Image = ({ name, index, module, alias }: Props) => {
   const [page, dispatch] = usePage();
   const IMAGE_TYPES_ALLOWED = $t("IMAGE_TYPES_ALLOWED");
   const [loading, setLoading] = useState(false);
@@ -39,12 +41,19 @@ const Image = ({ name, index, module }: Props) => {
         console.log(file.name);
         dispatch({
           type: "MODULE_PROP_IMAGE",
-          payload: { name, value: originalName, index, key: "src", images, module },
+          payload: {
+            name,
+            value: originalName,
+            index,
+            key: "src",
+            images,
+            module,
+          },
         });
         setObjectURL(objectURL);
         setLoading(false);
       } catch (err) {
-        console.error(err)
+        console.error(err);
       }
       return;
     }
@@ -60,8 +69,8 @@ const Image = ({ name, index, module }: Props) => {
   return (
     <>
       <Stack width="100%" p={15}>
-        <Heading as="h4" size="md">
-          {name}
+        <Heading as="h4" size="md" onMouseEnter={() => devLog(name)}>
+          {alias}
         </Heading>
         <Divider />
         <HStack width="100%">
@@ -95,7 +104,11 @@ const Image = ({ name, index, module }: Props) => {
                 <CircularProgress isIndeterminate></CircularProgress>
               </Flex>
             ) : objectURL ? (
-              <img src={objectURL} style={{ padding: 20 }} alt={$t("IMG_ALT")} />
+              <img
+                src={objectURL}
+                style={{ padding: 20 }}
+                alt={$t("IMG_ALT")}
+              />
             ) : (
               <Text>{$t("DROP_ZONE_TEXT_SINGULAR")}</Text>
             )}

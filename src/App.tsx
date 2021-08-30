@@ -5,6 +5,7 @@ import Modules from "pages/Modules";
 import Pages from "pages/Pages";
 import Page from "templates/Page";
 import NewPage from "pages/NewPage";
+import NewModule from "pages/NewModule";
 
 interface DashboardProps extends RouteComponentProps {
   children: ReactChild[];
@@ -18,6 +19,7 @@ const App = () => {
         <Dashboard path="dashboard">
           <Pages path="pages" />
           <NewPage path="new-page" />
+          <NewModule path="new-module" />
           <Modules path="modules" />
           <Page path="pages/:page" />
         </Dashboard>

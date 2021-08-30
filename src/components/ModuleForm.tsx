@@ -3,27 +3,41 @@ import {
   FormControl,
   FormLabel,
   Input,
-  Button,
   Flex,
   IconButton,
   Wrap,
   WrapItem,
   Heading,
+  Box,
+  Divider,
 } from "@chakra-ui/react";
 import ModuleField from "components/ModuleField";
 import { FiPlus } from "react-icons/fi";
 import { $t } from "store/TranslationsContext";
 import { createSchema } from "utils/adapter";
-import { onClose, Field as FieldInterface } from "interfaces/declarations";
+import { Field as FieldInterface } from "interfaces/declarations";
+import { useNavigate } from "@reach/router";
+import Button from "components/Button";
 
-const ModuleForm = ({ onClose }: { onClose: onClose }): ReactElement => {
+const itemStyles = {
+  background: "white",
+  p: 4,
+  borderRadius: 5,
+  width: "100%",
+};
+
+const ModuleForm = (): ReactElement => {
+  const FIELDS = $t("FIELDS");
   const [schema, setSchema] = useState({
     name: "",
-    fields: [{ name: "", type: "" }],
+    fields: [{ name: "", type: "", alias: "" }],
   });
+  const [loading, setLoading] = useState(false);
+
+  const navigate = useNavigate();
   const handleAddField = () => {
     setSchema((current) => {
-      const next = [...current.fields, { name: "", type: "" }];
+      const next = [...current.fields, { name: "", type: "", alias: "" }];
       return {
         ...current,
         fields: next,
@@ -64,15 +78,18 @@ const ModuleForm = ({ onClose }: { onClose: onClose }): ReactElement => {
     });
   };
   async function handleSubmit(e: FormEvent) {
+    console.log(schema);
+    setLoading(true);
     e.preventDefault();
     e.stopPropagation();
     await createSchema(schema);
-    onClose();
+    setLoading(false);
+    navigate("/dashboard/modules");
   }
   return (
     <form onSubmit={handleSubmit}>
       <Wrap>
-        <WrapItem width="100%">
+        <WrapItem {...itemStyles}>
           <FormControl isRequired width="100%">
             <FormLabel>{$t("MODULE_NAME")}</FormLabel>
             <Input
@@ -85,33 +102,37 @@ const ModuleForm = ({ onClose }: { onClose: onClose }): ReactElement => {
             />
           </FormControl>
         </WrapItem>
-        <WrapItem width="100%">
-          <Heading as="h4" size="md" mt={5}>
-            {$t("FIELDS")}
+        <WrapItem {...itemStyles} display="flex" flexDirection="column">
+          <Heading as="h4" size="md" mb={4}>
+            {FIELDS}
           </Heading>
+          {schema.fields.map((field: FieldInterface, index: number) => (
+            <Box width="100%">
+              <ModuleField
+                key={index}
+                handleField={handleField}
+                handleRemoveField={handleRemoveField}
+                index={index}
+                {...field}
+              />
+              <Divider my={5} />
+            </Box>
+          ))}
         </WrapItem>
-        {schema.fields.map((field: FieldInterface, index: number) => (
-          <WrapItem key={index} width="100%">
-            <ModuleField
-              handleField={handleField}
-              handleRemoveField={handleRemoveField}
-              index={index}
-              {...field}
-            />
-          </WrapItem>
-        ))}
-        <WrapItem width="100%">
+        <WrapItem {...itemStyles}>
           <Flex justifyContent="space-between" alignItems="center" flex="1">
             <IconButton
               size="lg"
-              mt={5}
               aria-label={$t("ADD_FIELD")}
               icon={<FiPlus />}
               onClick={handleAddField}
             />
-            <Button mt={5} type="submit" size="lg">
-              {$t("CREATE")}
-            </Button>
+            <Button
+              type="submit"
+              label={"CREAR"}
+              loading={loading}
+              disabled={schema.fields.length === 0 || schema.name === ""}
+            ></Button>
           </Flex>
         </WrapItem>
       </Wrap>

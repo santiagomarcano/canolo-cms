@@ -20,10 +20,10 @@ const ModuleFieldType = ({ type, index }: Props) => {
   }
   return (
     <Stack width="100%">
-      {Object.entries(fields).map(([key, value]) => {
+      {Object.entries(fields).map(([key, value]: [key: string, value: any]) => {
         const {
           default: Component,
-        } = require(`components/Fields/${value}.tsx`);
+        } = require(`components/Fields/${value.type}.tsx`);
         return (
           <VStack
             key={key}
@@ -32,7 +32,12 @@ const ModuleFieldType = ({ type, index }: Props) => {
             borderColor="gray.200"
             borderRadius="5"
           >
-            <Component name={key} index={index} module={type} />
+            <Component
+              name={key}
+              alias={value.alias}
+              index={index}
+              module={value.type}
+            />
           </VStack>
         );
       })}

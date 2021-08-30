@@ -20,7 +20,6 @@ import ModuleFieldType from "components/ModuleFieldType";
 import { usePage } from "store/PageContext";
 import Button from "components/Button";
 import { useNavigate } from "@reach/router";
-import { useEffect } from "react";
 
 interface Props {
   modules: Array<Module>;
@@ -30,6 +29,13 @@ interface ModuleHandlerEvent {
   value: string;
   index: number;
 }
+
+const itemStyles = {
+  background: "white",
+  p: 4,
+  borderRadius: 5,
+  width: "100%",
+};
 
 const PageForm = ({ modules }: Props): ReactElement => {
   const navigate = useNavigate();
@@ -59,7 +65,7 @@ const PageForm = ({ modules }: Props): ReactElement => {
   return (
     <form onSubmit={handleSubmit}>
       <Wrap>
-        <WrapItem width="100%" background="white" p={4} borderRadius={5}>
+        <WrapItem {...itemStyles}>
           <FormControl isRequired width="100%">
             <FormLabel>{$t("PAGE_NAME")}</FormLabel>
             <Input
@@ -119,7 +125,7 @@ const PageForm = ({ modules }: Props): ReactElement => {
             </Stack>
           </Flex>
         )}
-        <WrapItem width="100%" background="white" p={4} borderRadius={5}>
+        <WrapItem {...itemStyles}>
           <Flex justifyContent="space-between" alignItems="center" flex="1">
             <IconButton
               size="lg"
@@ -129,7 +135,7 @@ const PageForm = ({ modules }: Props): ReactElement => {
             />
             <Button
               type="submit"
-              label={"CREAR"}
+              label={$t("CREATE")}
               loading={loading}
               disabled={page.modules.length === 0 || page.name === ""}
             ></Button>

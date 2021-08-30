@@ -1,7 +1,5 @@
 import React from "react";
 import {
-  Flex,
-  Text,
   Input,
   HStack,
   Stack,
@@ -13,13 +11,15 @@ import {
 } from "@chakra-ui/react";
 import { $t } from "store/TranslationsContext";
 import { usePage } from "store/PageContext";
+import { devLog } from "utils/developer";
 
 interface Props {
   name: string;
   index: number;
+  alias: string;
 }
 
-const Label = ({ name, index }: Props) => {
+const Label = ({ name, index, alias }: Props) => {
   const [page, dispatch] = usePage();
   const handleChangeText = ({ target }: { target: HTMLInputElement }) => {
     dispatch({
@@ -33,10 +33,11 @@ const Label = ({ name, index }: Props) => {
       payload: { name, value: target.value, index, key: "size" },
     });
   };
+ 
   return (
     <Stack width="100%" p={15}>
-      <Heading as="h4" size="md">
-        {name}
+      <Heading as="h4" size="md" onMouseEnter={() => devLog(name)} cursor="pointer">
+        {alias}
       </Heading>
       <Divider />
       <HStack width="100%">

@@ -15,6 +15,7 @@ import { $t } from "store/TranslationsContext";
 interface FieldProps {
   name: string;
   type: string;
+  alias: string;
   index?: number;
   handleField: Function;
   handleRemoveField: Function;
@@ -23,18 +24,23 @@ interface FieldProps {
 const Field = ({
   name,
   type,
+  alias,
   index,
   handleField,
   handleRemoveField,
 }: FieldProps): ReactElement => {
   return (
-    <Grid templateColumns="16fr 16fr 1fr" gap={5} width="100%">
-      <GridItem>
+    <Grid
+      templateColumns={["1fr", "1fr", "16fr 16fr 16fr 1fr"]}
+      gap={5}
+      width="100%"
+    >
+      <GridItem width="100%">
         <FormControl id="name" isRequired>
           <FormLabel as="legend">{$t("FIELD_NAME")}</FormLabel>
           <Input
             size="lg"
-            key={`input-${index}`}
+            key={`input-props-${index}`}
             type="text"
             isRequired
             autoComplete="false"
@@ -43,6 +49,27 @@ const Field = ({
               e.preventDefault();
               handleField({
                 is: "name",
+                value: e.target.value,
+                index,
+              });
+            }}
+          />
+        </FormControl>
+      </GridItem>
+      <GridItem>
+        <FormControl id="alias" isRequired>
+          <FormLabel as="legend">{$t("ALIAS")}</FormLabel>
+          <Input
+            size="lg"
+            key={`input-alias-${index}`}
+            type="text"
+            isRequired
+            autoComplete="false"
+            value={alias}
+            onChange={(e) => {
+              e.preventDefault();
+              handleField({
+                is: "alias",
                 value: e.target.value,
                 index,
               });

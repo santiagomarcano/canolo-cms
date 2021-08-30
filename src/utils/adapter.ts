@@ -4,6 +4,7 @@ import { PageModule } from "interfaces/declarations";
 
 interface Field {
   name: string;
+  alias: string;
   type: string;
 }
 
@@ -26,8 +27,12 @@ export async function createSchema(schema: Schema) {
     const modules = collection(db, "modules");
     const schemaAsObject: any = {};
     for (let field of schema.fields) {
-      schemaAsObject[field.name] = field.type;
+      schemaAsObject[field.name] = {
+        type: field.type,
+        alias: field.alias,
+      };
     }
+    console.log(modules);
     const capitalized = capitalize(schema.name);
     await setDoc(doc(modules, capitalized), schemaAsObject);
   } catch (err) {
