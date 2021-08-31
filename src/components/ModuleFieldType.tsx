@@ -18,14 +18,10 @@ const ModuleFieldType = ({ type, index }: Props) => {
       </Flex>
     );
   }
-  console.log(fields)
   return (
     <Stack width="100%">
       {Object.entries(fields)
-        .sort((a: any, b: any) => {
-          console.log(a[1].alias, b[1].alias)
-          return (a[1].alias[0] - b[1].alias[0])
-        })
+        .sort((a: any, b: any) => a[1].order - b[1].order)
         .map(([key, value]: [key: string, value: any]) => {
           const {
             default: Component,

@@ -17,6 +17,8 @@ interface PageProps extends RouteComponentProps {
 export default function Pages({}: PageProps) {
   const [pages] = useCollection(collection(db, "pages"));
 
+  console.log(pages?.docs[0].ref)
+
   return (
     <Structure>
       <Loader state={pages}>

@@ -40,5 +40,10 @@
     "LOADING": "Cargando",
     "IMG_ALT": "Su imágen",
     "MEDIA_GALLERY": "Galería multimedia",
-    "SEARCH_BY_NAME": "Buscar por nombre"
+    "SEARCH_BY_NAME": "Buscar por nombre",
+    "DELETE": "Eliminar",
+    "SURE_DELETE": "¿Está seguro que desea eliminar la imágen?\nDeberá actualizar todos los módulos donde se use esta imágen",
+    "RESIZING_IMAGE": "Redimensionando imágen",
+    "UPLOADING_IMAGE": "Cargando imágen",
+    "CHOOSE_IMAGE": "Escoja una imágen de la galería"
 }

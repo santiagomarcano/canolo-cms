@@ -7,7 +7,7 @@ import {
   getMetadata,
   FullMetadata,
 } from "firebase/storage";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 interface Props {
   as: string;
@@ -42,7 +42,6 @@ const useStorage = (
   const [loading, setLoading] = useState(false);
   const [listLength, setListLength] = useState<number | null>(null);
   useEffect(() => {
-    const pages: any = {};
     (async () => {
       setLoading(true);
       if (as === "paginated-list") {
@@ -51,7 +50,7 @@ const useStorage = (
           const refs: any = [];
           let promises: any = [];
           for (let item of items) {
-            if (item.name.includes("300")) {
+            if (item.name.includes("size{300}")) {
               promises.push(getDownloadURL(item), getMetadata(item));
               refs.push(item);
             }
@@ -86,7 +85,6 @@ const useStorage = (
     })();
     return () => {
       setLoading(false);
-      // pageTokens = [];
     };
   }, deps);
   useEffect(() => {

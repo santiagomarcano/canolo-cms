@@ -24,7 +24,6 @@ const Module = ({ path, module }: Props) => {
   const [state, loading] = useDocumentData(doc(db, `modules/${module}`), [
     path,
   ]);
-  console.log(state, `modules/${module}`, loading);
   return (
     <Structure>
       <Loader state={!loading}>

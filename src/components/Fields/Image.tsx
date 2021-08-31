@@ -52,7 +52,7 @@ const Image = ({ name, index, module, alias }: Props) => {
         isOpen={isOpen}
         onClose={onClose}
         headerLabel={$t("MEDIA_GALLERY")}
-        cancellable={true}
+        cancellable={ffmpegState}
         size="2xl"
       >
         <MediaGallery
@@ -82,9 +82,6 @@ const Image = ({ name, index, module, alias }: Props) => {
           >
             {page.modules[index]?.props[name]?.src ? (
               <>
-                {console.log(
-                  page.modules[index]?.props[name]?.src.replace("{size}", "300")
-                )}
                 <ChakraImage
                   height={300}
                   src={page.modules[index]?.props[name]?.src.replace(
@@ -95,7 +92,7 @@ const Image = ({ name, index, module, alias }: Props) => {
                 />
               </>
             ) : (
-              <p>drop some shitte</p>
+              <Text>{$t("CHOOSE_IMAGE")}</Text>
             )}
           </Flex>
           <FormControl isRequired>

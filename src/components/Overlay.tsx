@@ -30,11 +30,11 @@ export default function Overlay({
   cancellable = true,
 }: Props) {
   return (
-    <Modal isOpen={isOpen} onClose={onClose} size={size} isCentered>
+    <Modal isOpen={isOpen} onClose={onClose} size={size} isCentered closeOnOverlayClick={!cancellable}>
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>{headerLabel}</ModalHeader>
-        {cancellable && <ModalCloseButton />}
+        <ModalCloseButton disabled={cancellable} />
         <ModalBody>{children}</ModalBody>
       </ModalContent>
     </Modal>

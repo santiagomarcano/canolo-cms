@@ -6,6 +6,7 @@ interface Field {
   name: string;
   alias: string;
   type: string;
+  order?: number;
 }
 
 interface Schema {
@@ -26,11 +27,14 @@ export async function createSchema(schema: Schema) {
   try {
     const modules = collection(db, "modules");
     const schemaAsObject: any = {};
+    let i = 0;
     for (let field of schema.fields) {
       schemaAsObject[field.name] = {
         type: field.type,
         alias: field.alias,
+        order: i,
       };
+      i++;
     }
     console.log(modules);
     const capitalized = capitalize(schema.name);
@@ -43,18 +47,15 @@ export async function createSchema(schema: Schema) {
 export async function createPage(page: Page) {
   try {
     const pages = collection(db, "pages");
-    console.log("ON CRETE", page);
     const cleanPage = {
       name: page.name,
+      lastUpdate: new Date().toISOString(),
       modules: page.modules.map(({ component, props }) => ({
         component,
         props,
       })),
     };
-    console.log(page);
     await setDoc(doc(pages, page.name), cleanPage);
-    // await pages.doc(page.name).set(cleanPage);
-    alert("Page updated!!");
   } catch (err) {
     alert(err);
   }

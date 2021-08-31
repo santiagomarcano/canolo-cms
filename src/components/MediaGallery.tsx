@@ -1,12 +1,10 @@
 import React, {
+  MouseEventHandler,
   ReactElement,
-  UIEvent,
-  useEffect,
   useRef,
   useState,
 } from "react";
 import {
-  Button as ChakraButton,
   CircularProgress,
   Image,
   Grid,
@@ -16,17 +14,17 @@ import {
   Input,
   InputGroup,
   InputLeftElement,
-  Button,
+  IconButton,
 } from "@chakra-ui/react";
 import { storage } from "utils/firebase";
 import useStorage from "hooks/useStorage";
-import { ref } from "firebase/storage";
+import { deleteObject, ref } from "firebase/storage";
 import Loader from "./Loader";
 import Dropzone from "components/Dropzone";
 import { $t } from "store/TranslationsContext";
 import { useMemo } from "react";
 import { sizes } from "utils/ffmpeg";
-import { FiSearch } from "react-icons/fi";
+import { FiSearch, FiTrash } from "react-icons/fi";
 
 interface Props {
   selected: Array<string> | string;
@@ -39,11 +37,13 @@ const MediaGallery = ({
   selected,
   multiple = false,
   onSelect,
-  onClose
+  onClose,
 }: Props): ReactElement => {
   const [page, setPage] = useState(0);
   const [trigger, setTrigger] = useState(Math.random());
   const gridRef = useRef<HTMLDivElement>(null);
+  const SURE_DELETE = $t("SURE_DELETE");
+  const DELETE = $t("DELETE");
   const [files, listLength, loading] = useStorage(
     {
       as: "paginated-list",
@@ -56,6 +56,13 @@ const MediaGallery = ({
   const [filter, setFilter] = useState("");
   const handleFilter = ({ target }: { target: HTMLInputElement }) => {
     setFilter(target.value.toLowerCase());
+  };
+  const handleDelete = async (ref: any) => {
+    const confirmation = window.confirm(SURE_DELETE);
+    if (confirmation) {
+      await deleteObject(ref);
+      setTrigger(Math.random());
+    }
   };
   return (
     <>
@@ -109,10 +116,29 @@ const MediaGallery = ({
                         selected === urlPlaceholder ? "blue.200" : "gray.200"
                       }
                       cursor="pointer"
-                      onClick={() => onSelect(urlPlaceholder)}
+                      onClick={() => {
+                        onSelect(urlPlaceholder);
+                        onClose();
+                      }}
                       borderWidth={3}
                       transition="border 0.5s"
+                      position="relative"
                     >
+                      <IconButton
+                        aria-label={DELETE}
+                        icon={<FiTrash />}
+                        position="absolute"
+                        top={1}
+                        right={1}
+                        isRound
+                        size="sm"
+                        colorScheme="red"
+                        onClick={(e: React.MouseEvent<HTMLElement>) => {
+                          e.stopPropagation();
+                          e.preventDefault();
+                          handleDelete(ref);
+                        }}
+                      />
                       <Image
                         src={url}
                         crossOrigin="anonymous"
@@ -148,17 +174,15 @@ const MediaGallery = ({
         </Flex>
       ) : (
         <Flex justifyContent="space-between" my={6}>
-          <GridItem>
-            <Dropzone
-              onUploadFinished={() => {
-                gridRef.current?.scrollIntoView(false);
-                setTrigger(Math.random());
-              }}
-            />
-          </GridItem>
-          <GridItem>
-            <Button size="lg" onClick={onClose}>OK</Button>
-          </GridItem>
+          <Dropzone
+            onUploadFinished={() => {
+              gridRef.current?.scrollIntoView({
+                block: "end",
+                behavior: "smooth",
+              });
+              setTrigger(Math.random());
+            }}
+          />
         </Flex>
       )}
     </>

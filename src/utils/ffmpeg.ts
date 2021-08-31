@@ -34,13 +34,7 @@ function toHash(hashBuffer: ArrayBuffer): string {
   return hashHex;
 }
 
-export const resizeBatch = async ({
-  file,
-  progress,
-}: {
-  file: File;
-  progress: { set: Function; value: number };
-}): Promise<any> => {
+export const resizeBatch = async ({ file }: { file: File }): Promise<any> => {
   // Available sizes to resize
   const resizedImages = [];
   // Hash file to get unique id
@@ -49,16 +43,12 @@ export const resizeBatch = async ({
   const hash = toHash(hashBuffer);
   try {
     for await (let size of sizes) {
-      progress.set(
-        parseInt((progress.value * 100) / (sizes.length * 2) as any)
-      );
       const resized = await resize({
         file,
         size: { width: size, height: -1 },
         hash,
       });
       resizedImages.push(resized);
-      progress.value++;
     }
     return { images: resizedImages, name: file.name };
   } catch (err) {
@@ -87,7 +77,7 @@ const resize = async ({ file, size, hash }: Resize): Promise<any> => {
       "output.png"
     );
     const data = ffmpeg.FS("readFile", "output.png");
-    const resizedFile = new File([data.buffer], `${hash}-${size.width}.png`, {
+    const resizedFile = new File([data.buffer], `${hash}-size{${size.width}}.png`, {
       type: "image/png",
     });
     ffmpeg.FS("unlink", "output.png");
