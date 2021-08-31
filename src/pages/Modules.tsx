@@ -18,42 +18,40 @@ export default function Modules({}: Props) {
   return (
     <Structure>
       <Loader state={!loading}>
-        <>
-          <Flex justifyContent="flex-end">
-            <Link to="/dashboard/new-module">
-              <Button colorScheme="blue">{$t("NEW_MODULE")}</Button>
-            </Link>
-          </Flex>
-          <Divider my={5} />
-          <UnorderedList m={0}>
-            {modules?.docs.map((module: Module) => (
-              <React.Fragment key={module.id}>
-                <Link key={module.id} to={`/dashboard/modules/${module.id}`}>
-                  <Box
-                    boxShadow="sm"
-                    width="100%"
-                    background="white"
-                    borderWidth="1px"
-                    borderRadius="lg"
-                    overflow="hidden"
-                    padding="3"
-                    cursor="pointer"
-                    transition="background 0.5s"
-                    _hover={{
-                      background: "gray.200",
-                    }}
-                  >
-                    <Flex justifyContent="space-between" alignItems="center">
-                      <div>{module.id}</div>
-                      <FiArrowRight />
-                    </Flex>
-                  </Box>
-                </Link>
-                <Divider my={2} />
-              </React.Fragment>
-            ))}
-          </UnorderedList>
-        </>
+        <Flex justifyContent="flex-end">
+          <Link to="/dashboard/new-module">
+            <Button colorScheme="blue">{$t("NEW_MODULE")}</Button>
+          </Link>
+        </Flex>
+        <Divider my={5} />
+        <UnorderedList m={0}>
+          {modules?.docs.map((module: Module) => (
+            <React.Fragment key={module.id}>
+              <Link key={module.id} to={`/dashboard/modules/${module.id}`}>
+                <Box
+                  boxShadow="sm"
+                  width="100%"
+                  background="white"
+                  borderWidth="1px"
+                  borderRadius="lg"
+                  overflow="hidden"
+                  padding="3"
+                  cursor="pointer"
+                  transition="background 0.5s"
+                  _hover={{
+                    background: "gray.200",
+                  }}
+                >
+                  <Flex justifyContent="space-between" alignItems="center">
+                    <div>{module.id}</div>
+                    <FiArrowRight />
+                  </Flex>
+                </Box>
+              </Link>
+              <Divider my={2} />
+            </React.Fragment>
+          ))}
+        </UnorderedList>
       </Loader>
     </Structure>
   );

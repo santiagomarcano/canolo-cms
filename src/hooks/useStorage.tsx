@@ -73,8 +73,8 @@ const useStorage = (
           setState(
             formattedResult.sort(
               (a, b) =>
-                +a.meta.customMetadata.uploadedAt -
-                +b.meta.customMetadata.uploadedAt
+                +b.meta.customMetadata.uploadedAt -
+                +a.meta.customMetadata.uploadedAt
             )
           );
           setLoading(false);

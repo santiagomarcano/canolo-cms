@@ -45,5 +45,12 @@
     "SURE_DELETE": "¿Está seguro que desea eliminar la imágen?\nDeberá actualizar todos los módulos donde se use esta imágen",
     "RESIZING_IMAGE": "Redimensionando imágen",
     "UPLOADING_IMAGE": "Cargando imágen",
-    "CHOOSE_IMAGE": "Escoja una imágen de la galería"
+    "CHOOSE_IMAGE": "Escoja una imágen de la galería",
+    "NAME": "Nombre",
+    "LAST_UPDATE": "Última actualización",
+    "STATE": "Estado",
+    "PUBLISHED": "Publicado",
+    "DRAFT": "Borrador",
+    "CHOOSE_STATE": "Esoja un estado",
+    "GALLERY": "Galería"
 }

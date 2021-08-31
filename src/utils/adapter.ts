@@ -16,12 +16,19 @@ interface Schema {
 
 interface Page {
   name: string;
+  state: string | boolean;
+  lastUpdate: string;
   modules: Array<PageModule>;
 }
 
 function capitalize(string: string): string {
   return string[0] + string.toLowerCase().slice(1, string.length);
 }
+
+const refreshPublished = async () => {
+  const updates = collection(db, "updates");
+  await setDoc(doc(updates, "publish"), { date: new Date().toISOString() });
+};
 
 export async function createSchema(schema: Schema) {
   try {
@@ -49,6 +56,7 @@ export async function createPage(page: Page) {
     const pages = collection(db, "pages");
     const cleanPage = {
       name: page.name,
+      state: page.state,
       lastUpdate: new Date().toISOString(),
       modules: page.modules.map(({ component, props }) => ({
         component,

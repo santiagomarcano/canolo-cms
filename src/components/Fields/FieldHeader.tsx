@@ -21,7 +21,7 @@ const FieldHeader = ({ name, alias }: Props) => {
   return (
     <>
       <Heading
-        as="h4"
+        as="h6"
         size="md"
         onMouseEnter={() => devLog(name)}
         cursor="pointer"

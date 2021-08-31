@@ -27,17 +27,19 @@ import { sizes } from "utils/ffmpeg";
 import { FiSearch, FiTrash } from "react-icons/fi";
 
 interface Props {
-  selected: Array<string> | string;
-  multiple: boolean;
-  onSelect: Function;
-  onClose: any;
+  selected?: Array<string> | string;
+  multiple?: boolean;
+  onSelect?: Function;
+  onClose?: any;
+  isModal?: boolean;
 }
 
 const MediaGallery = ({
   selected,
   multiple = false,
-  onSelect,
-  onClose,
+  onSelect = () => {},
+  onClose = () => {},
+  isModal = true,
 }: Props): ReactElement => {
   const [page, setPage] = useState(0);
   const [trigger, setTrigger] = useState(Math.random());
@@ -66,20 +68,49 @@ const MediaGallery = ({
   };
   return (
     <>
-      <Flex flex="1" py={2}>
-        <InputGroup>
-          <InputLeftElement pointerEvents="none" children={<FiSearch />} />
-          <Input
-            type="text"
-            placeholder={$t("SEARCH_BY_NAME")}
-            onChange={handleFilter}
-          />
-        </InputGroup>
-      </Flex>
+      <Grid flex="1" py={2}>
+        <GridItem>
+          <InputGroup>
+            <InputLeftElement pointerEvents="none" children={<FiSearch />} />
+            <Input
+              type="text"
+              placeholder={$t("SEARCH_BY_NAME")}
+              onChange={handleFilter}
+            />
+          </InputGroup>
+        </GridItem>
+        <GridItem>
+          {loading ? (
+            <Flex
+              justifyContent="center"
+              alignItems="center"
+              opacity="0.4"
+              my={5}
+              width="100%"
+              h={50}
+              background={isModal ? "gray.200" : "white"}
+            >
+              <CircularProgress isIndeterminate size={10} />
+            </Flex>
+          ) : (
+            <Flex justifyContent="space-between" my={6}>
+              <Dropzone
+                onUploadFinished={() => {
+                  gridRef.current?.scrollIntoView({
+                    block: "start",
+                    behavior: "smooth",
+                  });
+                  setTrigger(Math.random());
+                }}
+              />
+            </Flex>
+          )}
+        </GridItem>
+      </Grid>
       <Grid
         templateColumns={["repeat(3, 1fr)"]}
         gap={5}
-        maxHeight={500}
+        maxHeight={isModal ? 500 : "auto"}
         overflowY="scroll"
         css={{
           "&::-webkit-scrollbar": {
@@ -160,31 +191,6 @@ const MediaGallery = ({
           );
         }, [files, filter, selected])}
       </Grid>
-      {loading ? (
-        <Flex
-          justifyContent="center"
-          alignItems="center"
-          opacity="0.4"
-          my={5}
-          width="100%"
-          h={50}
-          background="gray.200"
-        >
-          <CircularProgress isIndeterminate size={10} />
-        </Flex>
-      ) : (
-        <Flex justifyContent="space-between" my={6}>
-          <Dropzone
-            onUploadFinished={() => {
-              gridRef.current?.scrollIntoView({
-                block: "end",
-                behavior: "smooth",
-              });
-              setTrigger(Math.random());
-            }}
-          />
-        </Flex>
-      )}
     </>
   );
 };

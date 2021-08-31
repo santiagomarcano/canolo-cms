@@ -10,6 +10,9 @@ import {
   Heading,
   Stack,
   VStack,
+  Select,
+  GridItem,
+  Grid,
 } from "@chakra-ui/react";
 import ModuleSelector from "components/ModuleSelector";
 import { FiPlus } from "react-icons/fi";
@@ -42,7 +45,7 @@ const PageForm = ({ modules, type }: Props): ReactElement => {
   const navigate = useNavigate();
   const [page, dispatch] = usePage();
   const [loading, setLoading] = useState(false);
-  const MODULES = $t("MODULES")
+  const MODULES = $t("MODULES");
   const handleAddModule = () => {
     dispatch({ type: "ADD_MODULE" });
   };
@@ -54,6 +57,9 @@ const PageForm = ({ modules, type }: Props): ReactElement => {
   };
   const handleChangePageName = ({ target }: { target: HTMLInputElement }) => {
     dispatch({ type: "PAGE_NAME", payload: { value: target.value } });
+  };
+  const handleStateChange = ({ target }: { target: HTMLSelectElement }) => {
+    dispatch({ type: "PAGE_STATUS", payload: { value: target.value } });
   };
   async function handleSubmit(e: FormEvent) {
     setLoading(true);
@@ -67,18 +73,35 @@ const PageForm = ({ modules, type }: Props): ReactElement => {
     <form onSubmit={handleSubmit}>
       <Wrap>
         <WrapItem {...itemStyles}>
-          <FormControl isRequired width="100%">
-            <FormLabel>{$t("PAGE_NAME")}</FormLabel>
-            <Input
-              key="page-name"
-              size="lg"
-              type="text"
-              isRequired
-              autoComplete="false"
-              value={page.name}
-              onChange={handleChangePageName}
-            />
-          </FormControl>
+          <Grid templateColumns={["repeat(2, 1fr)"]} width="100%" gap={2}>
+            <GridItem>
+              <FormControl isRequired width="100%">
+                <FormLabel>{$t("PAGE_NAME")}</FormLabel>
+                <Input
+                  key="page-name"
+                  size="lg"
+                  type="text"
+                  isRequired
+                  autoComplete="false"
+                  value={page.name}
+                  onChange={handleChangePageName}
+                />
+              </FormControl>
+            </GridItem>
+            <GridItem>
+              <FormControl isRequired width="100%">
+                <FormLabel>{$t("STATE")}</FormLabel>
+                <Select
+                  size="lg"
+                  onChange={handleStateChange}
+                  value={page.state}
+                >
+                  <option value={0}>{$t("DRAFT")}</option>
+                  <option value={1}>{$t("PUBLISHED")}</option>
+                </Select>
+              </FormControl>
+            </GridItem>
+          </Grid>
         </WrapItem>
         {page?.modules?.length > 0 && (
           <Flex
@@ -136,7 +159,7 @@ const PageForm = ({ modules, type }: Props): ReactElement => {
             />
             <Button
               type="submit"
-              label={type === 'new' ? $t("CREAR") : $t("UPDATE")}
+              label={type === "new" ? $t("CREAR") : $t("UPDATE")}
               loading={loading}
               disabled={page?.modules?.length === 0 || page?.name === ""}
             ></Button>

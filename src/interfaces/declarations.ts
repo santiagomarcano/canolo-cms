@@ -12,6 +12,7 @@ export interface Module {
   name: string;
   fields: Array<Field>;
   id?: string | number;
+  data?: any;
 }
 
 export interface PageModule {

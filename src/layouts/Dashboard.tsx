@@ -36,6 +36,7 @@ import {
   FiMenu,
   FiBell,
   FiChevronDown,
+  FiGrid,
 } from "react-icons/fi";
 import { IconType } from "react-icons";
 import { ReactText } from "react";
@@ -55,10 +56,7 @@ const links = () => {
   const LinkItems: Array<LinkItemProps> = [
     { name: $t("MODULES"), icon: FiHome, pathname: "/dashboard/modules" },
     { name: $t("PAGES"), icon: FiHome, pathname: "/dashboard/pages" },
-    // { name: "Trending", icon: FiTrendingUp },
-    // { name: "Explore", icon: FiCompass },
-    // { name: "Favourites", icon: FiStar },
-    // { name: "Settings", icon: FiSettings },
+    { name: $t("GALLERY"), icon: FiGrid, pathname: "/dashboard/gallery" },
   ];
   return LinkItems;
 };
@@ -224,12 +222,12 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
       </Text>
 
       <HStack spacing={{ base: "0", md: "6" }}>
-        <IconButton
+        {/* <IconButton
           size="lg"
           variant="ghost"
           aria-label="open menu"
           icon={<FiBell />}
-        />
+        /> */}
         <Flex alignItems={"center"}>
           <Menu>
             <MenuButton
@@ -237,7 +235,7 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
               transition="all 0.3s"
               _focus={{ boxShadow: "none" }}
             >
-              <HStack>
+              {/* <HStack>
                 <Avatar
                   size={"sm"}
                   src={
@@ -258,7 +256,7 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
                 <Box display={{ base: "none", md: "flex" }}>
                   <FiChevronDown />
                 </Box>
-              </HStack>
+              </HStack> */}
             </MenuButton>
             <MenuList
               bg={useColorModeValue("white", "gray.900")}

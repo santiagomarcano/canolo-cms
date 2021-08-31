@@ -26,6 +26,12 @@ const reducer = (state: any, action: Action) => {
       next.name = value;
       return next;
     }
+    case "PAGE_STATUS": {
+      const { value } = action.payload;
+      const next = { ...state };
+      next.state = value;
+      return next;
+    }
     case "MODULE": {
       const { index, value } = action.payload;
       const next = [...state.modules];
@@ -100,6 +106,8 @@ const reducer = (state: any, action: Action) => {
         modules: next,
       };
     }
+    default:
+      return state;
   }
 };
 
