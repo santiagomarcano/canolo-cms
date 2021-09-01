@@ -17,7 +17,7 @@ const useDocumentData = (
     setLoading(true);
     (async () => {
       if (subscribe) {
-        const snapshot = await onSnapshot(dc, (snapshot: any) => {
+        await onSnapshot(dc, (snapshot: any) => {
           setState(snapshot.data());
           setLoading(false);
         });
@@ -28,7 +28,7 @@ const useDocumentData = (
         setState(snapshot.data());
         setLoading(false);
       } catch (err) {
-        const snapshot = await getDocFromCache(dc);
+        const snapshot = await getDoc(dc);
         setState(snapshot.data());
         setLoading(false);
       }
