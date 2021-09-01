@@ -21,14 +21,16 @@ const formatFields = (fields: any) => {
 };
 
 const Module = ({ path, module }: Props) => {
-  const [state, loading] = useDocumentData(doc(db, `modules/${module}`), [
-    path,
-  ]);
+  const [state, loading] = useDocumentData(
+    doc(db, `modules/${module}`),
+    [path],
+    {}
+  );
   return (
     <Structure>
       <Loader state={!loading}>
         <ModuleForm
-        type="update"
+          type="update"
           initialState={{
             name: module || "",
             fields: formatFields(state),

@@ -20,15 +20,11 @@ import { collection } from "firebase/firestore";
 import { db } from "utils/firebase";
 import { RouteComponentProps, Link } from "@reach/router";
 import { FiArrowRight, FiCheck, FiEye, FiEyeOff } from "react-icons/fi";
+import { getDateTime } from "utils/helpers";
 
 interface PageProps extends RouteComponentProps {
   id?: string;
 }
-
-const getDateTime = (date: string): string => {
-  const d = new Date(date);
-  return `${d.toLocaleDateString()} - ${d.toLocaleTimeString()}`;
-};
 
 const boxStyles = {
   borderWidth: "1px",

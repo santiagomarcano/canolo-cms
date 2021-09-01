@@ -15,7 +15,7 @@ interface PageProps extends RouteComponentProps {
 
 const Page = ({ page }: PageProps) => {
   const [modules] = useCollection(collection(db, "modules"));
-  const [state, loading] = useDocumentData(doc(db, `pages/${page}`), [page]);
+  const [state, loading] = useDocumentData(doc(db, `pages/${page}`), [page], {});
   return (
     <Structure>
       <Loader state={!loading}>

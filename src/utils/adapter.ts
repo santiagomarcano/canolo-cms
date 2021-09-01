@@ -30,6 +30,13 @@ const refreshPublished = async () => {
   await setDoc(doc(updates, "publish"), { date: new Date().toISOString() });
 };
 
+export async function triggerBuild(message: string) {
+  const confirmation = window.confirm(message);
+  if (confirmation) {
+    await refreshPublished();
+  }
+}
+
 export async function createSchema(schema: Schema) {
   try {
     const modules = collection(db, "modules");

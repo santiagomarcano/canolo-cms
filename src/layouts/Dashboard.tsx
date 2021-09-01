@@ -26,6 +26,8 @@ import {
   Center,
   CircularProgress,
   Container,
+  Button,
+  ScaleFade,
 } from "@chakra-ui/react";
 import {
   FiHome,
@@ -45,6 +47,11 @@ import { Link } from "@reach/router";
 import { useLoader } from "store/LoadingContext";
 import Overlay from "components/Overlay";
 import Loader from "components/Loader";
+import useDocumentData from "hooks/useDocumentData";
+import { doc } from "firebase/firestore";
+import { db } from "utils/firebase";
+import { getDateTime } from "utils/helpers";
+import { triggerBuild } from "utils/adapter";
 
 interface LinkItemProps {
   name: string;
@@ -117,6 +124,10 @@ interface SidebarProps extends BoxProps {
 }
 
 const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
+  const [publish] = useDocumentData(doc(db, `updates/publish`), [], {
+    subscribe: true,
+  });
+  const PUBLISH_MESSAGE = $t("PUBLISH_MESSAGE");
   const location = useLocation();
   return (
     <Box
@@ -147,6 +158,33 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
           {link.name}
         </NavItem>
       ))}
+      <Container
+        flexDirection="column"
+        position="absolute"
+        bottom={5}
+        width="100%"
+        px={4}
+      >
+        <ScaleFade initialScale={0.9} in={publish}>
+          <Flex flexDirection="column">
+            <Text fontSize="sm" color="gray.500" width="100%">
+              <span>{$t("LAST_PUBLISH")}:</span>
+            </Text>{" "}
+            <Text fontSize="sm" color="gray.500" width="100%">
+              {getDateTime(publish?.date)}
+            </Text>
+            <Button
+              colorScheme="green"
+              onClick={() => triggerBuild(PUBLISH_MESSAGE)}
+              mt={2}
+              size="lg"
+              width="100%"
+            >
+              {$t("PUBLISH")}
+            </Button>
+          </Flex>
+        </ScaleFade>
+      </Container>
     </Box>
   );
 };
@@ -201,7 +239,7 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
       bg={useColorModeValue("white", "gray.900")}
       borderBottomWidth="1px"
       borderBottomColor={useColorModeValue("gray.200", "gray.700")}
-      justifyContent={{ base: "space-between", md: "flex-end" }}
+      justifyContent={{ base: "space-between" }}
       {...rest}
     >
       <IconButton
@@ -228,15 +266,15 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
           aria-label="open menu"
           icon={<FiBell />}
         /> */}
-        <Flex alignItems={"center"}>
+        <Flex flex="1">
           <Menu>
             <MenuButton
               py={2}
               transition="all 0.3s"
               _focus={{ boxShadow: "none" }}
             >
-              {/* <HStack>
-                <Avatar
+              <HStack>
+                {/* <Avatar
                   size={"sm"}
                   src={
                     "https://images.unsplash.com/photo-1619946794135-5bc917a27793?ixlib=rb-0.3.5&q=80&fm=jpg&crop=faces&fit=crop&h=200&w=200&s=b616b2c5b373a80ffc9636ba24f7a4a9"
@@ -255,8 +293,8 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
                 </VStack>
                 <Box display={{ base: "none", md: "flex" }}>
                   <FiChevronDown />
-                </Box>
-              </HStack> */}
+                </Box> */}
+              </HStack>
             </MenuButton>
             <MenuList
               bg={useColorModeValue("white", "gray.900")}

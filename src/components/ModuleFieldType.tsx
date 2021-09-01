@@ -10,7 +10,11 @@ interface Props {
 }
 
 const ModuleFieldType = ({ type, index }: Props) => {
-  const [fields, loading] = useDocumentData(doc(db, `modules/${type}`), [type]);
+  const [fields, loading] = useDocumentData(
+    doc(db, `modules/${type}`),
+    [type],
+    {}
+  );
   if (loading) {
     return (
       <Flex width="100%" justifyContent="center">

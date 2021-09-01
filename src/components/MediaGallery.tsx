@@ -96,10 +96,6 @@ const MediaGallery = ({
             <Flex justifyContent="space-between" my={6}>
               <Dropzone
                 onUploadFinished={() => {
-                  gridRef.current?.scrollIntoView({
-                    block: "start",
-                    behavior: "smooth",
-                  });
                   setTrigger(Math.random());
                 }}
               />

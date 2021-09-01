@@ -52,5 +52,8 @@
     "PUBLISHED": "Publicado",
     "DRAFT": "Borrador",
     "CHOOSE_STATE": "Esoja un estado",
-    "GALLERY": "Galería"
+    "GALLERY": "Galería",
+    "LAST_PUBLISH": "Última publicación",
+    "PUBLISH": "Publicar",
+    "PUBLISH_MESSAGE": "¿Está seguro que quiere hacer públicos los últimos cambios?"
 }
