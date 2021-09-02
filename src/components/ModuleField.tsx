@@ -11,27 +11,32 @@ import {
 } from "@chakra-ui/react";
 import { FiMinus } from "react-icons/fi";
 import { $t } from "store/TranslationsContext";
+import { Field as FieldInterface } from "interfaces/declarations";
 
 interface FieldProps {
   name: string;
   type: string;
   alias: string;
+  order: number;
   index?: number;
+  fields: Array<FieldInterface>;
   handleField: Function;
   handleRemoveField: Function;
 }
 
-const Field = ({
+const ModuleField = ({
   name,
   type,
   alias,
+  order,
   index,
+  fields,
   handleField,
   handleRemoveField,
 }: FieldProps): ReactElement => {
   return (
     <Grid
-      templateColumns={["1fr", "1fr", "16fr 16fr 16fr 1fr"]}
+      templateColumns={["1fr", "1fr", "1fr", "2fr 2fr 2fr 1fr 1fr"]}
       gap={5}
       width="100%"
     >
@@ -79,6 +84,34 @@ const Field = ({
       </GridItem>
       <GridItem>
         <FormControl id="type" isRequired>
+          <FormLabel>{$t("ORDER")}</FormLabel>
+          <Select
+            size="lg"
+            key={`select-${index}`}
+            placeholder={$t("ORDER")}
+            value={order}
+            isRequired
+            onChange={(e) => {
+              e.preventDefault();
+              handleField({
+                is: "order",
+                value: e.target.value,
+                index,
+              });
+            }}
+          >
+            {fields.map((_, index) => {
+                return (
+                  <option value={index} key={index}>
+                    {index}
+                  </option>
+                );
+            })}
+          </Select>
+        </FormControl>
+      </GridItem>
+      <GridItem>
+        <FormControl id="type" isRequired>
           <FormLabel>{$t("FIELD_TYPE")}</FormLabel>
           <Select
             size="lg"
@@ -119,4 +152,4 @@ const Field = ({
   );
 };
 
-export default Field;
+export default ModuleField;

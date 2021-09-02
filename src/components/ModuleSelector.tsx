@@ -21,7 +21,8 @@ interface Props {
   handleRemoveModule: Callback;
   options: Array<any>;
   index: number;
-  value: string;
+  component: string;
+  visibility: string | number;
 }
 
 const ModuleSelector = ({
@@ -29,10 +30,11 @@ const ModuleSelector = ({
   handleRemoveModule,
   options,
   index,
-  value,
+  component,
+  visibility,
 }: Props): ReactElement => {
   return (
-    <Grid templateColumns="32fr 1fr" gap={5} width="100%">
+    <Grid templateColumns={["10fr 10fr 1fr"]} gap={5} width="100%">
       {/* <GridItem>
         <FormControl id="name" isRequired>
           <FormLabel as="legend">{$t("ORDER")}</FormLabel>
@@ -61,16 +63,15 @@ const ModuleSelector = ({
             size="lg"
             key={`select-${index}`}
             placeholder={$t("SELECT_OPTION")}
-            value={value}
+            value={component}
             isRequired
             onChange={(e) => {
               e.preventDefault();
               if (!e.target.value || e.target.value === "") {
-                handleRemoveModule(index);
                 return;
               }
               handleModule({
-                is: "type",
+                is: "component",
                 value: e.target.value,
                 index,
               });
@@ -81,6 +82,33 @@ const ModuleSelector = ({
                 {id}
               </option>
             ))}
+          </Select>
+        </FormControl>
+      </GridItem>
+      <GridItem>
+        <FormControl id="visibility" isRequired>
+          <FormLabel>{$t("VISIBILITY")}</FormLabel>
+          <Select
+            size="lg"
+            key={`select-${index}`}
+            placeholder={$t("SELECT_OPTION")}
+            value={visibility}
+            isRequired
+            onChange={(e) => {
+              e.preventDefault();
+              handleModule({
+                is: "visibility",
+                value: e.target.value,
+                index,
+              });
+            }}
+          >
+            <option value={1}>
+              {$t("VISIBLE")}
+            </option>
+            <option value={0}>
+              {$t("HIDDEN")}
+            </option>
           </Select>
         </FormControl>
       </GridItem>

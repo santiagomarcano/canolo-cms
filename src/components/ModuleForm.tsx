@@ -32,13 +32,14 @@ interface Props {
 }
 
 interface State {
+  name: string;
+  fields: {
     name: string;
-    fields: {
-      name: string;
-      type: string;
-      alias: string;
-    }[];
-  };
+    type: string;
+    alias: string;
+    order: number;
+  }[];
+}
 
 const ModuleForm = ({ initialState, type }: Props): ReactElement => {
   const FIELDS = $t("FIELDS");
@@ -117,17 +118,20 @@ const ModuleForm = ({ initialState, type }: Props): ReactElement => {
           <Heading as="h4" size="md" mb={4}>
             {FIELDS}
           </Heading>
-          {schema.fields.map((field: FieldInterface, index: number) => (
-            <Box width="100%" key={index}>
-              <ModuleField
-                handleField={handleField}
-                handleRemoveField={handleRemoveField}
-                index={index}
-                {...field}
-              />
-              <Divider my={5} />
-            </Box>
-          ))}
+          {schema.fields
+            .sort((a, b) => a.order - b.order)
+            .map((field: FieldInterface, index: number) => (
+              <Box width="100%" key={index}>
+                <ModuleField
+                  handleField={handleField}
+                  handleRemoveField={handleRemoveField}
+                  index={index}
+                  fields={schema.fields}
+                  {...field}
+                />
+                <Divider my={5} />
+              </Box>
+            ))}
         </WrapItem>
         <WrapItem {...itemStyles}>
           <Flex justifyContent="space-between" alignItems="center" flex="1">
@@ -139,7 +143,7 @@ const ModuleForm = ({ initialState, type }: Props): ReactElement => {
             />
             <Button
               type="submit"
-              label={type === 'new' ? $t("CREAR") : $t("UPDATE")}
+              label={type === "new" ? $t("CREAR") : $t("UPDATE")}
               loading={loading}
               disabled={schema.fields.length === 0 || schema.name === ""}
             ></Button>

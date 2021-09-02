@@ -6,7 +6,7 @@
     "ADD_FIELD": "Añadir campo",
     "FIELD_NAME": "Prop",
     "ALIAS": "Alias",
-    "FIELD_TYPE": "Tipo de campo",
+    "FIELD_TYPE": "Campo",
     "SELECT_OPTION": "Selecciona",
     "CREATE": "Crear",
     "UPDATE": "Actualizar",
@@ -14,8 +14,8 @@
         "Label": "Etiqueta",
         "Text": "Texto",
         "Image": "Imágen",
-        "Images": "Imágenes",
-        "Link": "Enlace"
+        "Link": "Enlace",
+        "Toggler": "Toggler"
     },
     "SIZES": [
         "XS",
@@ -55,5 +55,15 @@
     "GALLERY": "Galería",
     "LAST_PUBLISH": "Última publicación",
     "PUBLISH": "Publicar",
-    "PUBLISH_MESSAGE": "¿Está seguro que quiere hacer públicos los últimos cambios?"
+    "PUBLISH_MESSAGE": "¿Está seguro que quiere hacer públicos los últimos cambios?",
+    "DELETE_PAGE": "Eliminar página",
+    "DELETE_PAGE_CONFIRMATION": "¿Está seguro que desea eliminar la página?\nEste cambio es irreversible",
+    "DELETE_PAGE_SUCCESSFULL": "La página ha sido eliminada satisfactoriamente",
+    "HREF": "Hipervínculo",
+    "VALUE": "Valor",
+    "ORDER": "Orden",
+    "SELECT_MODULE": "Selecciona módulo",
+    "VISIBILITY": "Visibilidad",
+    "VISIBLE": "Visible",
+    "HIDDEN": "Oculto"
 }

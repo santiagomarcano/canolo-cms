@@ -6,6 +6,7 @@ export interface Field {
   name: string;
   alias: string;
   type: string;
+  order: number;
 }
 
 export interface Module {
@@ -17,5 +18,6 @@ export interface Module {
 
 export interface PageModule {
   component: string;
+  visibility: string | number;
   props: {};
 }

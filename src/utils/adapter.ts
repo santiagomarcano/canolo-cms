@@ -1,5 +1,5 @@
 import { db } from "utils/firebase";
-import { collection, doc, setDoc } from "firebase/firestore";
+import { collection, deleteDoc, doc, setDoc } from "firebase/firestore";
 import { PageModule } from "interfaces/declarations";
 
 interface Field {
@@ -41,14 +41,12 @@ export async function createSchema(schema: Schema) {
   try {
     const modules = collection(db, "modules");
     const schemaAsObject: any = {};
-    let i = 0;
     for (let field of schema.fields) {
       schemaAsObject[field.name] = {
         type: field.type,
         alias: field.alias,
-        order: i,
+        order: field.order,
       };
-      i++;
     }
     console.log(modules);
     const capitalized = capitalize(schema.name);
@@ -58,19 +56,31 @@ export async function createSchema(schema: Schema) {
   }
 }
 
-export async function createPage(page: Page) {
+export async function createPage({
+  page,
+  isEdit,
+}: {
+  page: Page;
+  isEdit: boolean;
+}) {
   try {
     const pages = collection(db, "pages");
+    const pageRef = doc(pages, page.name);
+    if (isEdit) {
+      await deleteDoc(pageRef);
+    }
     const cleanPage = {
       name: page.name,
       state: page.state,
       lastUpdate: new Date().toISOString(),
-      modules: page.modules.map(({ component, props }) => ({
+      modules: page.modules.map(({ component, props, visibility }) => ({
         component,
+        visibility,
         props,
       })),
     };
-    await setDoc(doc(pages, page.name), cleanPage);
+    console.log(cleanPage);
+    await setDoc(pageRef, cleanPage);
   } catch (err) {
     alert(err);
   }

@@ -13,6 +13,12 @@ import {
   Select,
   GridItem,
   Grid,
+  Accordion,
+  AccordionButton,
+  AccordionIcon,
+  AccordionItem,
+  AccordionPanel,
+  Box,
 } from "@chakra-ui/react";
 import ModuleSelector from "components/ModuleSelector";
 import { FiPlus } from "react-icons/fi";
@@ -27,11 +33,14 @@ import { useNavigate } from "@reach/router";
 interface Props {
   modules: Array<Module>;
   type: string;
+  onDelete?: any;
+  isEdit?: boolean;
 }
 
 interface ModuleHandlerEvent {
   value: string;
   index: number;
+  is: string;
 }
 
 const itemStyles = {
@@ -41,7 +50,12 @@ const itemStyles = {
   width: "100%",
 };
 
-const PageForm = ({ modules, type }: Props): ReactElement => {
+const PageForm = ({
+  modules,
+  type,
+  onDelete,
+  isEdit = false,
+}: Props): ReactElement => {
   const navigate = useNavigate();
   const [page, dispatch] = usePage();
   const [loading, setLoading] = useState(false);
@@ -49,8 +63,8 @@ const PageForm = ({ modules, type }: Props): ReactElement => {
   const handleAddModule = () => {
     dispatch({ type: "ADD_MODULE" });
   };
-  const handleModule = ({ value, index }: ModuleHandlerEvent) => {
-    dispatch({ type: "MODULE", payload: { index, value } });
+  const handleModule = ({ value, index, is }: ModuleHandlerEvent) => {
+    dispatch({ type: "MODULE", payload: { index, value, is } });
   };
   const handleRemoveModule = (index: number) => {
     dispatch({ type: "REMOVE_MODULE", payload: { index } });
@@ -65,7 +79,7 @@ const PageForm = ({ modules, type }: Props): ReactElement => {
     setLoading(true);
     e.preventDefault();
     e.stopPropagation();
-    await createPage(page);
+    await createPage({ page, isEdit });
     setLoading(false);
     navigate("/dashboard/pages");
   }
@@ -94,7 +108,7 @@ const PageForm = ({ modules, type }: Props): ReactElement => {
                 <Select
                   size="lg"
                   onChange={handleStateChange}
-                  value={page.state}
+                  value={page.state || 0}
                 >
                   <option value={0}>{$t("DRAFT")}</option>
                   <option value={1}>{$t("PUBLISHED")}</option>
@@ -103,52 +117,75 @@ const PageForm = ({ modules, type }: Props): ReactElement => {
             </GridItem>
           </Grid>
         </WrapItem>
-        {page?.modules?.length > 0 && (
-          <Flex
-            width="100%"
-            background="white"
-            p={4}
-            borderRadius={5}
-            mt={5}
-            display="flex"
-            flexDirection="column"
-          >
-            <Heading as="h4" size="md" mb={5}>
-              {MODULES}
-            </Heading>
-            <Stack>
-              {page.modules.map((module: PageModule, index: number) => {
-                return (
-                  <VStack
-                    key={`${module}-${index}`}
-                    border="1px solid"
+        <WrapItem
+          width="100%"
+          background="white"
+          m={0}
+          display="block"
+          p={4}
+          borderRadius={5}
+        >
+          <Heading as="h4" size="md" mb={5}>
+            {MODULES}
+          </Heading>
+          <Accordion allowToggle width="100%" size="lg">
+            {page.modules?.length > 0 && (
+              <>
+                {page?.modules.map((module: any, index: number) => (
+                  <AccordionItem
+                    key={module.component}
+                    borderWidth={1}
                     borderColor="gray.200"
-                    padding="5"
-                    borderRadius="5"
+                    borderRadius={5}
+                    background="gray.50"
+                    my={2}
                   >
-                    <WrapItem key={index} width="100%">
-                      <ModuleSelector
-                        options={modules}
-                        handleModule={handleModule}
-                        handleRemoveModule={handleRemoveModule}
-                        index={index}
-                        value={module.component}
-                      />
-                    </WrapItem>
-                    <WrapItem width="100%">
-                      {module && (
-                        <ModuleFieldType
-                          type={module.component}
-                          index={index}
-                        />
-                      )}
-                    </WrapItem>
-                  </VStack>
-                );
-              })}
-            </Stack>
-          </Flex>
-        )}
+                    <h2>
+                      <AccordionButton
+                        _expanded={{
+                          bg: "green",
+                          color: "white",
+                          borderWidth: 1,
+                          borderColor: "gray.200",
+                        }}
+                        height={50}
+                        fontSize={18}
+                        borderRadius={5}
+                      >
+                        <Box flex="1" textAlign="left">
+                          {module.component || $t("SELECT_MODULE")}
+                        </Box>
+                        <AccordionIcon />
+                      </AccordionButton>
+                    </h2>
+                    <AccordionPanel background="gray.50">
+                      <Wrap>
+                        <WrapItem key={index} width="100%">
+                          <ModuleSelector
+                            options={modules}
+                            handleModule={handleModule}
+                            handleRemoveModule={handleRemoveModule}
+                            index={index}
+                            component={module.component}
+                            visibility={module.visibility}
+                          />
+                        </WrapItem>
+                        <WrapItem width="100%">
+                          {module && (
+                            <ModuleFieldType
+                              type={module.component}
+                              index={index}
+                            />
+                          )}
+                        </WrapItem>
+                      </Wrap>
+                    </AccordionPanel>
+                  </AccordionItem>
+                ))}
+              </>
+            )}
+          </Accordion>
+        </WrapItem>
         <WrapItem {...itemStyles}>
           <Flex justifyContent="space-between" alignItems="center" flex="1">
             <IconButton
@@ -157,12 +194,24 @@ const PageForm = ({ modules, type }: Props): ReactElement => {
               icon={<FiPlus />}
               onClick={handleAddModule}
             />
-            <Button
-              type="submit"
-              label={type === "new" ? $t("CREAR") : $t("UPDATE")}
-              loading={loading}
-              disabled={page?.modules?.length === 0 || page?.name === ""}
-            ></Button>
+            <div>
+              {isEdit && (
+                <Button
+                  type="button"
+                  label={$t("DELETE_PAGE")}
+                  onClick={onDelete}
+                  mr={2}
+                  colorScheme="red"
+                ></Button>
+              )}
+              <Button
+                type="submit"
+                label={type === "new" ? $t("CREAR") : $t("UPDATE")}
+                loading={loading}
+                disabled={page?.modules?.length === 0 || page?.name === ""}
+                colorScheme="green"
+              ></Button>
+            </div>
           </Flex>
         </WrapItem>
       </Wrap>

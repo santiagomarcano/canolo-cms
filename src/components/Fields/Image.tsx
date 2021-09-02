@@ -12,23 +12,25 @@ import {
   VStack,
   useDisclosure,
   Image as ChakraImage,
+  HStack,
+  GridItem,
+  Grid,
 } from "@chakra-ui/react";
 import { $t } from "store/TranslationsContext";
 import { usePage } from "store/PageContext";
-import { resizeBatch } from "utils/ffmpeg";
 import FieldHeader from "./FieldHeader";
 import { useFFMPEG } from "store/FFMPEGProvider";
 import Overlay from "components/Overlay";
 import MediaGallery from "components/MediaGallery";
 
 interface Props {
-  name: string;
+  name: string | number;
+  alias: string | number;
   index: number;
-  module: string;
-  alias: string;
+  module?: string;
 }
 
-const Image = ({ name, index, module, alias }: Props) => {
+const Image = ({ name, index, alias }: Props) => {
   const [ffmpegState] = useFFMPEG();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [page, dispatch] = usePage();
@@ -65,44 +67,51 @@ const Image = ({ name, index, module, alias }: Props) => {
       <Stack width="100%" p={15}>
         <FieldHeader name={name} alias={alias} />
         <Divider />
-        <VStack width="100%">
-          <Flex
-            justify="center"
-            align="center"
-            textAlign="center"
-            cursor={ffmpegState ? "not-allowed" : "pointer"}
-            bg="gray.200"
-            w="100%"
-            h={300}
-            borderRadius={5}
-            overflow="hidden"
-            position="relative"
-            opacity={ffmpegState ? 0.2 : 1}
-            onClick={onOpen}
-          >
-            {page.modules[index]?.props[name]?.src ? (
-              <>
-                <ChakraImage
-                  height={300}
-                  src={page.modules[index]?.props[name]?.src.replace(
-                    "{size}",
-                    "300"
-                  )}
-                  crossOrigin="anonymous"
-                />
-              </>
-            ) : (
-              <Text>{$t("CHOOSE_IMAGE")}</Text>
-            )}
-          </Flex>
-          <FormControl isRequired>
-            <FormLabel>{$t("ALT_TEXT")}</FormLabel>
-            <Input
-              value={page.modules[index]?.props[name]?.alt || ""}
-              onChange={handleChange}
-            />
-          </FormControl>
-        </VStack>
+        <Grid width="100%" templateColumns={["1fr 2fr"]} gap={5}>
+          <GridItem>
+            <Flex
+              justify="center"
+              align="center"
+              textAlign="center"
+              cursor={ffmpegState ? "not-allowed" : "pointer"}
+              bg="gray.200"
+              w="100%"
+              h={200}
+              borderRadius={5}
+              overflow="hidden"
+              position="relative"
+              opacity={ffmpegState ? 0.2 : 1}
+              onClick={onOpen}
+            >
+              {page.modules[index]?.props[name]?.src ? (
+                <>
+                  <ChakraImage
+                    height="100%"
+                    width="100%"
+                    objectFit="cover"
+                    borderRadius={5}
+                    src={page.modules[index]?.props[name]?.src.replace(
+                      "{size}",
+                      "300"
+                    )}
+                    crossOrigin="anonymous"
+                  />
+                </>
+              ) : (
+                <Text>{$t("CHOOSE_IMAGE")}</Text>
+              )}
+            </Flex>
+          </GridItem>
+          <GridItem>
+            <FormControl isRequired>
+              <FormLabel>{$t("ALT_TEXT")}</FormLabel>
+              <Input
+                value={page.modules[index]?.props[name]?.alt || ""}
+                onChange={handleChange}
+              />
+            </FormControl>
+          </GridItem>
+        </Grid>
       </Stack>
     </>
   );

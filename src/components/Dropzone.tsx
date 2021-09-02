@@ -1,11 +1,6 @@
 import React, { useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
-import {
-  Flex,
-  Text,
-  Stack,
-  VStack,
-} from "@chakra-ui/react";
+import { Flex, Text, Stack, VStack } from "@chakra-ui/react";
 import { $t } from "store/TranslationsContext";
 import { resizeBatch, sizes } from "utils/ffmpeg";
 import { useFFMPEG } from "store/FFMPEGProvider";
@@ -25,6 +20,18 @@ const Dropzone = ({ onUploadFinished }: Props) => {
   const [progressPhase, setProgressPhase] = useState("");
   const onDrop = useCallback(async (acceptedFiles) => {
     const file = acceptedFiles?.[0];
+    // You should accept SVG files
+    // if (file.type.includes("svg")) {
+    //   uploadBytes(storageRef, image, {
+    //     cacheControl: "public,max-age=300",
+    //     contentType: "image/png",
+    //     customMetadata: {
+    //       originalName,
+    //       uploadedAt: String(Date.now()),
+    //     },
+    //   });
+    //   return;
+    // }
     if (allowedTypes.includes(file.type)) {
       setFfmpegState(true);
       setLoading(true);

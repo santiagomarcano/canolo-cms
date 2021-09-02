@@ -13,8 +13,8 @@ import "react-quill/dist/quill.snow.css";
 import { devLog } from "utils/developer";
 
 interface Props {
-  name: string;
-  alias: string;
+  name: string | number;
+  alias: string | number;
 }
 
 const FieldHeader = ({ name, alias }: Props) => {

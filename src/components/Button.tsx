@@ -10,7 +10,9 @@ interface Props {
   size?: string;
   type?: "submit" | "button";
   onClick?: MouseEventHandler;
-  disabled: boolean;
+  disabled?: boolean;
+  mr?: string | number;
+  colorScheme?: string;
 }
 
 const Button = ({

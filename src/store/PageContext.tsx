@@ -33,9 +33,9 @@ const reducer = (state: any, action: Action) => {
       return next;
     }
     case "MODULE": {
-      const { index, value } = action.payload;
+      const { index, value, is } = action.payload;
       const next = [...state.modules];
-      next[index] = { component: value, props: {}, images: [] };
+      next[index] = { ...next[index], [is]: value };
       return {
         ...state,
         modules: next,

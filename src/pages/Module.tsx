@@ -17,6 +17,7 @@ const formatFields = (fields: any) => {
     name: key,
     alias: fields[key]?.alias,
     type: fields[key]?.type,
+    order: fields[key].order,
   }));
 };
 
