@@ -12,6 +12,7 @@ const NewModule = ({}: Props) => {
         type="new"
         initialState={{
           name: "",
+          alias: "",
           fields: [{ name: "", type: "", alias: "", order: 0 }],
         }}
       />

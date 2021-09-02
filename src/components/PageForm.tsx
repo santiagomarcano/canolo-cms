@@ -21,7 +21,7 @@ import {
   Box,
 } from "@chakra-ui/react";
 import ModuleSelector from "components/ModuleSelector";
-import { FiPlus } from "react-icons/fi";
+import { FiEye, FiEyeOff, FiPlus } from "react-icons/fi";
 import { $t } from "store/TranslationsContext";
 import { createPage } from "utils/adapter";
 import { Module, PageModule } from "interfaces/declarations";
@@ -50,6 +50,12 @@ const itemStyles = {
   width: "100%",
 };
 
+const getAlias = (module: any, modules: any) => {
+  return modules
+    .find((m: any) => module.component === m?.data().meta.name)
+    ?.data().meta?.alias;
+};
+
 const PageForm = ({
   modules,
   type,
@@ -60,6 +66,7 @@ const PageForm = ({
   const [page, dispatch] = usePage();
   const [loading, setLoading] = useState(false);
   const MODULES = $t("MODULES");
+  const SELECT_MODULE = $t("SELECT_MODULE");
   const handleAddModule = () => {
     dispatch({ type: "ADD_MODULE" });
   };
@@ -133,7 +140,7 @@ const PageForm = ({
               <>
                 {page?.modules.map((module: any, index: number) => (
                   <AccordionItem
-                    key={module.component}
+                    key={index}
                     borderWidth={1}
                     borderColor="gray.200"
                     borderRadius={5}
@@ -147,13 +154,30 @@ const PageForm = ({
                           color: "white",
                           borderWidth: 1,
                           borderColor: "gray.200",
+                          borderBottomEndRadius: 0,
+                          borderBottomStartRadius: 0,
+                        }}
+                        _focus={{
+                          borderWidth: 0,
                         }}
                         height={50}
                         fontSize={18}
                         borderRadius={5}
                       >
                         <Box flex="1" textAlign="left">
-                          {module.component || $t("SELECT_MODULE")}
+                          <Flex
+                            justifyContent="space-between"
+                            alignItems="center"
+                          >
+                            {getAlias(module, modules) || SELECT_MODULE}
+                            <Box mr={2}>
+                              {Number(module.visibility) ? (
+                                <FiEye />
+                              ) : (
+                                <FiEyeOff />
+                              )}
+                            </Box>
+                          </Flex>
                         </Box>
                         <AccordionIcon />
                       </AccordionButton>
@@ -174,6 +198,7 @@ const PageForm = ({
                           {module && (
                             <ModuleFieldType
                               type={module.component}
+                              modules={modules}
                               index={index}
                             />
                           )}
@@ -206,7 +231,7 @@ const PageForm = ({
               )}
               <Button
                 type="submit"
-                label={type === "new" ? $t("CREAR") : $t("UPDATE")}
+                label={type === "new" ? $t("CREATE") : $t("UPDATE")}
                 loading={loading}
                 disabled={page?.modules?.length === 0 || page?.name === ""}
                 colorScheme="green"

@@ -11,6 +11,7 @@ interface Field {
 
 interface Schema {
   name: string;
+  alias: string;
   fields: Array<Field>;
 }
 
@@ -37,7 +38,7 @@ export async function triggerBuild(message: string) {
   }
 }
 
-export async function createSchema(schema: Schema) {
+export async function createSchema(schema: Schema, id: any) {
   try {
     const modules = collection(db, "modules");
     const schemaAsObject: any = {};
@@ -49,8 +50,11 @@ export async function createSchema(schema: Schema) {
       };
     }
     console.log(modules);
-    const capitalized = capitalize(schema.name);
-    await setDoc(doc(modules, capitalized), schemaAsObject);
+    schemaAsObject.meta = {
+      name: capitalize(schema.name),
+      alias: capitalize(schema.alias),
+    };
+    await setDoc(id ? doc(modules, id) : doc(modules), schemaAsObject);
   } catch (err) {
     alert(err);
   }
@@ -79,7 +83,6 @@ export async function createPage({
         props,
       })),
     };
-    console.log(cleanPage);
     await setDoc(pageRef, cleanPage);
   } catch (err) {
     alert(err);

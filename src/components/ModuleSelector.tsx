@@ -32,30 +32,10 @@ const ModuleSelector = ({
   index,
   component,
   visibility,
-}: Props): ReactElement => {
+}:
+Props): ReactElement => {
   return (
     <Grid templateColumns={["10fr 10fr 1fr"]} gap={5} width="100%">
-      {/* <GridItem>
-        <FormControl id="name" isRequired>
-          <FormLabel as="legend">{$t("ORDER")}</FormLabel>
-          <Input
-            size="lg"
-            key={`input-${index}`}
-            type="text"
-            isRequired
-            autoComplete="false"
-            value={name}
-            onChange={(e) => {
-              e.preventDefault();
-              handleField({
-                is: "name",
-                value: e.target.value,
-                index,
-              });
-            }}
-          />
-        </FormControl>
-      </GridItem> */}
       <GridItem>
         <FormControl id="type" isRequired>
           <FormLabel>{$t("MODULE_TYPE")}</FormLabel>
@@ -77,9 +57,9 @@ const ModuleSelector = ({
               });
             }}
           >
-            {options.map(({ id }) => (
-              <option value={id} key={id}>
-                {id}
+            {options.map((option: any, index: number) => (
+              <option value={option.data().meta.name} key={option.id}>
+                {option.data().meta.alias}
               </option>
             ))}
           </Select>
@@ -103,12 +83,8 @@ const ModuleSelector = ({
               });
             }}
           >
-            <option value={1}>
-              {$t("VISIBLE")}
-            </option>
-            <option value={0}>
-              {$t("HIDDEN")}
-            </option>
+            <option value={1}>{$t("VISIBLE")}</option>
+            <option value={0}>{$t("HIDDEN")}</option>
           </Select>
         </FormControl>
       </GridItem>

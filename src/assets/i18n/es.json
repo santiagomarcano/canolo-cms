@@ -59,6 +59,8 @@
     "DELETE_PAGE": "Eliminar página",
     "DELETE_PAGE_CONFIRMATION": "¿Está seguro que desea eliminar la página?\nEste cambio es irreversible",
     "DELETE_PAGE_SUCCESSFULL": "La página ha sido eliminada satisfactoriamente",
+    "DELETE_MODULE_CONFIRMATION": "¿Está seguro que desea eliminar el módulo?\nEste cambio es irreversible",
+    "DELETE_MODULE_SUCCESSFULL": "El módulo ha sido eliminado satisfactoriamente",
     "HREF": "Hipervínculo",
     "VALUE": "Valor",
     "ORDER": "Orden",

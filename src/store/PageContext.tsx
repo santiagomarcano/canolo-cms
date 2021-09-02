@@ -51,7 +51,7 @@ const reducer = (state: any, action: Action) => {
     case "ADD_MODULE": {
       return {
         ...state,
-        modules: [...state.modules, ""],
+        modules: [...state.modules, { component: "", props: {} }],
       };
     }
     case "MODULE_PROP": {

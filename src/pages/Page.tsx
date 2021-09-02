@@ -9,6 +9,7 @@ import { db } from "utils/firebase";
 import { RouteComponentProps, useNavigate } from "@reach/router";
 import useDocumentData from "hooks/useDocumentData";
 import { $t } from "store/TranslationsContext";
+import { Module } from "interfaces/declarations";
 
 interface PageProps extends RouteComponentProps {
   page?: string;
@@ -17,10 +18,10 @@ interface PageProps extends RouteComponentProps {
 const Page = ({ page }: PageProps) => {
   const DELETE_PAGE_CONFIRMATION = $t("DELETE_PAGE_CONFIRMATION");
   const DELETE_PAGE_SUCCESSFULL = $t("DELETE_PAGE_SUCCESSFULL");
+  const navigate = useNavigate();
   const pageRef = doc(db, `pages/${page}`);
   const [modules] = useCollection(collection(db, "modules"));
   const [state, loading] = useDocumentData(pageRef, [page], {});
-  const navigate = useNavigate();
   const handleDelete = async (e: MouseEventHandler<HTMLButtonElement>) => {
     const confirmation = window.confirm(DELETE_PAGE_CONFIRMATION);
     if (confirmation) {
@@ -35,7 +36,7 @@ const Page = ({ page }: PageProps) => {
         <PageProvider value={state}>
           <PageForm
             type="update"
-            modules={modules?.docs as Array<any>}
+            modules={modules?.docs as Array<Module>}
             onDelete={handleDelete}
             isEdit
           />

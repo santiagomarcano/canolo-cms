@@ -9,6 +9,7 @@ import { Box, Button, Divider, Flex, UnorderedList } from "@chakra-ui/react";
 import { Module } from "interfaces/declarations";
 import { Link, RouteComponentProps } from "@reach/router";
 import { FiArrowRight } from "react-icons/fi";
+import { formatModuleNameAlias } from "utils/helpers";
 
 interface Props extends RouteComponentProps {}
 
@@ -43,7 +44,9 @@ export default function Modules({}: Props) {
                   }}
                 >
                   <Flex justifyContent="space-between" alignItems="center">
-                    <div>{module.id}</div>
+                    <div>
+                      {module?.data()?.meta?.name}
+                    </div>
                     <FiArrowRight />
                   </Flex>
                 </Box>

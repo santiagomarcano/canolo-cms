@@ -14,6 +14,10 @@ export interface Module {
   fields: Array<Field>;
   id?: string | number;
   data?: any;
+  meta: {
+    name: string;
+    alias: string;
+  };
 }
 
 export interface PageModule {

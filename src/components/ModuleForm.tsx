@@ -1,4 +1,9 @@
-import React, { FormEvent, ReactElement, useState } from "react";
+import React, {
+  FormEvent,
+  MouseEventHandler,
+  ReactElement,
+  useState,
+} from "react";
 import {
   FormControl,
   FormLabel,
@@ -10,14 +15,17 @@ import {
   Heading,
   Box,
   Divider,
+  GridItem,
+  Grid,
 } from "@chakra-ui/react";
 import ModuleField from "components/ModuleField";
-import { FiPlus } from "react-icons/fi";
+import { FiLinkedin, FiPlus } from "react-icons/fi";
 import { $t } from "store/TranslationsContext";
 import { createSchema } from "utils/adapter";
 import { Field as FieldInterface } from "interfaces/declarations";
 import { useNavigate } from "@reach/router";
 import Button from "components/Button";
+import { formatModuleNameAlias } from "utils/helpers";
 
 const itemStyles = {
   background: "white",
@@ -29,10 +37,14 @@ const itemStyles = {
 interface Props {
   initialState: State;
   type: string;
+  onDelete?: any;
+  isEdit?: boolean;
 }
 
 interface State {
   name: string;
+  alias: string;
+  id?: string | number | null;
   fields: {
     name: string;
     type: string;
@@ -41,11 +53,15 @@ interface State {
   }[];
 }
 
-const ModuleForm = ({ initialState, type }: Props): ReactElement => {
+const ModuleForm = ({
+  initialState,
+  type,
+  onDelete,
+  isEdit = false,
+}: Props): ReactElement => {
   const FIELDS = $t("FIELDS");
   const [schema, setSchema] = useState(initialState);
   const [loading, setLoading] = useState(false);
-
   const navigate = useNavigate();
   const handleAddField = () => {
     setSchema((current: any) => {
@@ -89,12 +105,18 @@ const ModuleForm = ({ initialState, type }: Props): ReactElement => {
       return next;
     });
   };
+  const handleChangeAlias = ({ target }: { target: HTMLInputElement }) => {
+    setSchema((schema) => {
+      const next = { ...schema };
+      next.alias = target.value;
+      return next;
+    });
+  };
   async function handleSubmit(e: FormEvent) {
-    console.log(schema);
     setLoading(true);
     e.preventDefault();
     e.stopPropagation();
-    await createSchema(schema);
+    await createSchema(schema, schema.id);
     setLoading(false);
     navigate("/dashboard/modules");
   }
@@ -102,23 +124,45 @@ const ModuleForm = ({ initialState, type }: Props): ReactElement => {
     <form onSubmit={handleSubmit}>
       <Wrap>
         <WrapItem {...itemStyles}>
-          <FormControl isRequired width="100%">
-            <FormLabel>{$t("MODULE_NAME")}</FormLabel>
-            <Input
-              size="lg"
-              type="text"
-              isRequired
-              autoComplete="false"
-              value={schema.name}
-              onChange={handleChangeSchemaName}
-            />
-          </FormControl>
+          <Grid
+            templateColumns={["1fr", "repeat(2, 1fr)"]}
+            gap={5}
+            width="100%"
+          >
+            <GridItem>
+              <FormControl isRequired width="100%">
+                <FormLabel>{$t("MODULE_NAME")}</FormLabel>
+                <Input
+                  size="lg"
+                  type="text"
+                  isRequired
+                  autoComplete="false"
+                  value={schema.name}
+                  onChange={handleChangeSchemaName}
+                />
+              </FormControl>
+            </GridItem>
+            <GridItem>
+              <FormControl isRequired width="100%">
+                <FormLabel>{$t("ALIAS")}</FormLabel>
+                <Input
+                  size="lg"
+                  type="text"
+                  isRequired
+                  autoComplete="false"
+                  value={schema.alias}
+                  onChange={handleChangeAlias}
+                />
+              </FormControl>
+            </GridItem>
+          </Grid>
         </WrapItem>
         <WrapItem {...itemStyles} display="flex" flexDirection="column">
           <Heading as="h4" size="md" mb={4}>
             {FIELDS}
           </Heading>
           {schema.fields
+            .filter((field) => field.name !== "meta")
             .sort((a, b) => a.order - b.order)
             .map((field: FieldInterface, index: number) => (
               <Box width="100%" key={index}>
@@ -141,12 +185,23 @@ const ModuleForm = ({ initialState, type }: Props): ReactElement => {
               icon={<FiPlus />}
               onClick={handleAddField}
             />
-            <Button
-              type="submit"
-              label={type === "new" ? $t("CREAR") : $t("UPDATE")}
-              loading={loading}
-              disabled={schema.fields.length === 0 || schema.name === ""}
-            ></Button>
+            <Flex>
+              {isEdit && (
+                <Button
+                  type="button"
+                  label={$t("DELETE")}
+                  mr={2}
+                  colorScheme="red"
+                  onClick={onDelete}
+                ></Button>
+              )}
+              <Button
+                type="submit"
+                label={type === "new" ? $t("CREAR") : $t("UPDATE")}
+                loading={loading}
+                disabled={schema.fields.length === 0 || schema.name === ""}
+              ></Button>
+            </Flex>
           </Flex>
         </WrapItem>
       </Wrap>

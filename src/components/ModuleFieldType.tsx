@@ -1,30 +1,27 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { CircularProgress, Flex, Stack, VStack } from "@chakra-ui/react";
 import { db } from "utils/firebase";
 import { doc } from "firebase/firestore";
 import useDocumentData from "hooks/useDocumentData";
 
 interface Props {
-  type: string;
+  type: any;
   index: number;
+  modules: any;
 }
 
-const ModuleFieldType = ({ type, index }: Props) => {
-  const [fields, loading] = useDocumentData(
-    doc(db, `modules/${type}`),
-    [type],
-    {}
+const ModuleFieldType = ({ type, index, modules }: Props) => {
+  const module = useMemo(
+    () => modules.find((module: any) => module.data().meta.name === type)?.data(),
+    [type]
   );
-  if (loading) {
-    return (
-      <Flex width="100%" justifyContent="center">
-        <CircularProgress isIndeterminate />
-      </Flex>
-    );
+  if (!module) {
+    return <></>
   }
   return (
     <Stack width="100%">
-      {Object.entries(fields)
+      {Object.entries(module)
+        .filter(([key]) => key !== 'meta')
         .sort((a: any, b: any) => a[1].order - b[1].order)
         .map(([key, value]: [key: string, value: any]) => {
           const {

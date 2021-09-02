@@ -1,12 +1,13 @@
-import React from "react";
+import React, { MouseEventHandler } from "react";
 import Structure from "layouts/Dashboard";
 import ModuleForm from "components/ModuleForm";
-import { RouteComponentProps } from "@reach/router";
+import { RouteComponentProps, useNavigate } from "@reach/router";
 import useDocumentData from "hooks/useDocumentData";
-import { doc } from "firebase/firestore";
+import { deleteDoc, doc } from "firebase/firestore";
 import { db } from "utils/firebase";
 import Loader from "components/Loader";
 import { Field } from "interfaces/declarations";
+import { $t } from "store/TranslationsContext";
 
 interface Props extends RouteComponentProps {
   module?: string;
@@ -22,20 +23,33 @@ const formatFields = (fields: any) => {
 };
 
 const Module = ({ path, module }: Props) => {
-  const [state, loading] = useDocumentData(
-    doc(db, `modules/${module}`),
-    [path],
-    {}
-  );
+  console.log('MODULE IS', module)
+  const DELETE_MODULE_CONFIRMATION = $t("DELETE_MODULE_CONFIRMATION");
+  const DELETE_MODULE_SUCCESSFULL = $t("DELETE_MODULE_SUCCESSFULL");
+  const navigate = useNavigate();
+  const moduleRef = doc(db, `modules/${module}`);
+  const [state, loading] = useDocumentData(moduleRef, [path], { initialValue: {} });
+  const handleDelete = async (e: MouseEventHandler<HTMLButtonElement>) => {
+    const confirmation = window.confirm(DELETE_MODULE_CONFIRMATION);
+    if (confirmation) {
+      await deleteDoc(moduleRef);
+      alert(DELETE_MODULE_SUCCESSFULL);
+      navigate("/dashboard/modules");
+    }
+  };
   return (
     <Structure>
       <Loader state={!loading}>
         <ModuleForm
           type="update"
+          onDelete={handleDelete}
           initialState={{
-            name: module || "",
+            id: module || null,
+            name:  state?.meta?.name,
+            alias: state?.meta?.alias,
             fields: formatFields(state),
           }}
+          isEdit
         />
       </Loader>
     </Structure>

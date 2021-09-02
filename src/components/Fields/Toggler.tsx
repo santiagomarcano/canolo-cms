@@ -18,16 +18,14 @@ interface Props {
   alias: string;
 }
 
-const Label = ({ name, index, alias }: Props) => {
+const Toggler = ({ name, index, alias }: Props) => {
   const [page, dispatch] = usePage();
-
   const handleChangeValue = ({ target }: { target: HTMLSelectElement }) => {
     dispatch({
       type: "MODULE_PROP",
       payload: { name, value: target.value, index },
     });
   };
-
   return (
     <Stack width="100%" p={15}>
       <FieldHeader name={name} alias={alias} />
@@ -52,4 +50,4 @@ const Label = ({ name, index, alias }: Props) => {
   );
 };
 
-export default Label;
+export default Toggler;

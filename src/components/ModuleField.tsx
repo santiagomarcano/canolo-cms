@@ -36,7 +36,7 @@ const ModuleField = ({
 }: FieldProps): ReactElement => {
   return (
     <Grid
-      templateColumns={["1fr", "1fr", "1fr", "2fr 2fr 2fr 1fr 1fr"]}
+      templateColumns={["1fr", "1fr", "1fr", "2fr 2fr 2fr 2fr 1fr"]}
       gap={5}
       width="100%"
     >
