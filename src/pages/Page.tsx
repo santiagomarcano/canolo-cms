@@ -38,7 +38,7 @@ const Page = ({ page }: PageProps) => {
             type="update"
             modules={modules?.docs as Array<Module>}
             onDelete={handleDelete}
-            isEdit
+            id={page || null}
           />
         </PageProvider>
       </Loader>

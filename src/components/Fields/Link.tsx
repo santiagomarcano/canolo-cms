@@ -6,7 +6,6 @@ import {
   FormControl,
   FormLabel,
   Divider,
-  Select,
 } from "@chakra-ui/react";
 import { $t } from "store/TranslationsContext";
 import { usePage } from "store/PageContext";

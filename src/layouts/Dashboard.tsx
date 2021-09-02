@@ -3,12 +3,10 @@ import Base from "./Base";
 import { $t } from "../store/TranslationsContext";
 import {
   IconButton,
-  Avatar,
   Box,
   CloseButton,
   Flex,
   HStack,
-  VStack,
   Icon,
   useColorModeValue,
   // Link,
@@ -31,13 +29,7 @@ import {
 } from "@chakra-ui/react";
 import {
   FiHome,
-  FiTrendingUp,
-  FiCompass,
-  FiStar,
-  FiSettings,
   FiMenu,
-  FiBell,
-  FiChevronDown,
   FiGrid,
 } from "react-icons/fi";
 import { IconType } from "react-icons";

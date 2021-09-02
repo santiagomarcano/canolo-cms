@@ -1,5 +1,5 @@
 import { getDocs } from "@firebase/firestore";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 const useCollection = (col: any) => {
   const [state, setState] = useState<any>(null);

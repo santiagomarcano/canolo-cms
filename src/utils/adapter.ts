@@ -1,5 +1,5 @@
 import { db } from "utils/firebase";
-import { collection, deleteDoc, doc, setDoc } from "firebase/firestore";
+import { collection, doc, setDoc } from "firebase/firestore";
 import { PageModule } from "interfaces/declarations";
 
 interface Field {
@@ -23,7 +23,7 @@ interface Page {
 }
 
 function capitalize(string: string): string {
-  return string[0] + string.toLowerCase().slice(1, string.length);
+  return string[0].toUpperCase() + string.toLowerCase().slice(1, string.length);
 }
 
 const refreshPublished = async () => {
@@ -49,7 +49,6 @@ export async function createSchema(schema: Schema, id: any) {
         order: field.order,
       };
     }
-    console.log(modules);
     schemaAsObject.meta = {
       name: capitalize(schema.name),
       alias: capitalize(schema.alias),
@@ -62,18 +61,15 @@ export async function createSchema(schema: Schema, id: any) {
 
 export async function createPage({
   page,
-  isEdit,
+  id,
 }: {
   page: Page;
-  isEdit: boolean;
+  id: string | null;
 }) {
   try {
     const pages = collection(db, "pages");
-    const pageRef = doc(pages, page.name);
-    if (isEdit) {
-      await deleteDoc(pageRef);
-    }
-    const cleanPage = {
+    const pageRef = id ? doc(pages, id) : doc(pages);
+    const formattedPage = {
       name: page.name,
       state: page.state,
       lastUpdate: new Date().toISOString(),
@@ -83,7 +79,7 @@ export async function createPage({
         props,
       })),
     };
-    await setDoc(pageRef, cleanPage);
+    await setDoc(pageRef, formattedPage);
   } catch (err) {
     alert(err);
   }

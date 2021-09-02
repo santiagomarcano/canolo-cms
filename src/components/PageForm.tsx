@@ -8,8 +8,6 @@ import {
   Wrap,
   WrapItem,
   Heading,
-  Stack,
-  VStack,
   Select,
   GridItem,
   Grid,
@@ -24,7 +22,7 @@ import ModuleSelector from "components/ModuleSelector";
 import { FiEye, FiEyeOff, FiPlus } from "react-icons/fi";
 import { $t } from "store/TranslationsContext";
 import { createPage } from "utils/adapter";
-import { Module, PageModule } from "interfaces/declarations";
+import { Module } from "interfaces/declarations";
 import ModuleFieldType from "components/ModuleFieldType";
 import { usePage } from "store/PageContext";
 import Button from "components/Button";
@@ -35,6 +33,7 @@ interface Props {
   type: string;
   onDelete?: any;
   isEdit?: boolean;
+  id: string | null;
 }
 
 interface ModuleHandlerEvent {
@@ -61,6 +60,7 @@ const PageForm = ({
   type,
   onDelete,
   isEdit = false,
+  id = null,
 }: Props): ReactElement => {
   const navigate = useNavigate();
   const [page, dispatch] = usePage();
@@ -86,7 +86,7 @@ const PageForm = ({
     setLoading(true);
     e.preventDefault();
     e.stopPropagation();
-    await createPage({ page, isEdit });
+    await createPage({ page, id });
     setLoading(false);
     navigate("/dashboard/pages");
   }
@@ -220,7 +220,7 @@ const PageForm = ({
               onClick={handleAddModule}
             />
             <div>
-              {isEdit && (
+              {id && (
                 <Button
                   type="button"
                   label={$t("DELETE_PAGE")}

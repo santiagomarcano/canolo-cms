@@ -21,11 +21,6 @@ interface Resize {
   hash: string;
 }
 
-interface ResizedImage {
-  images: Array<File>;
-  name: string;
-}
-
 function toHash(hashBuffer: ArrayBuffer): string {
   const hashArray = Array.from(new Uint8Array(hashBuffer)); // convert buffer to byte array
   const hashHex = hashArray
@@ -57,13 +52,13 @@ export const resizeBatch = async ({ file }: { file: File }): Promise<any> => {
   }
 };
 
-const download = (file: File): void => {
-  const link = document.createElement("a");
-  link.setAttribute("download", file.name);
-  link.setAttribute("href", URL.createObjectURL(file));
-  link.setAttribute("target", "_blank");
-  link.click();
-};
+// const download = (file: File): void => {
+//   const link = document.createElement("a");
+//   link.setAttribute("download", file.name);
+//   link.setAttribute("href", URL.createObjectURL(file));
+//   link.setAttribute("target", "_blank");
+//   link.click();
+// };
 
 const resize = async ({ file, size, hash }: Resize): Promise<any> => {
   try {

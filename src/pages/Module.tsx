@@ -23,7 +23,6 @@ const formatFields = (fields: any) => {
 };
 
 const Module = ({ path, module }: Props) => {
-  console.log('MODULE IS', module)
   const DELETE_MODULE_CONFIRMATION = $t("DELETE_MODULE_CONFIRMATION");
   const DELETE_MODULE_SUCCESSFULL = $t("DELETE_MODULE_SUCCESSFULL");
   const navigate = useNavigate();

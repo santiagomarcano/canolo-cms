@@ -5,20 +5,3 @@ export const getDateTime = (date: string | number): string => {
   }
   return `${d.toLocaleDateString()} - ${d.toLocaleTimeString()}`;
 };
-
-export const formatModuleNameAlias = ({
-  id,
-  is,
-}: {
-  id: string | number;
-  is: "name" | "alias";
-}): string => {
-  console.log("Aqui?", id);
-  const arr = id.toString().split("-");
-  if (is === "alias") {
-    return arr[1];
-  } else if (is === "name") {
-    return arr[0];
-  }
-  return "";
-};

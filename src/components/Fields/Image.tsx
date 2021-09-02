@@ -1,5 +1,4 @@
-import React, { useCallback, useState } from "react";
-import { useDropzone } from "react-dropzone";
+import React from "react";
 import {
   Flex,
   Text,
@@ -8,11 +7,8 @@ import {
   FormControl,
   FormLabel,
   Divider,
-  CircularProgress,
-  VStack,
   useDisclosure,
   Image as ChakraImage,
-  HStack,
   GridItem,
   Grid,
 } from "@chakra-ui/react";
@@ -58,7 +54,6 @@ const Image = ({ name, index, alias }: Props) => {
         size="2xl"
       >
         <MediaGallery
-          multiple={false}
           selected={page.modules[index]?.props[name]?.src || ""}
           onSelect={handleGallery}
           onClose={onClose}

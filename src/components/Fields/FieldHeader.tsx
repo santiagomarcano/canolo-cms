@@ -1,14 +1,7 @@
 import React from "react";
 import {
-  HStack,
-  Stack,
-  FormControl,
-  FormLabel,
   Heading,
-  Divider,
 } from "@chakra-ui/react";
-import { usePage } from "store/PageContext";
-import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { devLog } from "utils/developer";
 

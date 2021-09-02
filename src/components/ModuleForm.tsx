@@ -1,6 +1,5 @@
 import React, {
   FormEvent,
-  MouseEventHandler,
   ReactElement,
   useState,
 } from "react";
@@ -19,13 +18,12 @@ import {
   Grid,
 } from "@chakra-ui/react";
 import ModuleField from "components/ModuleField";
-import { FiLinkedin, FiPlus } from "react-icons/fi";
+import { FiPlus } from "react-icons/fi";
 import { $t } from "store/TranslationsContext";
 import { createSchema } from "utils/adapter";
 import { Field as FieldInterface } from "interfaces/declarations";
 import { useNavigate } from "@reach/router";
 import Button from "components/Button";
-import { formatModuleNameAlias } from "utils/helpers";
 
 const itemStyles = {
   background: "white",
@@ -186,7 +184,7 @@ const ModuleForm = ({
               onClick={handleAddField}
             />
             <Flex>
-              {isEdit && (
+              {schema.id && (
                 <Button
                   type="button"
                   label={$t("DELETE")}
@@ -197,7 +195,7 @@ const ModuleForm = ({
               )}
               <Button
                 type="submit"
-                label={type === "new" ? $t("CREAR") : $t("UPDATE")}
+                label={type === "new" ? $t("CREATE") : $t("UPDATE")}
                 loading={loading}
                 disabled={schema.fields.length === 0 || schema.name === ""}
               ></Button>

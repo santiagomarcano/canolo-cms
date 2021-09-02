@@ -16,7 +16,11 @@ const NewPage = ({}: PageProps) => {
     <Structure>
       <Loader state={modules}>
         <PageProvider value={{ name: "", modules: [], state: "0" }}>
-          <PageForm type="new" modules={modules?.docs as Array<any>} />
+          <PageForm
+            type="new"
+            modules={modules?.docs as Array<any>}
+            id={null}
+          />
         </PageProvider>
       </Loader>
     </Structure>

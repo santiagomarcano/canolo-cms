@@ -1,11 +1,7 @@
-import { getDocs } from "@firebase/firestore";
 import {
   getDownloadURL,
-  list,
-  ListResult,
   listAll,
   getMetadata,
-  FullMetadata,
 } from "firebase/storage";
 import React, { useEffect, useState } from "react";
 
@@ -16,10 +12,10 @@ interface Props {
   amount: number;
 }
 
-interface ListOptions {
-  maxResults: number;
-  pageToken?: any;
-}
+// interface ListOptions {
+//   maxResults: number;
+//   pageToken?: any;
+// }
 
 interface File {
   url: string;

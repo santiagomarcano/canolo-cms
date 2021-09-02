@@ -1,5 +1,4 @@
 import React, {
-  MouseEventHandler,
   ReactElement,
   useRef,
   useState,
@@ -19,16 +18,13 @@ import {
 import { storage } from "utils/firebase";
 import useStorage from "hooks/useStorage";
 import { deleteObject, ref } from "firebase/storage";
-import Loader from "./Loader";
 import Dropzone from "components/Dropzone";
 import { $t } from "store/TranslationsContext";
 import { useMemo } from "react";
-import { sizes } from "utils/ffmpeg";
 import { FiSearch, FiTrash } from "react-icons/fi";
 
 interface Props {
   selected?: Array<string> | string;
-  multiple?: boolean;
   onSelect?: Function;
   onClose?: any;
   isModal?: boolean;
@@ -36,7 +32,6 @@ interface Props {
 
 const MediaGallery = ({
   selected,
-  multiple = false,
   onSelect = () => {},
   onClose = () => {},
   isModal = true,

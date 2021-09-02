@@ -2,7 +2,7 @@ import React, { useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { Flex, Text, Stack, VStack } from "@chakra-ui/react";
 import { $t } from "store/TranslationsContext";
-import { resizeBatch, sizes } from "utils/ffmpeg";
+import { resizeBatch } from "utils/ffmpeg";
 import { useFFMPEG } from "store/FFMPEGProvider";
 import { storage } from "utils/firebase";
 import { ref, uploadBytes } from "firebase/storage";

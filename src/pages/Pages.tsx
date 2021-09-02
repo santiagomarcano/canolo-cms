@@ -11,15 +11,13 @@ import {
   UnorderedList,
   Text,
   GridItem,
-  SimpleGrid,
   Grid,
-  Icon,
 } from "@chakra-ui/react";
-import { Module, PageModule } from "interfaces/declarations";
+import { Module } from "interfaces/declarations";
 import { collection } from "firebase/firestore";
 import { db } from "utils/firebase";
 import { RouteComponentProps, Link } from "@reach/router";
-import { FiArrowRight, FiCheck, FiEye, FiEyeOff } from "react-icons/fi";
+import { FiArrowRight, FiEye, FiEyeOff } from "react-icons/fi";
 import { getDateTime } from "utils/helpers";
 
 interface PageProps extends RouteComponentProps {
@@ -83,7 +81,7 @@ export default function Pages({}: PageProps) {
                       alignItems="center"
                     >
                       <GridItem>
-                        <Text>{page.id}</Text>
+                        <Text>{page?.data().name}</Text>
                       </GridItem>
                       <GridItem>
                         <Text>{getDateTime(page?.data().lastUpdate)}</Text>

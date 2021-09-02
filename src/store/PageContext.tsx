@@ -7,10 +7,10 @@ interface Action {
   payload: any;
 }
 
-interface State {
-  name: string;
-  modules: Array<{}>;
-}
+// interface State {
+//   name: string;
+//   modules: Array<{}>;
+// }
 
 interface Module {
   component: string;
