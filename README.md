@@ -1,4 +1,4 @@
-# CANOLO CMS
+# Canolo CMS
 
 ## Headless CMS for Firebase
 
