@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React from "react";
 import {
   HStack,
   Stack,
@@ -7,7 +7,6 @@ import {
   Divider,
 } from "@chakra-ui/react";
 import { usePage } from "store/PageContext";
-import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { $t } from "store/TranslationsContext";
 import FieldHeader from "./FieldHeader";
@@ -21,27 +20,12 @@ interface Props {
 
 const Text = ({ name, index, alias }: Props) => {
   const [page, dispatch] = usePage();
-  // const [editorState, setEditorState] = useState(EditorState.createEmpty());
-  const editorRef = useRef<any>(null);
   const handleChangeText = (state: any) => {
     dispatch({
       type: "MODULE_PROP",
       payload: { name, value: state, index },
     });
   };
-  // const editor = useEditor({
-  //   extensions: [StarterKit],
-  //   content: "<p>Hello World! 🌎️</p>",
-  // });
-  // useEffect(() => {
-  //   if (editor) {
-  //     editor.on("update", (value: any) => {
-  //       console.log("change!!", editor.getHTML());
-  //     });
-  //   }
-  // }, [editor]);
-  // console.log("Value is", page.modules);
-  // console.log("Editor is", editor);
   return (
     <Stack width="100%" p={15}>
       <FieldHeader name={name} alias={alias} />
