@@ -50,7 +50,7 @@ export async function createSchema(schema: Schema, id: any) {
       };
     }
     schemaAsObject.meta = {
-      name: capitalize(schema.name),
+      name: schema.name,
       alias: capitalize(schema.alias),
     };
     await setDoc(id ? doc(modules, id) : doc(modules), schemaAsObject);

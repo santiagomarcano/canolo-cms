@@ -14,12 +14,15 @@ interface Props extends RouteComponentProps {
 }
 
 const formatFields = (fields: any) => {
-  return Object.keys(fields).map((key) => ({
-    name: key,
-    alias: fields[key]?.alias,
-    type: fields[key]?.type,
-    order: fields[key].order,
-  }));
+  return Object.keys(fields)
+    .map((key) => ({
+      name: key,
+      alias: fields[key]?.alias,
+      type: fields[key]?.type,
+      order: fields[key].order,
+    }))
+    .filter((i) => i.name !== "meta")
+    .sort((a, b) => a.order - b.order);
 };
 
 const Module = ({ path, module }: Props) => {
@@ -27,7 +30,9 @@ const Module = ({ path, module }: Props) => {
   const DELETE_MODULE_SUCCESSFULL = $t("DELETE_MODULE_SUCCESSFULL");
   const navigate = useNavigate();
   const moduleRef = doc(db, `modules/${module}`);
-  const [state, loading] = useDocumentData(moduleRef, [path], { initialValue: {} });
+  const [state, loading] = useDocumentData(moduleRef, [path], {
+    initialValue: {},
+  });
   const handleDelete = async (e: MouseEventHandler<HTMLButtonElement>) => {
     const confirmation = window.confirm(DELETE_MODULE_CONFIRMATION);
     if (confirmation) {
@@ -44,7 +49,7 @@ const Module = ({ path, module }: Props) => {
           onDelete={handleDelete}
           initialState={{
             id: module || null,
-            name:  state?.meta?.name,
+            name: state?.meta?.name,
             alias: state?.meta?.alias,
             fields: formatFields(state),
           }}

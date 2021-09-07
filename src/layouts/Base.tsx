@@ -3,6 +3,7 @@ import { ChakraProvider } from "@chakra-ui/react";
 import { TranslationsProvider } from "../store/TranslationsContext";
 import { initializeFFMPEG } from "utils/ffmpeg";
 import { FFMPEGProvider } from "store/FFMPEGProvider";
+import { PublishProvider } from "store/PublishContext";
 
 export default function Layout({ children }: { children: ReactElement }) {
   useEffect(() => {
@@ -10,9 +11,11 @@ export default function Layout({ children }: { children: ReactElement }) {
   }, []);
   return (
     <TranslationsProvider>
-      <FFMPEGProvider>
-        <ChakraProvider>{children}</ChakraProvider>
-      </FFMPEGProvider>
+      <PublishProvider>
+        <FFMPEGProvider>
+          <ChakraProvider>{children}</ChakraProvider>
+        </FFMPEGProvider>
+      </PublishProvider>
     </TranslationsProvider>
   );
 }

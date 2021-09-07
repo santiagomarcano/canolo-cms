@@ -55,7 +55,6 @@ const ModuleForm = ({
   initialState,
   type,
   onDelete,
-  isEdit = false,
 }: Props): ReactElement => {
   const FIELDS = $t("FIELDS");
   const [schema, setSchema] = useState(initialState);
@@ -160,7 +159,6 @@ const ModuleForm = ({
             {FIELDS}
           </Heading>
           {schema.fields
-            .filter((field) => field.name !== "meta")
             .sort((a, b) => a.order - b.order)
             .map((field: FieldInterface, index: number) => (
               <Box width="100%" key={index}>

@@ -19,6 +19,7 @@ import { db } from "utils/firebase";
 import { RouteComponentProps, Link } from "@reach/router";
 import { FiArrowRight, FiEye, FiEyeOff } from "react-icons/fi";
 import { getDateTime } from "utils/helpers";
+import { usePublish } from "store/PublishContext";
 
 interface PageProps extends RouteComponentProps {
   id?: string;
@@ -33,8 +34,16 @@ const boxStyles = {
   width: "100%",
 };
 
+const getPublishColor = (date: string, lastUpdate: string): string => {
+  if (new Date(date).getTime() < new Date(lastUpdate).getTime()) {
+    return "blue";
+  }
+  return "transparent";
+};
+
 export default function Pages({}: PageProps) {
   const [pages, loading] = useCollection(collection(db, "pages"));
+  const publish = usePublish();
 
   return (
     <Structure>
@@ -84,14 +93,17 @@ export default function Pages({}: PageProps) {
                         <Text>{page?.data().name}</Text>
                       </GridItem>
                       <GridItem>
-                        <Text>{getDateTime(page?.data().lastUpdate)}</Text>
+                        <Text
+                          borderColor={getPublishColor(publish.date, page?.data().lastUpdate)}
+                          borderWidth={2}
+                          borderRadius={5}
+                          p={2}
+                        >
+                          {getDateTime(page?.data().lastUpdate)}
+                        </Text>
                       </GridItem>
                       <GridItem justifySelf="center">
-                        {Number(page?.data().state) ? (
-                          <FiEye />
-                        ) : (
-                          <FiEyeOff />
-                        )}
+                        {Number(page?.data().state) ? <FiEye /> : <FiEyeOff />}
                       </GridItem>
                       <GridItem justifySelf="end">
                         <FiArrowRight />

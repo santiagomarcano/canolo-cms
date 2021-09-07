@@ -27,11 +27,7 @@ import {
   Button,
   ScaleFade,
 } from "@chakra-ui/react";
-import {
-  FiHome,
-  FiMenu,
-  FiGrid,
-} from "react-icons/fi";
+import { FiHome, FiMenu, FiGrid } from "react-icons/fi";
 import { IconType } from "react-icons";
 import { ReactText } from "react";
 import { useLocation } from "@reach/router";
@@ -44,6 +40,7 @@ import { doc } from "firebase/firestore";
 import { db } from "utils/firebase";
 import { getDateTime } from "utils/helpers";
 import { triggerBuild } from "utils/adapter";
+import { usePublish } from "store/PublishContext";
 
 interface LinkItemProps {
   name: string;
@@ -116,9 +113,10 @@ interface SidebarProps extends BoxProps {
 }
 
 const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
-  const [publish] = useDocumentData(doc(db, `updates/publish`), [], {
-    subscribe: true,
-  });
+  // const [publish] = useDocumentData(doc(db, `updates/publish`), [], {
+  //   subscribe: true,
+  // });
+  const publish = usePublish();
   const PUBLISH_MESSAGE = $t("PUBLISH_MESSAGE");
   const location = useLocation();
   return (
