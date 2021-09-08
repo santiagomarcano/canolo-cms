@@ -4,7 +4,6 @@ import {
   FormLabel,
   Input,
   Flex,
-  IconButton,
   Wrap,
   WrapItem,
   Heading,
@@ -19,9 +18,9 @@ import {
   Box,
 } from "@chakra-ui/react";
 import ModuleSelector from "components/ModuleSelector";
-import { FiEye, FiEyeOff, FiPlus } from "react-icons/fi";
+import { FiEye, FiEyeOff } from "react-icons/fi";
 import { $t } from "store/TranslationsContext";
-import { createPage } from "utils/adapter";
+import { createCollectionPage } from "utils/adapter";
 import { Module } from "interfaces/declarations";
 import ModuleFieldType from "components/ModuleFieldType";
 import { usePage } from "store/PageContext";
@@ -32,8 +31,8 @@ interface Props {
   modules: Array<Module>;
   type: string;
   onDelete?: any;
-  isEdit?: boolean;
   id: string | null;
+  collectionId: string;
 }
 
 interface ModuleHandlerEvent {
@@ -55,21 +54,18 @@ const getAlias = (module: any, modules: any) => {
     ?.data().meta?.alias;
 };
 
-const PageForm = ({
+const CollectionInstanceForm = ({
   modules,
   type,
   onDelete,
-  isEdit = false,
   id = null,
+  collectionId,
 }: Props): ReactElement => {
   const navigate = useNavigate();
   const [page, dispatch] = usePage();
   const [loading, setLoading] = useState(false);
   const MODULES = $t("MODULES");
   const SELECT_MODULE = $t("SELECT_MODULE");
-  const handleAddModule = () => {
-    dispatch({ type: "ADD_MODULE" });
-  };
   const handleModule = ({ value, index, is }: ModuleHandlerEvent) => {
     dispatch({ type: "MODULE", payload: { index, value, is } });
   };
@@ -86,9 +82,9 @@ const PageForm = ({
     setLoading(true);
     e.preventDefault();
     e.stopPropagation();
-    await createPage({ page, id });
+    await createCollectionPage({ page, id, collectionId });
     setLoading(false);
-    navigate("/dashboard/pages");
+    navigate(`/dashboard/${collectionId}`);
   }
   return (
     <form onSubmit={handleSubmit}>
@@ -104,8 +100,8 @@ const PageForm = ({
                   type="text"
                   isRequired
                   autoComplete="false"
-                  pattern="^[ A-Za-z0-9_@./#&+-]*$"
                   value={page.name}
+                  pattern="^[ A-Za-z0-9]*$"
                   onChange={handleChangePageName}
                 />
               </FormControl>
@@ -123,6 +119,20 @@ const PageForm = ({
                 </Select>
               </FormControl>
             </GridItem>
+            {/* <GridItem gridColumnStart={1} gridColumnEnd={3}>
+              <FormControl isRequired width="100%">
+                <FormLabel>{$t("SLUG")}</FormLabel>
+                <Input
+                  key="page-name"
+                  size="lg"
+                  type="text"
+                  isRequired
+                  autoComplete="false"
+                  value={page.name}
+                  onChange={handleChangePageName}
+                />
+              </FormControl>
+            </GridItem> */}
           </Grid>
         </WrapItem>
         <WrapItem
@@ -193,6 +203,7 @@ const PageForm = ({
                             index={index}
                             component={module.component}
                             visibility={module.visibility}
+                            canRemove={false}
                           />
                         </WrapItem>
                         <WrapItem width="100%">
@@ -214,12 +225,7 @@ const PageForm = ({
         </WrapItem>
         <WrapItem {...itemStyles}>
           <Flex justifyContent="space-between" alignItems="center" flex="1">
-            <IconButton
-              size="lg"
-              aria-label={$t("ADD_MODULE")}
-              icon={<FiPlus />}
-              onClick={handleAddModule}
-            />
+            <div></div>
             <div>
               {id && (
                 <Button
@@ -245,4 +251,4 @@ const PageForm = ({
   );
 };
 
-export default PageForm;
+export default CollectionInstanceForm;

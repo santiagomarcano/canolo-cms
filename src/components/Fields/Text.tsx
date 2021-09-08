@@ -7,7 +7,6 @@ import {
   Divider,
 } from "@chakra-ui/react";
 import { usePage } from "store/PageContext";
-import "react-quill/dist/quill.snow.css";
 import { $t } from "store/TranslationsContext";
 import FieldHeader from "./FieldHeader";
 import TipTap from "components/TipTap";
@@ -33,8 +32,6 @@ const Text = ({ name, index, alias }: Props) => {
       <HStack width="100%">
         <FormControl isRequired>
           <FormLabel>{$t("TEXT")}</FormLabel>
-          {/* {page.modules[index]?.props[name] && ( */}
-          {/* <EditorContent editor={editor} onChange={handleChangeText} /> */}
           <TipTap content={page.modules[index]?.props[name]} onChange={handleChangeText} />
         </FormControl>
       </HStack>
@@ -43,8 +40,3 @@ const Text = ({ name, index, alias }: Props) => {
 };
 
 export default Text;
-
-/*
-
-"<p><strong>VASCO SZINETAR</strong></p><p>LICENCIADO EN CINEMATOGRAFÍA ARTISTA, FOTÓGRAFO, CURADOR DE FOTOGRAFÍA ESPECIALISTA EN ARCHIVOS FOTOGRÁFICOS.</p><p><a href="https://vascoszinetar.com" rel="noopener noreferrer" target="_blank">VASCOSZINETAR.COM</a></p>"
-*/

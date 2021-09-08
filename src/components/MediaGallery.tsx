@@ -71,6 +71,7 @@ const MediaGallery = ({
               type="text"
               placeholder={$t("SEARCH_BY_NAME")}
               onChange={handleFilter}
+              pattern="^[ A-Za-z0-9_@./#&+-]*$"
             />
           </InputGroup>
         </GridItem>

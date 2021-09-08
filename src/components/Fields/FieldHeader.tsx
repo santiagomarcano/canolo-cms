@@ -2,7 +2,6 @@ import React from "react";
 import {
   Heading,
 } from "@chakra-ui/react";
-import "react-quill/dist/quill.snow.css";
 import { devLog } from "utils/developer";
 
 interface Props {

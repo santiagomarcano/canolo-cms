@@ -41,6 +41,7 @@ const Link = ({ name, index, alias }: Props) => {
           <Input
             value={page.modules[index]?.props[name]?.text || ""}
             onChange={handleChangeText}
+            pattern="^[ A-Za-z0-9_@./#&+-]*$"
           />
         </FormControl>
         <FormControl isRequired>
@@ -48,6 +49,7 @@ const Link = ({ name, index, alias }: Props) => {
           <Input
             value={page.modules[index]?.props[name]?.href || ""}
             onChange={handleChangeHREF}
+            pattern="^[ A-Za-z0-9_@./#&+-]*$"
           />
         </FormControl>
       </HStack>

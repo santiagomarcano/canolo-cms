@@ -59,6 +59,31 @@ export async function createSchema(schema: Schema, id: any) {
   }
 }
 
+export async function createCollection({
+  structure,
+  id,
+}: {
+  structure: Page;
+  id: string | null;
+}) {
+  try {
+    const collections = collection(db, "collections");
+    const collectionRef = id ? doc(collections, id) : doc(collections);
+    const formattedCollection = {
+      name: structure.name,
+      lastUpdate: new Date().toISOString(),
+      modules: structure.modules.map(({ component, props }) => ({
+        component,
+        props: {},
+        visibility: 1,
+      })),
+    };
+    await setDoc(collectionRef, formattedCollection);
+  } catch (err) {
+    alert(err);
+  }
+}
+
 export async function createPage({
   page,
   id,
@@ -72,6 +97,47 @@ export async function createPage({
     const formattedPage = {
       name: page.name,
       state: page.state,
+      lastUpdate: new Date().toISOString(),
+      modules: page.modules.map(({ component, props, visibility }) => ({
+        component,
+        visibility,
+        props,
+      })),
+    };
+    await setDoc(pageRef, formattedPage);
+  } catch (err) {
+    alert(err);
+  }
+}
+
+const slugify = (text: string): string => {
+  return text
+    .toString()
+    .toLowerCase()
+    .replace(/\s+/g, "-") // Replace spaces with -
+    .replace(/[^\w\-]+/g, "") // Remove all non-word chars
+    .replace(/\-\-+/g, "-") // Replace multiple - with single -
+    .replace(/^-+/, "") // Trim - from start of text
+    .replace(/-+$/, ""); // Trim - from end of text
+};
+
+export async function createCollectionPage({
+  page,
+  id,
+  collectionId,
+}: {
+  page: Page;
+  id: string | null;
+  collectionId: string;
+}) {
+  try {
+    console.log("ID IS", id);
+    const pages = collection(db, collectionId);
+    const pageRef = id ? doc(pages, id) : doc(pages);
+    const formattedPage = {
+      name: page.name,
+      state: page.state,
+      slug: slugify(page.name),
       lastUpdate: new Date().toISOString(),
       modules: page.modules.map(({ component, props, visibility }) => ({
         component,

@@ -13,7 +13,7 @@ export const initializeFFMPEG = async () => {
   }
 };
 
-export const sizes = [300, 500, 1500];
+export const sizes = [10, 300, 500, 1500];
 
 interface Resize {
   file: File;
@@ -38,6 +38,7 @@ export const resizeBatch = async ({ file }: { file: File }): Promise<any> => {
   const hash = toHash(hashBuffer);
   try {
     for await (let size of sizes) {
+      console.log("Creating size", size);
       const resized = await resize({
         file,
         size: { width: size, height: -1 },
@@ -72,9 +73,13 @@ const resize = async ({ file, size, hash }: Resize): Promise<any> => {
       "output.png"
     );
     const data = ffmpeg.FS("readFile", "output.png");
-    const resizedFile = new File([data.buffer], `${hash}-size{${size.width}}.png`, {
-      type: "image/png",
-    });
+    const resizedFile = new File(
+      [data.buffer],
+      `${hash}-size{${size.width === 10 ? "thumbnail" : size.width}}.png`,
+      {
+        type: "image/png",
+      }
+    );
     ffmpeg.FS("unlink", "output.png");
     return resizedFile;
   } catch (err) {

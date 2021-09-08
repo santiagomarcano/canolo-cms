@@ -14,16 +14,17 @@ import {
   Grid,
 } from "@chakra-ui/react";
 import { Module } from "interfaces/declarations";
-import { collection } from "firebase/firestore";
+import { collection as firebaseCollection } from "firebase/firestore";
 import { db } from "utils/firebase";
 import { RouteComponentProps, Link } from "@reach/router";
 import { FiArrowRight, FiEye, FiEyeOff } from "react-icons/fi";
 import { getDateTime } from "utils/helpers";
 import { usePublish } from "store/PublishContext";
 
-interface PageProps extends RouteComponentProps {
+interface Props extends RouteComponentProps {
   id?: string;
-  name?: string;
+  path: string;
+  collection?: string;
   location?: any;
 }
 
@@ -37,22 +38,22 @@ const boxStyles = {
 };
 
 const getPublishColor = (date: string, lastUpdate: string): string => {
-if (new Date(date).getTime() < new Date(lastUpdate).getTime()) {
+  if (new Date(date).getTime() < new Date(lastUpdate).getTime()) {
     return "blue";
   }
   return "transparent";
 };
 
-export default function Pages({ location }: PageProps) {
-  const [pages, loading] = useCollection(collection(db, "pages"));
+export default function CollectionInstanceList({ collection, location }: Props) {
+  const [pages, loading] = useCollection(firebaseCollection(db, `${collection}`), null, [collection]);
   const publish = usePublish();
   return (
-    <Structure name={location?.state?.name}>
+    <Structure name={location.state.name}>
       <Loader state={!loading}>
         <>
           <Flex justifyContent="flex-end">
-            <Link to="/dashboard/new-page">
-              <Button colorScheme="blue">{$t("NEW_PAGE")}</Button>
+            <Link to={`/dashboard/${collection}/new`}>
+              <Button colorScheme="blue">{$t("CREATE_NEW")}</Button>
             </Link>
           </Flex>
           <Divider my={5} />
@@ -76,7 +77,7 @@ export default function Pages({ location }: PageProps) {
             <Divider my={2} />
             {pages?.docs.map((page: Module) => (
               <React.Fragment key={page.id}>
-                <Link key={page.id} to={`/dashboard/pages/${page.id}`}>
+                <Link key={page.id} to={`/dashboard/${collection}/${page.id}`}>
                   <Box
                     {...boxStyles}
                     background="white"

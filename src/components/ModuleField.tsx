@@ -50,6 +50,7 @@ const ModuleField = ({
             isRequired
             autoComplete="false"
             value={name}
+            pattern="^[ A-Za-z0-9_@./#&+-]*$"
             onChange={(e) => {
               e.preventDefault();
               handleField({
@@ -70,6 +71,7 @@ const ModuleField = ({
             type="text"
             isRequired
             autoComplete="false"
+            pattern="^[ A-Za-z0-9_@./#&+-]*$"
             value={alias}
             onChange={(e) => {
               e.preventDefault();

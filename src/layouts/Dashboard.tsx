@@ -9,7 +9,6 @@ import {
   HStack,
   Icon,
   useColorModeValue,
-  // Link,
   Drawer,
   DrawerContent,
   Text,
@@ -27,20 +26,26 @@ import {
   Button,
   ScaleFade,
 } from "@chakra-ui/react";
-import { FiHome, FiMenu, FiGrid } from "react-icons/fi";
+import {
+  FiMenu,
+  FiGrid,
+  FiFolder,
+  FiLayout,
+  FiCodesandbox,
+  FiArchive,
+} from "react-icons/fi";
 import { IconType } from "react-icons";
 import { ReactText } from "react";
 import { useLocation } from "@reach/router";
 import { Link } from "@reach/router";
 import { useLoader } from "store/LoadingContext";
 import Overlay from "components/Overlay";
-import Loader from "components/Loader";
-import useDocumentData from "hooks/useDocumentData";
-import { doc } from "firebase/firestore";
+import { collection } from "firebase/firestore";
 import { db } from "utils/firebase";
 import { getDateTime } from "utils/helpers";
 import { triggerBuild } from "utils/adapter";
 import { usePublish } from "store/PublishContext";
+import useCollection from "hooks/useCollection";
 
 interface LinkItemProps {
   name: string;
@@ -48,22 +53,46 @@ interface LinkItemProps {
   pathname: string;
 }
 
-const links = () => {
-  const LinkItems: Array<LinkItemProps> = [
-    { name: $t("MODULES"), icon: FiHome, pathname: "/dashboard/modules" },
-    { name: $t("PAGES"), icon: FiHome, pathname: "/dashboard/pages" },
+const links = (collections: Array<any>) => {
+  let LinkItems: Array<LinkItemProps> = [
     { name: $t("GALLERY"), icon: FiGrid, pathname: "/dashboard/gallery" },
+    {
+      name: $t("MODULES"),
+      icon: FiCodesandbox,
+      pathname: "/dashboard/modules",
+    },
+    {
+      name: $t("COLLECTIONS"),
+      icon: FiFolder,
+      pathname: "/dashboard/collections",
+    },
+    { name: $t("PAGES"), icon: FiLayout, pathname: "/dashboard/pages" },
   ];
+  if (collections?.length > 0 || collections) {
+    LinkItems = [
+      ...LinkItems,
+      ...collections?.map((collection) => {
+        return {
+          pathname: `/dashboard/${collection.id}`,
+          name: collection.data().name,
+          icon: FiArchive,
+        };
+      }),
+    ];
+  }
   return LinkItems;
 };
 
 export default function SidebarWithHeader({
   children,
+  name,
 }: {
   children: ReactNode;
+  name?: string | any
 }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [loading] = useLoader();
+  console.log('NAME IS', name)
   return (
     <Base>
       <>
@@ -98,7 +127,7 @@ export default function SidebarWithHeader({
             </DrawerContent>
           </Drawer>
           {/* mobilenav */}
-          <MobileNav onOpen={onOpen} />
+          <MobileNav onOpen={onOpen} name={name} />
           <Box ml={{ base: 0, md: 60 }} p="4" flex="1">
             {children}
           </Box>
@@ -113,12 +142,11 @@ interface SidebarProps extends BoxProps {
 }
 
 const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
-  // const [publish] = useDocumentData(doc(db, `updates/publish`), [], {
-  //   subscribe: true,
-  // });
   const publish = usePublish();
   const PUBLISH_MESSAGE = $t("PUBLISH_MESSAGE");
   const location = useLocation();
+  const [collections] = useCollection(collection(db, "collections"), []);
+
   return (
     <Box
       transition="3s ease"
@@ -136,7 +164,7 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
         </Text>
         <CloseButton display={{ base: "flex", md: "none" }} onClick={onClose} />
       </Flex>
-      {links().map((link) => (
+      {links(collections?.docs).map((link) => (
         <NavItem
           key={link.name}
           icon={link.icon}
@@ -144,6 +172,7 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
             location.pathname === link.pathname ? "1px solid lightgray" : "none"
           }
           pathname={link.pathname}
+          name={link.name}
         >
           {link.name}
         </NavItem>
@@ -183,10 +212,11 @@ interface NavItemProps extends FlexProps {
   icon: IconType;
   children: ReactText;
   pathname: string;
+  name: string;
 }
-const NavItem = ({ icon, children, pathname, ...rest }: NavItemProps) => {
+const NavItem = ({ icon, children, pathname, name, ...rest }: NavItemProps) => {
   return (
-    <Link to={pathname} style={{ textDecoration: "none" }}>
+    <Link to={pathname} style={{ textDecoration: "none" }} replace state={{ name }}>
       <Flex
         align="center"
         p="4"
@@ -218,8 +248,9 @@ const NavItem = ({ icon, children, pathname, ...rest }: NavItemProps) => {
 
 interface MobileProps extends FlexProps {
   onOpen: () => void;
+  name?: string | any;
 }
-const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
+const MobileNav = ({ onOpen, name, ...rest }: MobileProps) => {
   return (
     <Flex
       ml={{ base: 0, md: 60 }}
@@ -257,6 +288,7 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
           icon={<FiBell />}
         /> */}
         <Flex flex="1">
+          <Text as="h2" fontSize="xl" fontWeight="bold">{name}</Text>
           <Menu>
             <MenuButton
               py={2}

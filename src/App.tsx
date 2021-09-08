@@ -1,34 +1,42 @@
-import React, { ReactChild, useEffect } from "react";
+import React, { ReactChild } from "react";
 import { Router, RouteComponentProps } from "@reach/router";
 import Base from "layouts/Base";
 import Modules from "pages/Modules";
+import Collections from "pages/Collections";
 import Pages from "pages/Pages";
 import Page from "pages/Page";
 import NewPage from "pages/NewPage";
 import NewModule from "pages/NewModule";
 import Module from "pages/Module";
 import Gallery from "pages/Gallery";
-import useDocumentData from "hooks/useDocumentData";
-import { doc } from "firebase/firestore";
-import { db } from "utils/firebase";
-import { usePublish } from "store/PublishContext";
+import NewCollection from "pages/NewCollection";
+import Collection from "pages/Collection";
+import CollectionInstanceList from "pages/CollectionInstanceList";
+import NewCollectionInstance from "pages/NewCollectionInstance";
+import CollectionInstance from "pages/CollectionInstance";
 
 interface DashboardProps extends RouteComponentProps {
   children: ReactChild[];
 }
 
-const Dashboard = ({ children, path }: DashboardProps) => <>{children}</>;
+const Dashboard = ({ children }: DashboardProps) => <>{children}</>;
 const App = () => {
   return (
     <Base>
       <Router>
         <Dashboard path="dashboard">
-          <Pages path="pages" />
           <NewPage path="new-page" />
+          <Pages path="pages" />
+          <Page path="pages/:page" />
+          <CollectionInstanceList path="/:collection" />
+          <NewCollectionInstance path="/:collection/new" />
+          <CollectionInstance path="/:collection/:id" />
           <NewModule path="new-module" />
           <Modules path="modules" />
           <Module path="modules/:module" />
-          <Page path="pages/:page" />
+          <Collections path="collections" />
+          <NewCollection path="new-collection" />
+          <Collection path="collections/:collection" />
           <Gallery path="gallery" />
         </Dashboard>
       </Router>

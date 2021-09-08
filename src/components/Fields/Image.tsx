@@ -19,6 +19,19 @@ import { useFFMPEG } from "store/FFMPEGProvider";
 import Overlay from "components/Overlay";
 import MediaGallery from "components/MediaGallery";
 
+const toDataURL = (url: string) =>
+  fetch(url)
+    .then((response) => response.blob())
+    .then(
+      (blob) =>
+        new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onloadend = () => resolve(reader.result);
+          reader.onerror = reject;
+          reader.readAsDataURL(blob);
+        })
+    );
+
 interface Props {
   name: string | number;
   alias: string | number;
@@ -37,11 +50,15 @@ const Image = ({ name, index, alias }: Props) => {
     });
   };
 
-  const handleGallery = (selected: any) => {
-    console.log(selected);
+  const handleGallery = async (selected: any) => {
     dispatch({
       type: "MODULE_PROP",
       payload: { name, value: selected, index, key: "src" },
+    });
+    const base64 = await toDataURL(selected.replace("{size}", "thumbnail"));
+    dispatch({
+      type: "MODULE_PROP",
+      payload: { name, value: base64, index, key: "thumbnail" },
     });
   };
   return (
@@ -103,6 +120,7 @@ const Image = ({ name, index, alias }: Props) => {
               <Input
                 value={page.modules[index]?.props[name]?.alt || ""}
                 onChange={handleChange}
+                pattern="^[ A-Za-z0-9_@./#&+-]*$"
               />
             </FormControl>
           </GridItem>

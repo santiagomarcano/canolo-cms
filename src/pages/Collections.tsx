@@ -14,22 +14,22 @@ interface Props extends RouteComponentProps {
   location?: any;
 }
 
-export default function Modules({ location }: Props) {
-  const [modules, loading] = useCollection(collection(db, "modules"));
+export default function Collections({ location }: Props) {
+  const [collections, loading] = useCollection(collection(db, "collections"));
 
   return (
-    <Structure name={location?.state.name}>
+    <Structure name={location.state.name}>
       <Loader state={!loading}>
         <Flex justifyContent="flex-end">
-          <Link to="/dashboard/new-module">
-            <Button colorScheme="blue">{$t("NEW_MODULE")}</Button>
+          <Link to="/dashboard/new-collection">
+            <Button colorScheme="blue">{$t("NEW_COLLECTION")}</Button>
           </Link>
         </Flex>
         <Divider my={5} />
         <UnorderedList m={0}>
-          {modules?.docs.map((module: Module) => (
-            <React.Fragment key={module.id}>
-              <Link key={module.id} to={`/dashboard/modules/${module.id}`}>
+          {collections?.docs.map((collection: Module) => (
+            <React.Fragment key={collection.id}>
+              <Link key={collection.id} to={`/dashboard/collections/${collection.id}`}>
                 <Box
                   boxShadow="sm"
                   width="100%"
@@ -46,7 +46,7 @@ export default function Modules({ location }: Props) {
                 >
                   <Flex justifyContent="space-between" alignItems="center">
                     <div>
-                      {module?.data()?.meta?.name}
+                      {collection?.data()?.name}
                     </div>
                     <FiArrowRight />
                   </Flex>

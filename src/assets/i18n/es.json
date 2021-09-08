@@ -57,8 +57,11 @@
     "PUBLISH": "Publicar",
     "PUBLISH_MESSAGE": "¿Está seguro que quiere hacer públicos los últimos cambios?",
     "DELETE_PAGE": "Eliminar página",
+    "DELETE_COLLECTION": "Eliminar colección",
     "DELETE_PAGE_CONFIRMATION": "¿Está seguro que desea eliminar la página?\nEste cambio es irreversible",
     "DELETE_PAGE_SUCCESSFULL": "La página ha sido eliminada satisfactoriamente",
+    "DELETE_COLLECTION_CONFIRMATION": "¿Está seguro que desea eliminar la colección?\nEste cambio es irreversible",
+    "DELETE_COLLECTION_SUCCESSFULL": "La colección ha sido eliminada satisfactoriamente",
     "DELETE_MODULE_CONFIRMATION": "¿Está seguro que desea eliminar el módulo?\nEste cambio es irreversible",
     "DELETE_MODULE_SUCCESSFULL": "El módulo ha sido eliminado satisfactoriamente",
     "HREF": "Hipervínculo",
@@ -67,5 +70,9 @@
     "SELECT_MODULE": "Selecciona módulo",
     "VISIBILITY": "Visibilidad",
     "VISIBLE": "Visible",
-    "HIDDEN": "Oculto"
+    "HIDDEN": "Oculto",
+    "COLLECTIONS": "Colecciones",
+    "NEW_COLLECTION": "Nueva colección",
+    "COLLECTION_NAME": "Nombre de colección",
+    "CREATE_NEW": "Crear nuevo"
 }
