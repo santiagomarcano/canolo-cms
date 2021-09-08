@@ -26,7 +26,6 @@ interface Props {
   modules: Array<Module>;
   type: string;
   onDelete?: any;
-  isEdit?: boolean;
   id: string | null;
 }
 
@@ -53,7 +52,6 @@ const CollectionForm = ({
   modules,
   type,
   onDelete,
-  isEdit = false,
   id = null,
 }: Props): ReactElement => {
   const navigate = useNavigate();

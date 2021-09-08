@@ -15,7 +15,8 @@
         "Text": "Texto",
         "Image": "Imágen",
         "Link": "Enlace",
-        "Toggler": "Toggler"
+        "Toggler": "Toggler",
+        "Tags": "Tags"
     },
     "SIZES": [
         "XS",
@@ -74,5 +75,9 @@
     "COLLECTIONS": "Colecciones",
     "NEW_COLLECTION": "Nueva colección",
     "COLLECTION_NAME": "Nombre de colección",
-    "CREATE_NEW": "Crear nuevo"
+    "CREATE_NEW": "Crear nuevo",
+    "ADD_YOUR_TAGS": "Agrega categorías",
+    "CATEGORIES": "Categorías",
+    "SAVE": "Guardar",
+    "CATEGORIES_SAVED": "Categorías guardadas correctamente"
 }

@@ -33,6 +33,7 @@ import {
   FiLayout,
   FiCodesandbox,
   FiArchive,
+  FiImage,
 } from "react-icons/fi";
 import { IconType } from "react-icons";
 import { ReactText } from "react";
@@ -55,7 +56,7 @@ interface LinkItemProps {
 
 const links = (collections: Array<any>) => {
   let LinkItems: Array<LinkItemProps> = [
-    { name: $t("GALLERY"), icon: FiGrid, pathname: "/dashboard/gallery" },
+    { name: $t("GALLERY"), icon: FiImage, pathname: "/dashboard/gallery" },
     {
       name: $t("MODULES"),
       icon: FiCodesandbox,
@@ -67,6 +68,8 @@ const links = (collections: Array<any>) => {
       pathname: "/dashboard/collections",
     },
     { name: $t("PAGES"), icon: FiLayout, pathname: "/dashboard/pages" },
+    { name: $t("CATEGORIES"), icon: FiGrid, pathname: "/dashboard/categories" },
+
   ];
   if (collections?.length > 0 || collections) {
     LinkItems = [

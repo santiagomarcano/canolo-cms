@@ -59,6 +59,16 @@ export async function createSchema(schema: Schema, id: any) {
   }
 }
 
+export async function createCategories(categories: Array<string>) {
+  const col = collection(db, "categories");
+  try {
+    const valuesDoc = doc(col, "value");
+    await setDoc(valuesDoc, { categories });
+  } catch (err) {
+    alert(err);
+  }
+}
+
 export async function createCollection({
   structure,
   id,

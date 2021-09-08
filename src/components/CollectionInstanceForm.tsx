@@ -119,6 +119,9 @@ const CollectionInstanceForm = ({
                 </Select>
               </FormControl>
             </GridItem>
+            <GridItem>
+              
+            </GridItem>
             {/* <GridItem gridColumnStart={1} gridColumnEnd={3}>
               <FormControl isRequired width="100%">
                 <FormLabel>{$t("SLUG")}</FormLabel>
