@@ -131,7 +131,6 @@ export async function createCollectionPage({
   collectionId: string;
 }) {
   try {
-    console.log("ID IS", id);
     const pages = collection(db, collectionId);
     const pageRef = id ? doc(pages, id) : doc(pages);
     const formattedPage = {

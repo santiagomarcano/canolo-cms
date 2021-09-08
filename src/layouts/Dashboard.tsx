@@ -92,7 +92,6 @@ export default function SidebarWithHeader({
 }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [loading] = useLoader();
-  console.log('NAME IS', name)
   return (
     <Base>
       <>

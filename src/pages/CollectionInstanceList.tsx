@@ -48,7 +48,7 @@ export default function CollectionInstanceList({ collection, location }: Props) 
   const [pages, loading] = useCollection(firebaseCollection(db, `${collection}`), null, [collection]);
   const publish = usePublish();
   return (
-    <Structure name={location.state.name}>
+    <Structure name={location?.state?.name}>
       <Loader state={!loading}>
         <>
           <Flex justifyContent="flex-end">

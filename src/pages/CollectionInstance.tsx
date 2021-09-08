@@ -38,7 +38,7 @@ const CollectionInstance = ({ collection, id, location }: PageProps) => {
     }
   };
   return (
-    <Structure name={location?.state.props}>
+    <Structure name={state?.name}>
       <Loader state={!loading}>
         <PageProvider value={state}>
           <CollectionInstanceForm
