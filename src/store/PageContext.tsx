@@ -32,6 +32,12 @@ const reducer = (state: any, action: Action) => {
       next.state = value;
       return next;
     }
+    case "PAGE_CATEGORIES": {
+      const { value } = action.payload;
+      const next = { ...state };
+      next.categories = value;
+      return next;
+    }
     case "MODULE": {
       const { index, value, is } = action.payload;
       const next = [...state.modules];

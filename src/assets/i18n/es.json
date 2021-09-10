@@ -79,5 +79,6 @@
     "ADD_YOUR_TAGS": "Agrega categorías",
     "CATEGORIES": "Categorías",
     "SAVE": "Guardar",
-    "CATEGORIES_SAVED": "Categorías guardadas correctamente"
+    "CATEGORIES_SAVED": "Categorías guardadas correctamente",
+    "NO_RESULTS": "No hay resultados con el filtro o todas las categorías están agregadas"
 }

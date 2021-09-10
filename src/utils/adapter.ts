@@ -20,6 +20,7 @@ interface Page {
   state: string | boolean;
   lastUpdate: string;
   modules: Array<PageModule>;
+  categories?: Array<string>;
 }
 
 function capitalize(string: string): string {
@@ -147,6 +148,7 @@ export async function createCollectionPage({
       name: page.name,
       state: page.state,
       slug: slugify(page.name),
+      categories: page.categories,
       lastUpdate: new Date().toISOString(),
       modules: page.modules.map(({ component, props, visibility }) => ({
         component,

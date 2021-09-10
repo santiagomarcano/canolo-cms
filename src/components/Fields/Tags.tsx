@@ -7,10 +7,12 @@ import {
   Divider,
   Input,
   Button,
+  Flex,
+  Container,
 } from "@chakra-ui/react";
-import { usePage } from "store/PageContext";
 import { $t } from "store/TranslationsContext";
 import FieldHeader from "./FieldHeader";
+import { FiX } from "react-icons/fi";
 
 interface Props {
   name: string;
@@ -19,7 +21,7 @@ interface Props {
   alias: string;
 }
 
-const Tags = ({ onChange, value, name = 'tags', alias = 'Tags' }: Props) => {
+const Tags = ({ onChange, value, name = "tags", alias = "Tags" }: Props) => {
   const handleAddTag = (e: any) => {
     e.stopPropagation();
     if (e.code === "Enter" || e.which === 13) {
@@ -33,42 +35,37 @@ const Tags = ({ onChange, value, name = 'tags', alias = 'Tags' }: Props) => {
       } else {
         next = [targetValue];
       }
-      onChange(next)
+      onChange(next);
       e.target.value = "";
     }
   };
-  const handleRemoveTag = (e: any) => {
-    e.stopPropagation();
-    e.preventDefault();
-    const targetValue = e.target.textContent;
+  const handleRemoveTag = (tag: string) => {
     const current = value;
     let next: Array<string> = [];
     if (current) {
-      next = current.filter((item: string) => item !== targetValue);
+      next = current.filter((item: string) => item !== tag);
     }
-    onChange(next)
+    onChange(next);
   };
   return (
-    <Stack width="100%">
+    <Container width="100%">
       <FieldHeader name={name} alias={alias} />
       <Divider />
-      <HStack>
-        {value && value.map((tag: string) => (
-          <Button key={tag} onClick={handleRemoveTag}>
-            {tag}
-          </Button>
-        ))}
-      </HStack>
+      <Flex flexWrap="wrap" mt={2} maxHeight={300} overflow="scroll">
+        {value &&
+          value.map((tag: string) => (
+            <Button key={tag} onClick={() => handleRemoveTag(tag)} rightIcon={<FiX />} mr={2} mb={2} >
+              {tag}
+            </Button>
+          ))}
+      </Flex>
       <HStack width="100%">
         <FormControl>
           <FormLabel>{$t("ADD_YOUR_TAGS")}</FormLabel>
-          <Input
-            onKeyPress={handleAddTag}
-            pattern="^[ A-Za-z0-9_@./#&+-]*$"
-          />
+          <Input onKeyPress={handleAddTag} pattern="^[ A-Za-z0-9_@./#&+-]*$" />
         </FormControl>
       </HStack>
-    </Stack>
+    </Container>
   );
 };
 

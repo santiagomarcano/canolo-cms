@@ -15,7 +15,7 @@ const NewPage = ({}: PageProps) => {
   return (
     <Structure>
       <Loader state={modules}>
-        <PageProvider value={{ name: "", modules: [], state: "0" }}>
+        <PageProvider value={{ name: "", modules: [], state: "0", categories: [] }}>
           <PageForm
             type="new"
             modules={modules?.docs as Array<any>}

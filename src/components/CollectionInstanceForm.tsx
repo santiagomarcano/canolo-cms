@@ -26,6 +26,7 @@ import ModuleFieldType from "components/ModuleFieldType";
 import { usePage } from "store/PageContext";
 import Button from "components/Button";
 import { useNavigate } from "@reach/router";
+import Autocomplete from "./Fields/Autocomplete";
 
 interface Props {
   modules: Array<Module>;
@@ -80,7 +81,9 @@ const CollectionInstanceForm = ({
   const handleStateChange = ({ target }: { target: HTMLSelectElement }) => {
     dispatch({ type: "PAGE_STATUS", payload: { value: target.value } });
   };
-  const handleTagsChange = ({ target }: { target: HTMLSelectElement }) => {};
+  const handleCategories = (selected: Array<string>) => {
+    dispatch({ type: "PAGE_CATEGORIES", payload: { value: selected } });
+  };
   async function handleSubmit(e: FormEvent) {
     setLoading(true);
     e.preventDefault();
@@ -123,9 +126,14 @@ const CollectionInstanceForm = ({
               </FormControl>
             </GridItem>
             <GridItem gridColumnStart={1} gridColumnEnd={3}>
-              <FormControl isRequired width="100%">
-                <FormLabel>{$t("CATEGORIES")}</FormLabel>
-                <Select
+              <Autocomplete
+                name="categories"
+                alias={$t("CATEGORIES")}
+                values={categories}
+                selected={page.categories}
+                onChange={handleCategories}
+              />
+              {/* <Select
                   size="lg"
                   onChange={handleTagsChange}
                   value={page.tags || []}
@@ -139,8 +147,7 @@ const CollectionInstanceForm = ({
                     //   {category}
                     // </option>
                   ))}
-                </Select>
-              </FormControl>
+                </Select> */}
             </GridItem>
             <GridItem></GridItem>
             {/* <GridItem gridColumnStart={1} gridColumnEnd={3}>
