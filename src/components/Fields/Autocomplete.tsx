@@ -86,6 +86,14 @@ const Autocomplete = ({ onChange, values, name, alias, selected }: Props) => {
               pattern="^[ A-Za-z0-9_@./#&+-]*$"
               autoComplete="off"
               value={filter}
+              type="text"
+              onKeyPress={(e: any) => {
+                if (e.code === "Enter" || e.which === 13) {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  return;
+                }
+              }}
             />
             <InputRightElement children={<FiSearch />} />
           </InputGroup>
@@ -109,6 +117,7 @@ const Autocomplete = ({ onChange, values, name, alias, selected }: Props) => {
                 {...boxStyles}
                 color="gray.500"
                 _hover={{ background: "white", color: "gray.500" }}
+                cursor="not-allowed"
               >
                 {NO_RESULTS}
               </Box>
