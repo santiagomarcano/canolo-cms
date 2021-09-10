@@ -33,6 +33,7 @@ interface Props {
   onDelete?: any;
   id: string | null;
   collectionId: string;
+  categories: Array<string>;
 }
 
 interface ModuleHandlerEvent {
@@ -60,6 +61,7 @@ const CollectionInstanceForm = ({
   onDelete,
   id = null,
   collectionId,
+  categories,
 }: Props): ReactElement => {
   const navigate = useNavigate();
   const [page, dispatch] = usePage();
@@ -78,6 +80,7 @@ const CollectionInstanceForm = ({
   const handleStateChange = ({ target }: { target: HTMLSelectElement }) => {
     dispatch({ type: "PAGE_STATUS", payload: { value: target.value } });
   };
+  const handleTagsChange = ({ target }: { target: HTMLSelectElement }) => {};
   async function handleSubmit(e: FormEvent) {
     setLoading(true);
     e.preventDefault();
@@ -119,9 +122,27 @@ const CollectionInstanceForm = ({
                 </Select>
               </FormControl>
             </GridItem>
-            <GridItem>
-              
+            <GridItem gridColumnStart={1} gridColumnEnd={3}>
+              <FormControl isRequired width="100%">
+                <FormLabel>{$t("CATEGORIES")}</FormLabel>
+                <Select
+                  size="lg"
+                  onChange={handleTagsChange}
+                  value={page.tags || []}
+                  multiple
+                >
+                  {categories.map((category: string) => (
+                    <Box key={category}>
+                      {category}
+                    </Box>
+                    // <option key={category} value={category}>
+                    //   {category}
+                    // </option>
+                  ))}
+                </Select>
+              </FormControl>
             </GridItem>
+            <GridItem></GridItem>
             {/* <GridItem gridColumnStart={1} gridColumnEnd={3}>
               <FormControl isRequired width="100%">
                 <FormLabel>{$t("SLUG")}</FormLabel>

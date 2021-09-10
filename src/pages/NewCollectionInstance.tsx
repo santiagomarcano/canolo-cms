@@ -32,6 +32,7 @@ const NewCollectionInstance = ({ collection }: PageProps) => {
               type="new"
               modules={modules?.docs as Array<any>}
               id={null}
+              categories={[]}
             />
           </PageProvider>
         ) : (

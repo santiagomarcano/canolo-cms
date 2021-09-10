@@ -42,12 +42,6 @@ const itemStyles = {
   width: "100%",
 };
 
-const getAlias = (module: any, modules: any) => {
-  return modules
-    .find((m: any) => module.component === m?.data().meta.name)
-    ?.data().meta?.alias;
-};
-
 const CollectionForm = ({
   modules,
   type,

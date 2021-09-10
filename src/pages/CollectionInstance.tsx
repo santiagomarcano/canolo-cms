@@ -29,6 +29,11 @@ const CollectionInstance = ({ collection, id, location }: PageProps) => {
   const pageRef = doc(db, `${collection}/${id}`);
   const [modules] = useCollection(firebaseCollection(db, "modules"));
   const [state, loading] = useDocumentData(pageRef, [collection], {});
+  const [{ categories }, loadingCategories] = useDocumentData(
+    doc(db, "categories/value"),
+    [],
+    { initialValue: {} }
+  );
   const handleDelete = async (e: MouseEventHandler<HTMLButtonElement>) => {
     const confirmation = window.confirm(DELETE_COLLECTION_CONFIRMATION);
     if (confirmation) {
@@ -39,10 +44,11 @@ const CollectionInstance = ({ collection, id, location }: PageProps) => {
   };
   return (
     <Structure name={state?.name}>
-      <Loader state={!loading}>
+      <Loader state={!loading && !loadingCategories}>
         <PageProvider value={state}>
           <CollectionInstanceForm
             type="update"
+            categories={categories}
             modules={modules?.docs as Array<Module>}
             onDelete={handleDelete}
             id={id || null}
