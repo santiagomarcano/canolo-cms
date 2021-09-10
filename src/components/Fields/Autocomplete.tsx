@@ -14,10 +14,9 @@ import {
   Box,
   SlideFade,
   Flex,
+  Text,
 } from "@chakra-ui/react";
-import { usePage } from "store/PageContext";
 import { $t } from "store/TranslationsContext";
-import FieldHeader from "./FieldHeader";
 import { FiSearch, FiX } from "react-icons/fi";
 
 interface Props {
@@ -26,6 +25,9 @@ interface Props {
   values: Array<string>;
   alias: string;
   selected: Array<string>;
+  placeholder?: string;
+  label?: string;
+  noSelectedLabel?: string;
 }
 
 const boxStyles = {
@@ -42,7 +44,14 @@ const boxStyles = {
   },
 };
 
-const Autocomplete = ({ onChange, values, name, alias, selected }: Props) => {
+const Autocomplete = ({
+  onChange,
+  values,
+  selected = [],
+  placeholder,
+  label,
+  noSelectedLabel,
+}: Props) => {
   const NO_RESULTS = $t("NO_RESULTS");
   const itemsRef = useRef<HTMLDivElement>({} as HTMLDivElement);
   const [filter, setFilter] = useState<string>("");
@@ -63,29 +72,36 @@ const Autocomplete = ({ onChange, values, name, alias, selected }: Props) => {
     <Stack width="100%">
       <Divider my={2} />
       <Flex flexWrap="wrap" maxHeight={150} overflow="scroll" ref={itemsRef}>
-        {selected &&
-          selected.map((tag: string) => (
-            <Button
-              key={tag}
-              onClick={() => handleRemoveTag(tag)}
-              rightIcon={<FiX pointerEvents="none" />}
-              mr={2}
-              mb={2}
-            >
-              <div></div>
-              {tag}
-            </Button>
-          ))}
+        <SlideFade in={selected?.length > 0}>
+          <>
+            {selected?.map((tag: string) => (
+              <Button
+                key={tag}
+                onClick={() => handleRemoveTag(tag)}
+                rightIcon={<FiX pointerEvents="none" />}
+                mr={2}
+                mb={2}
+              >
+                <div></div>
+                {tag}
+              </Button>
+            ))}
+          </>
+        </SlideFade>
+        <SlideFade in={selected?.length === 0}>
+          <Text>{noSelectedLabel}</Text>
+        </SlideFade>
       </Flex>
       <HStack width="100%">
         <FormControl>
-          <FormLabel>{$t("ADD_YOUR_TAGS")}</FormLabel>
+          <FormLabel>{label}</FormLabel>
           <InputGroup>
             <Input
               onChange={handleFilter}
               pattern="^[ A-Za-z0-9_@./#&+-]*$"
               autoComplete="off"
               value={filter}
+              placeholder={placeholder}
               type="text"
               onKeyPress={(e: any) => {
                 if (e.code === "Enter" || e.which === 13) {

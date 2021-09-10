@@ -132,38 +132,11 @@ const CollectionInstanceForm = ({
                 values={categories}
                 selected={page.categories}
                 onChange={handleCategories}
+                placeholder={$t("FILTER_PLACEHOLDER")}
+                label={$t("ADD_YOUR_TAGS")}
+                noSelectedLabel={$t("NO_SELECTED_LABEL")}
               />
-              {/* <Select
-                  size="lg"
-                  onChange={handleTagsChange}
-                  value={page.tags || []}
-                  multiple
-                >
-                  {categories.map((category: string) => (
-                    <Box key={category}>
-                      {category}
-                    </Box>
-                    // <option key={category} value={category}>
-                    //   {category}
-                    // </option>
-                  ))}
-                </Select> */}
             </GridItem>
-            <GridItem></GridItem>
-            {/* <GridItem gridColumnStart={1} gridColumnEnd={3}>
-              <FormControl isRequired width="100%">
-                <FormLabel>{$t("SLUG")}</FormLabel>
-                <Input
-                  key="page-name"
-                  size="lg"
-                  type="text"
-                  isRequired
-                  autoComplete="false"
-                  value={page.name}
-                  onChange={handleChangePageName}
-                />
-              </FormControl>
-            </GridItem> */}
           </Grid>
         </WrapItem>
         <WrapItem
