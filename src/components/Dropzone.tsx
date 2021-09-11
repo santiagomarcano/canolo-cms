@@ -2,7 +2,7 @@ import React, { useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { Flex, Text, Stack, VStack } from "@chakra-ui/react";
 import { $t } from "store/TranslationsContext";
-import { resizeBatch } from "utils/ffmpeg";
+import { resizeBatch, toSHA } from "utils/ffmpeg";
 import { useFFMPEG } from "store/FFMPEGProvider";
 import { storage } from "utils/firebase";
 import { ref, uploadBytes } from "firebase/storage";
@@ -20,18 +20,27 @@ const Dropzone = ({ onUploadFinished }: Props) => {
   const [progressPhase, setProgressPhase] = useState("");
   const onDrop = useCallback(async (acceptedFiles) => {
     const file = acceptedFiles?.[0];
-    // You should accept SVG files
-    // if (file.type.includes("svg")) {
-    //   uploadBytes(storageRef, image, {
-    //     cacheControl: "public,max-age=300",
-    //     contentType: "image/png",
-    //     customMetadata: {
-    //       originalName,
-    //       uploadedAt: String(Date.now()),
-    //     },
-    //   });
-    //   return;
-    // }
+    if (!file) return;
+    // SVG Files
+    if (file.type === "image/svg+xml" || file.type.includes("svg")) {
+      setProgressPhase("uploading");
+      setLoading(true);
+      const hash = await toSHA(file);
+      const storageRef = ref(storage, `images/${hash}-svg`);
+      await uploadBytes(storageRef, file, {
+        cacheControl: "public,max-age=300",
+        contentType: "image/svg+xml",
+        customMetadata: {
+          originalName: file.name,
+          uploadedAt: String(Date.now()),
+        },
+      });
+      setLoading(false);
+      setProgressPhase("");
+      onUploadFinished();
+      return;
+    }
+    // Resize image files (png, tif, jpeg)
     if (allowedTypes.includes(file.type)) {
       setFfmpegState(true);
       setLoading(true);

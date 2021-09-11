@@ -29,13 +29,17 @@ function toHash(hashBuffer: ArrayBuffer): string {
   return hashHex;
 }
 
+export const toSHA = async (file: File) => {
+  const arrayBuffer = await file.arrayBuffer();
+  const hashBuffer = await crypto.subtle.digest("SHA-256", arrayBuffer);
+  return toHash(hashBuffer);
+}
+
 export const resizeBatch = async ({ file }: { file: File }): Promise<any> => {
   // Available sizes to resize
   const resizedImages = [];
   // Hash file to get unique id
-  const arrayBuffer = await file.arrayBuffer();
-  const hashBuffer = await crypto.subtle.digest("SHA-256", arrayBuffer);
-  const hash = toHash(hashBuffer);
+  const hash = await toSHA(file);
   try {
     for await (let size of sizes) {
       console.log("Creating size", size);

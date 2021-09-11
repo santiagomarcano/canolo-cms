@@ -46,7 +46,7 @@ const useStorage = (
           const refs: any = [];
           let promises: any = [];
           for (let item of items) {
-            if (item.name.includes("size{300}")) {
+            if (item.name.includes("size{300}") || item.name.includes('svg')) {
               promises.push(getDownloadURL(item), getMetadata(item));
               refs.push(item);
             }
