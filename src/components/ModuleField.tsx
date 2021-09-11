@@ -12,6 +12,7 @@ import {
 import { FiMinus } from "react-icons/fi";
 import { $t } from "store/TranslationsContext";
 import { Field as FieldInterface } from "interfaces/declarations";
+import Tags from "./Fields/Tags";
 
 interface FieldProps {
   name: string;
@@ -19,10 +20,20 @@ interface FieldProps {
   alias: string;
   order: number;
   index?: number;
+  options?: Array<string>;
   fields: Array<FieldInterface>;
   handleField: Function;
   handleRemoveField: Function;
 }
+
+const getTemplateColumns = (type: string): Array<string> => {
+  const layout = ["1fr", "1fr", "1fr"];
+  if (type === "Options") {
+    layout.push("2fr 2fr 2fr 2fr 1fr");
+  }
+  layout.push("2fr 2fr 2fr 2fr 1fr");
+  return layout;
+};
 
 const ModuleField = ({
   name,
@@ -31,9 +42,11 @@ const ModuleField = ({
   order,
   index,
   fields,
+  options,
   handleField,
   handleRemoveField,
 }: FieldProps): ReactElement => {
+  const OPTIONS = $t("OPTIONS");
   return (
     <Grid
       templateColumns={["1fr", "1fr", "1fr", "2fr 2fr 2fr 2fr 1fr"]}
@@ -71,7 +84,6 @@ const ModuleField = ({
             type="text"
             isRequired
             autoComplete="false"
-            pattern="^[ A-Za-z0-9_@./#&+-]*$"
             value={alias}
             onChange={(e) => {
               e.preventDefault();
@@ -103,11 +115,11 @@ const ModuleField = ({
             }}
           >
             {fields.map((_, index) => {
-                return (
-                  <option value={index} key={index}>
-                    {index}
-                  </option>
-                );
+              return (
+                <option value={index} key={index}>
+                  {index}
+                </option>
+              );
             })}
           </Select>
         </FormControl>
@@ -138,7 +150,7 @@ const ModuleField = ({
           </Select>
         </FormControl>
       </GridItem>
-      <GridItem>
+      <GridItem gridColumnStart={["1", "1", "1", "5"]} gridRowStart={["6", "6", "6", "1"]}>
         <FormLabel></FormLabel>
         <Flex flex="1" width="100%" justifyContent="flex-end">
           <IconButton
@@ -150,6 +162,24 @@ const ModuleField = ({
           />
         </Flex>
       </GridItem>
+      {type === "Options" && (
+        <GridItem gridColumnStart={["1", "1", "1"]} gridColumnEnd={["1", "1", "1", "6"]}>
+          <Tags
+            alias={OPTIONS}
+            name={OPTIONS}
+            header={false}
+            label={OPTIONS}
+            value={options || []}
+            onChange={(value: string) => {
+              handleField({
+                is: "options",
+                value: value,
+                index,
+              });
+            }}
+          />
+        </GridItem>
+      )}
     </Grid>
   );
 };

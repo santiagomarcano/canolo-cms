@@ -7,6 +7,7 @@ interface Field {
   alias: string;
   type: string;
   order?: number;
+  options?: Array<string>;
 }
 
 interface Schema {
@@ -49,6 +50,9 @@ export async function createSchema(schema: Schema, id: any) {
         alias: field.alias,
         order: field.order,
       };
+      if (field.options) {
+        schemaAsObject[field.name].options = field.options;
+      }
     }
     schemaAsObject.meta = {
       name: schema.name,

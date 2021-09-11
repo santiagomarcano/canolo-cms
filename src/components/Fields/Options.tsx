@@ -16,10 +16,10 @@ interface Props {
   name: string;
   index: number;
   alias: string;
-  values?: Array<string>
+  options?: Array<string>;
 }
 
-const Toggler = ({ name, index, alias, values }: Props) => {
+const Toggler = ({ name, index, alias, options }: Props) => {
   const [page, dispatch] = usePage();
   const handleChangeValue = ({ target }: { target: HTMLSelectElement }) => {
     dispatch({
@@ -42,8 +42,11 @@ const Toggler = ({ name, index, alias, values }: Props) => {
             isRequired
             onChange={handleChangeValue}
           >
-            <option value={0}>Side</option>
-            <option value={1}>Main</option>
+            {options?.map((item: string) => (
+              <option value={item} key={item}>
+                {item}
+              </option>
+            ))}
           </Select>
         </FormControl>
       </HStack>

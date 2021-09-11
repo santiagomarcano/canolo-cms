@@ -19,9 +19,11 @@ interface Props {
   onChange: Function;
   value: Array<string>;
   alias: string;
+  label?: string;
+  header?: boolean;
 }
 
-const Tags = ({ onChange, value, name = "tags", alias = "Tags" }: Props) => {
+const Tags = ({ onChange, value, name = "tags", alias = "Tags", label = "Tags", header = true }: Props) => {
   const handleAddTag = (e: any) => {
     e.stopPropagation();
     if (e.code === "Enter" || e.which === 13) {
@@ -48,8 +50,8 @@ const Tags = ({ onChange, value, name = "tags", alias = "Tags" }: Props) => {
     onChange(next);
   };
   return (
-    <Container width="100%">
-      <FieldHeader name={name} alias={alias} />
+    <Container width="100%" p={0} m={0} maxWidth="none">
+      {header && <FieldHeader name={name} alias={alias} />}
       <Divider />
       <Flex flexWrap="wrap" mt={2} maxHeight={300} overflow="scroll">
         {value &&
@@ -61,8 +63,8 @@ const Tags = ({ onChange, value, name = "tags", alias = "Tags" }: Props) => {
       </Flex>
       <HStack width="100%">
         <FormControl>
-          <FormLabel>{$t("ADD_YOUR_TAGS")}</FormLabel>
-          <Input onKeyPress={handleAddTag} pattern="^[ A-Za-z0-9_@./#&+-]*$" />
+          <FormLabel>{label}</FormLabel>
+          <Input onKeyPress={handleAddTag} pattern="^[ A-Za-z0-9_@./#&+-]*$" width="100%" />
         </FormControl>
       </HStack>
     </Container>

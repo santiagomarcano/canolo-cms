@@ -149,7 +149,6 @@ const ModuleForm = ({
                   isRequired
                   autoComplete="false"
                   value={schema.alias}
-                  pattern="^[ A-Za-z0-9_@./#&+-]*$"
                   onChange={handleChangeAlias}
                 />
               </FormControl>

@@ -1,8 +1,5 @@
 import React, { useMemo } from "react";
-import { CircularProgress, Flex, Stack, VStack } from "@chakra-ui/react";
-import { db } from "utils/firebase";
-import { doc } from "firebase/firestore";
-import useDocumentData from "hooks/useDocumentData";
+import { Stack, VStack } from "@chakra-ui/react";
 
 interface Props {
   type: any;
@@ -40,6 +37,7 @@ const ModuleFieldType = ({ type, index, modules }: Props) => {
                 alias={value.alias}
                 index={index}
                 module={value.type}
+                options={value.options}
               />
             </VStack>
           );

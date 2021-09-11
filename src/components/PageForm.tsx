@@ -17,6 +17,7 @@ import {
   AccordionItem,
   AccordionPanel,
   Box,
+  Text
 } from "@chakra-ui/react";
 import ModuleSelector from "components/ModuleSelector";
 import { FiEye, FiEyeOff, FiPlus } from "react-icons/fi";
@@ -171,13 +172,16 @@ const PageForm = ({
                             alignItems="center"
                           >
                             {getAlias(module, modules) || SELECT_MODULE}
-                            <Box mr={2}>
-                              {Number(module.visibility) ? (
-                                <FiEye />
-                              ) : (
-                                <FiEyeOff />
-                              )}
-                            </Box>
+                            <Flex alignItems="center">
+                              {module.props.side && <Text fontSize="xs" as="i" mr={2}>({module.props.side})</Text>}
+                              <Box mr={2}>
+                                {Number(module.visibility) ? (
+                                  <FiEye />
+                                ) : (
+                                  <FiEyeOff />
+                                )}
+                              </Box>
+                            </Flex>
                           </Flex>
                         </Box>
                         <AccordionIcon />

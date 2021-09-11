@@ -15,8 +15,8 @@
         "Text": "Texto",
         "Image": "Imágen",
         "Link": "Enlace",
-        "Toggler": "Toggler",
-        "Tags": "Tags"
+        "Tags": "Tags",
+        "Options": "Opciones"
     },
     "SIZES": [
         "XS",
@@ -82,5 +82,6 @@
     "CATEGORIES_SAVED": "Categorías guardadas correctamente",
     "NO_RESULTS": "No hay resultados con el filtro o todas las categorías están agregadas",
     "FILTER_PLACEHOLDER": "Busque categorías",
-    "NO_SELECTED_LABEL": "No tiene categorías agregadas para esta página. Esto implica que la página no podrá ser filtrada en la web."
+    "NO_SELECTED_LABEL": "No tiene categorías agregadas para esta página. Esto implica que la página no podrá ser filtrada en la web.",
+    "OPTIONS": "Opciones"
 }

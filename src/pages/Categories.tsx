@@ -51,6 +51,7 @@ const CategoriesPage = ({}: PageProps) => {
             onChange={handleChange}
             name="categories"
             alias=""
+            label={$t("ADD_YOUR_TAGS")}
           />
           <Flex width="100%" mt={4} justifyContent="flex-end">
             <Button
