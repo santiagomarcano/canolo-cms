@@ -37,6 +37,10 @@ export async function triggerBuild(message: string) {
   const confirmation = window.confirm(message);
   if (confirmation) {
     await refreshPublished();
+    const response = await fetch(process.env.REACT_APP_DEPLOYHOOK || "", {
+      method: "POST",
+    });
+    console.log(response);
   }
 }
 

@@ -44,6 +44,7 @@ import { usePublish } from "store/PublishContext";
 import useCollection from "hooks/useCollection";
 import useAuth from "hooks/useAuth";
 import { signOut } from "firebase/auth";
+import NetlifyBadge from "components/NetlifyBadge";
 
 interface LinkItemProps {
   name: string;
@@ -210,12 +211,13 @@ const SidebarContent = ({ onClose, user, ...rest }: SidebarProps) => {
             <Button
               colorScheme="green"
               onClick={() => triggerBuild(PUBLISH_MESSAGE)}
-              mt={2}
+              my={2}
               size="lg"
               width="100%"
             >
               {$t("PUBLISH")}
             </Button>
+            <NetlifyBadge />
           </Flex>
         </ScaleFade>
       </Container>
