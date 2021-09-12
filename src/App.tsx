@@ -1,5 +1,5 @@
-import React, { ReactChild, useState } from "react";
-import { Router, RouteComponentProps, navigate, Redirect } from "@reach/router";
+import React, { ReactChild } from "react";
+import { Router, RouteComponentProps, navigate } from "@reach/router";
 import Base from "layouts/Base";
 import Modules from "pages/Modules";
 import Collections from "pages/Collections";
@@ -19,9 +19,7 @@ import Login from "pages/Login";
 import useAuth from "hooks/useAuth";
 import { auth } from "utils/firebase";
 import { useEffect } from "react";
-import { CircularProgress, Container, Flex, Text } from "@chakra-ui/react";
-import { $t } from "store/TranslationsContext";
-import { FiEyeOff } from "react-icons/fi";
+import { CircularProgress, Flex } from "@chakra-ui/react";
 import NotFound from "pages/NotFound";
 
 interface DashboardProps extends RouteComponentProps {
