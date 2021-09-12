@@ -1,5 +1,5 @@
 import { db } from "utils/firebase";
-import { collection, doc, setDoc } from "firebase/firestore";
+import { collection, doc, getDocs, setDoc } from "firebase/firestore";
 import { PageModule } from "interfaces/declarations";
 
 interface Field {
@@ -164,4 +164,26 @@ export async function createCollectionPage({
   } catch (err) {
     alert(err);
   }
+}
+
+export async function backupAll() {
+  const backupsRef = collection(db, "backups");
+  const { docs } = await getDocs(backupsRef);
+  const [backup] = docs;
+  const { collections } = backup.data();
+  const promises = [];
+  for (let name of collections) {
+    const colRef = collection(db, name);
+    promises.push(getDocs(colRef));
+  }
+  const result = await Promise.all(promises);
+  console.log(
+    result.map((r, index) => {
+      const name = collections[index];
+      return {
+        name,
+        docs: r.docs.map((d) => d.data()),
+      };
+    })
+  );
 }

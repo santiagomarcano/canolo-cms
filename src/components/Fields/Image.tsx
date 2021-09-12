@@ -50,7 +50,7 @@ const Image = ({ name, index, alias }: Props) => {
     });
   };
 
-  const handleGallery = async (selected: any) => {
+  const handleGallery = async ({ selected, sha256 }: { selected: string, sha256: string }) => {
     dispatch({
       type: "MODULE_PROP",
       payload: { name, value: selected, index, key: "src" },
@@ -59,6 +59,10 @@ const Image = ({ name, index, alias }: Props) => {
     dispatch({
       type: "MODULE_PROP",
       payload: { name, value: base64, index, key: "thumbnail" },
+    });
+    dispatch({
+      type: "MODULE_PROP",
+      payload: { name, value: sha256, index, key: "sha256" },
     });
   };
   return (

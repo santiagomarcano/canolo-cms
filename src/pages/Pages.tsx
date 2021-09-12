@@ -14,12 +14,13 @@ import {
   Grid,
 } from "@chakra-ui/react";
 import { Module } from "interfaces/declarations";
-import { collection } from "firebase/firestore";
+import { collection, getDocs } from "firebase/firestore";
 import { db } from "utils/firebase";
 import { RouteComponentProps, Link } from "@reach/router";
 import { FiArrowRight, FiEye, FiEyeOff } from "react-icons/fi";
 import { getDateTime } from "utils/helpers";
 import { usePublish } from "store/PublishContext";
+import { useEffect } from "react";
 
 interface PageProps extends RouteComponentProps {
   id?: string;

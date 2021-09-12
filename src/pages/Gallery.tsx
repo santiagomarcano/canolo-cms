@@ -9,7 +9,7 @@ interface PageProps extends RouteComponentProps {}
 
 const Gallery = ({}: PageProps) => {
   return (
-    <Structure>
+    <Structure name={$t("GALLERY")}>
       <Box background="white" p={4} borderRadius={5}>
         <Heading as="h4" size="md" mb={2}>
           {$t("MEDIA_GALLERY")}

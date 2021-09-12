@@ -15,6 +15,7 @@ import CollectionInstanceList from "pages/CollectionInstanceList";
 import NewCollectionInstance from "pages/NewCollectionInstance";
 import CollectionInstance from "pages/CollectionInstance";
 import Categories from "pages/Categories";
+import Login from "pages/Login";
 
 interface DashboardProps extends RouteComponentProps {
   children: ReactChild[];
@@ -41,6 +42,7 @@ const App = () => {
           <Gallery path="gallery" />
           <Categories path="categories" />
         </Dashboard>
+        <Login path="/" />
       </Router>
     </Base>
   );

@@ -1,8 +1,4 @@
-import React, {
-  ReactElement,
-  useRef,
-  useState,
-} from "react";
+import React, { ReactElement, useRef, useState } from "react";
 import {
   CircularProgress,
   Image,
@@ -123,6 +119,9 @@ const MediaGallery = ({
             <>
               {files.map(({ url, meta, ref }, index) => {
                 const urlPlaceholder = url.replace("300", "{size}");
+                const sha256 = ref.name
+                  .replace("-size{300}.png", "")
+                  .replace("-svg", "");
                 if (
                   meta.customMetadata.originalName
                     .toLowerCase()
@@ -140,7 +139,7 @@ const MediaGallery = ({
                       }
                       cursor="pointer"
                       onClick={() => {
-                        onSelect(urlPlaceholder);
+                        onSelect({ sha256, selected: urlPlaceholder });
                         onClose();
                       }}
                       borderWidth={3}

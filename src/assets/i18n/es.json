@@ -83,5 +83,10 @@
     "NO_RESULTS": "No hay resultados con el filtro o todas las categorías están agregadas",
     "FILTER_PLACEHOLDER": "Busque categorías",
     "NO_SELECTED_LABEL": "No tiene categorías agregadas para esta página. Esto implica que la página no podrá ser filtrada en la web.",
-    "OPTIONS": "Opciones"
+    "OPTIONS": "Opciones",
+    "EMAIL": "Email",
+    "PASSWORD": "Contraseña",
+    "LOGIN": "Entrar",
+    "ADMIN_AREA": "Administración de contenidos",
+    "MANAGE_YOUR_CONTENTS": "Gestiona los contenidos de tu web"
 }
