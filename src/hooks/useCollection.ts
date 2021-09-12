@@ -5,15 +5,15 @@ const useCollection = (col: any, initialState?: any, deps: Array<any> = []) => {
   const [state, setState] = useState<any>(initialState || null);
   const [loading, setLoading] = useState(false);
   useEffect(() => {
+    let snapshot: any = null;
     setLoading(true);
     (async () => {
       try {
-        const snapshot = await getDocs(col);
+        snapshot = await getDocs(col);
         setState(snapshot);
         setLoading(false);
       } catch (err) {
-        console.log("hay error!");
-        const snapshot = await getDocs(col);
+        snapshot = await getDocs(col);
         setState(snapshot);
         setLoading(false);
       }

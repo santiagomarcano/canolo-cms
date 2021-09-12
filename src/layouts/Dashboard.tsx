@@ -15,11 +15,6 @@ import {
   useDisclosure,
   BoxProps,
   FlexProps,
-  Menu,
-  MenuButton,
-  MenuDivider,
-  MenuItem,
-  MenuList,
   Center,
   CircularProgress,
   Container,
@@ -37,22 +32,26 @@ import {
 } from "react-icons/fi";
 import { IconType } from "react-icons";
 import { ReactText } from "react";
-import { useLocation } from "@reach/router";
+import { useLocation, useNavigate } from "@reach/router";
 import { Link } from "@reach/router";
 import { useLoader } from "store/LoadingContext";
 import Overlay from "components/Overlay";
 import { collection } from "firebase/firestore";
-import { db } from "utils/firebase";
+import { auth, db } from "utils/firebase";
 import { getDateTime } from "utils/helpers";
 import { triggerBuild } from "utils/adapter";
 import { usePublish } from "store/PublishContext";
 import useCollection from "hooks/useCollection";
+import useAuth from "hooks/useAuth";
+import { signOut } from "firebase/auth";
 
 interface LinkItemProps {
   name: string;
   icon: IconType;
   pathname: string;
 }
+
+const onlyAdminRoutes = ["/dashboard/modules", "/dashboard/collections"];
 
 const links = (collections: Array<any>) => {
   let LinkItems: Array<LinkItemProps> = [
@@ -69,7 +68,6 @@ const links = (collections: Array<any>) => {
     },
     { name: $t("PAGES"), icon: FiLayout, pathname: "/dashboard/pages" },
     { name: $t("CATEGORIES"), icon: FiGrid, pathname: "/dashboard/categories" },
-
   ];
   if (collections?.length > 0 || collections) {
     LinkItems = [
@@ -91,10 +89,11 @@ export default function SidebarWithHeader({
   name,
 }: {
   children: ReactNode;
-  name?: string | any
+  name?: string | any;
 }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [loading] = useLoader();
+  const [user] = useAuth({ auth, deps: [] });
   return (
     <Base>
       <>
@@ -111,10 +110,13 @@ export default function SidebarWithHeader({
           </Container>
         </Overlay>
         <Box minH="100vh" bg={useColorModeValue("gray.100", "gray.900")}>
-          <SidebarContent
-            onClose={() => onClose}
-            display={{ base: "none", md: "block" }}
-          />
+          {user && (
+            <SidebarContent
+              user={user}
+              onClose={() => onClose}
+              display={{ base: "none", md: "block" }}
+            />
+          )}
           <Drawer
             autoFocus={false}
             isOpen={isOpen}
@@ -125,7 +127,7 @@ export default function SidebarWithHeader({
             size="full"
           >
             <DrawerContent>
-              <SidebarContent onClose={onClose} />
+              {user && <SidebarContent onClose={onClose} user={user} />}
             </DrawerContent>
           </Drawer>
           {/* mobilenav */}
@@ -141,14 +143,14 @@ export default function SidebarWithHeader({
 
 interface SidebarProps extends BoxProps {
   onClose: () => void;
+  user: any;
 }
 
-const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
+const SidebarContent = ({ onClose, user, ...rest }: SidebarProps) => {
   const publish = usePublish();
   const PUBLISH_MESSAGE = $t("PUBLISH_MESSAGE");
   const location = useLocation();
   const [collections] = useCollection(collection(db, "collections"), []);
-
   return (
     <Box
       transition="3s ease"
@@ -162,23 +164,34 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
     >
       <Flex h="20" alignItems="center" mx="8" justifyContent="space-between">
         <Text fontSize="2xl" fontFamily="monospace" fontWeight="bold">
-          CMS
+          {process.env.REACT_APP_TITLE_SIMPLIFIED || ""}
         </Text>
         <CloseButton display={{ base: "flex", md: "none" }} onClick={onClose} />
       </Flex>
-      {links(collections?.docs).map((link) => (
-        <NavItem
-          key={link.name}
-          icon={link.icon}
-          border={
-            location.pathname === link.pathname ? "1px solid lightgray" : "none"
-          }
-          pathname={link.pathname}
-          name={link.name}
-        >
-          {link.name}
-        </NavItem>
-      ))}
+      {links(collections?.docs)
+        .filter((link) => {
+          if (
+            onlyAdminRoutes.includes(link.pathname) &&
+            user.email === process.env.REACT_APP_ADMIN_EMAIL
+          )
+            return true;
+          if (!onlyAdminRoutes.includes(link.pathname)) return true;
+        })
+        .map((link) => (
+          <NavItem
+            key={link.name}
+            icon={link.icon}
+            border={
+              location.pathname === link.pathname
+                ? "1px solid lightgray"
+                : "none"
+            }
+            pathname={link.pathname}
+            name={link.name}
+          >
+            {link.name}
+          </NavItem>
+        ))}
       <Container
         flexDirection="column"
         position="absolute"
@@ -218,7 +231,12 @@ interface NavItemProps extends FlexProps {
 }
 const NavItem = ({ icon, children, pathname, name, ...rest }: NavItemProps) => {
   return (
-    <Link to={pathname} style={{ textDecoration: "none" }} replace state={{ name }}>
+    <Link
+      to={pathname}
+      style={{ textDecoration: "none" }}
+      replace
+      state={{ name }}
+    >
       <Flex
         align="center"
         p="4"
@@ -253,6 +271,15 @@ interface MobileProps extends FlexProps {
   name?: string | any;
 }
 const MobileNav = ({ onOpen, name, ...rest }: MobileProps) => {
+  const navigate = useNavigate();
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+      navigate("/");
+    } catch (err) {
+      alert(err);
+    }
+  };
   return (
     <Flex
       ml={{ base: 0, md: 60 }}
@@ -272,65 +299,22 @@ const MobileNav = ({ onOpen, name, ...rest }: MobileProps) => {
         aria-label="open menu"
         icon={<FiMenu />}
       />
-
       <Text
         display={{ base: "flex", md: "none" }}
         fontSize="2xl"
         fontFamily="monospace"
         fontWeight="bold"
       >
-        CMS
+        {process.env.REACT_APP_TITLE_SIMPLIFIED || ""}
       </Text>
-
-      <HStack spacing={{ base: "0", md: "6" }}>
-        {/* <IconButton
-          size="lg"
-          variant="ghost"
-          aria-label="open menu"
-          icon={<FiBell />}
-        /> */}
-        <Flex flex="1">
-          <Text as="h2" fontSize="xl" fontWeight="bold">{name}</Text>
-          <Menu>
-            <MenuButton
-              py={2}
-              transition="all 0.3s"
-              _focus={{ boxShadow: "none" }}
-            >
-              <HStack>
-                {/* <Avatar
-                  size={"sm"}
-                  src={
-                    "https://images.unsplash.com/photo-1619946794135-5bc917a27793?ixlib=rb-0.3.5&q=80&fm=jpg&crop=faces&fit=crop&h=200&w=200&s=b616b2c5b373a80ffc9636ba24f7a4a9"
-                  }
-                />
-                <VStack
-                  display={{ base: "none", md: "flex" }}
-                  alignItems="flex-start"
-                  spacing="1px"
-                  ml="2"
-                >
-                  <Text fontSize="sm">Justina Clark</Text>
-                  <Text fontSize="xs" color="gray.600">
-                    Admin
-                  </Text>
-                </VStack>
-                <Box display={{ base: "none", md: "flex" }}>
-                  <FiChevronDown />
-                </Box> */}
-              </HStack>
-            </MenuButton>
-            <MenuList
-              bg={useColorModeValue("white", "gray.900")}
-              borderColor={useColorModeValue("gray.200", "gray.700")}
-            >
-              <MenuItem>Profile</MenuItem>
-              <MenuItem>Settings</MenuItem>
-              <MenuItem>Billing</MenuItem>
-              <MenuDivider />
-              <MenuItem>Sign out</MenuItem>
-            </MenuList>
-          </Menu>
+      <HStack spacing={{ base: "0", md: "6" }} width="100%">
+        <Flex flex="1" width="100%" justifyContent="space-between">
+          <Text as="h2" fontSize="xl" fontWeight="bold">
+            {name}
+          </Text>
+          <Button size="sm" onClick={handleLogout}>
+            {$t("LOGOUT")}
+          </Button>
         </Flex>
       </HStack>
     </Flex>

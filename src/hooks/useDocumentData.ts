@@ -14,10 +14,11 @@ const useDocumentData = (
   const [state, setState] = useState<any>(initialValue);
   const [loading, setLoading] = useState(false);
   useEffect(() => {
+    let unsubscribe = () => {};
     setLoading(true);
     (async () => {
       if (subscribe) {
-        await onSnapshot(dc, (snapshot: any) => {
+        unsubscribe = await onSnapshot(dc, (snapshot: any) => {
           setState(snapshot.data());
           setLoading(false);
         });
@@ -33,6 +34,9 @@ const useDocumentData = (
         setLoading(false);
       }
     })();
+    return () => {
+      unsubscribe();
+    };
   }, deps);
   return [state, loading];
 };

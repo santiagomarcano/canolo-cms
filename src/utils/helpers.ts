@@ -3,5 +3,9 @@ export const getDateTime = (date: string | number): string => {
   if (isNaN(d as any)) {
     return "";
   }
-  return `${d.toLocaleDateString()} - ${d.toLocaleTimeString()}`;
+  const hours = d.getHours() > 9 ? d.getHours() : `0${d.getHours()}`;
+  const minutes = d.getMinutes() > 9 ? d.getMinutes() : `0${d.getMinutes()}`;
+  const day = d.getDate() > 9 ? d.getDate() : `0${d.getDate()}`;
+  const month = d.getMonth() > 9 ? d.getMonth() : `0${d.getMonth()}`;
+  return `${day}-${month} - ${hours}:${minutes}`;
 };

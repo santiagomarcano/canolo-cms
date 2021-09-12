@@ -1,7 +1,6 @@
 import React from "react";
 import {
   HStack,
-  Stack,
   FormControl,
   FormLabel,
   Divider,
@@ -10,7 +9,6 @@ import {
   Flex,
   Container,
 } from "@chakra-ui/react";
-import { $t } from "store/TranslationsContext";
 import FieldHeader from "./FieldHeader";
 import { FiX } from "react-icons/fi";
 

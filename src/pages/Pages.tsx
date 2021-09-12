@@ -14,13 +14,12 @@ import {
   Grid,
 } from "@chakra-ui/react";
 import { Module } from "interfaces/declarations";
-import { collection, getDocs } from "firebase/firestore";
+import { collection } from "firebase/firestore";
 import { db } from "utils/firebase";
 import { RouteComponentProps, Link } from "@reach/router";
 import { FiArrowRight, FiEye, FiEyeOff } from "react-icons/fi";
 import { getDateTime } from "utils/helpers";
 import { usePublish } from "store/PublishContext";
-import { useEffect } from "react";
 
 interface PageProps extends RouteComponentProps {
   id?: string;
@@ -38,8 +37,8 @@ const boxStyles = {
 };
 
 const getPublishColor = (date: string, lastUpdate: string): string => {
-if (new Date(date).getTime() < new Date(lastUpdate).getTime()) {
-    return "blue";
+  if (new Date(date).getTime() < new Date(lastUpdate).getTime()) {
+    return "green";
   }
   return "transparent";
 };
@@ -86,6 +85,11 @@ export default function Pages({ location }: PageProps) {
                     _hover={{
                       background: "gray.200",
                     }}
+                    borderColor={getPublishColor(
+                      publish.date,
+                      page?.data().lastUpdate
+                    )}
+                    borderWidth={1}
                   >
                     <Grid
                       templateColumns={["2fr 2fr 1fr 1fr"]}
@@ -95,12 +99,7 @@ export default function Pages({ location }: PageProps) {
                         <Text>{page?.data().name}</Text>
                       </GridItem>
                       <GridItem>
-                        <Text
-                          borderColor={getPublishColor(publish.date, page?.data().lastUpdate)}
-                          borderWidth={2}
-                          borderRadius={5}
-                          p={2}
-                        >
+                        <Text>
                           {getDateTime(page?.data().lastUpdate)}
                         </Text>
                       </GridItem>

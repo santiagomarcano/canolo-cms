@@ -88,5 +88,11 @@
     "PASSWORD": "Contraseña",
     "LOGIN": "Entrar",
     "ADMIN_AREA": "Administración de contenidos",
-    "MANAGE_YOUR_CONTENTS": "Gestiona los contenidos de tu web"
+    "MANAGE_YOUR_CONTENTS": "Gestiona los contenidos de tu web",
+    "INVALID_EMAIL": "Email inválido. Intente nuevamente",
+    "USER_NOT_FOUND": "Usuario no no existente",
+    "WRONG_PASSWORD": "Contraseña inválida",
+    "LOGOUT": "Salir",
+    "PAGE_NOT_FOUND": "Página no encontrada.",
+    "REDIRECT_IN": "Será redireccionado en:"
 }
