@@ -68,6 +68,13 @@ const CollectionForm = ({
   }) => {
     dispatch({ type: "PAGE_NAME", payload: { value: target.value } });
   };
+  const handleChangeCollectionSlug = ({
+    target,
+  }: {
+    target: HTMLInputElement;
+  }) => {
+    dispatch({ type: "PAGE_SLUG", payload: { value: target.value } });
+  };
   async function handleSubmit(e: FormEvent) {
     setLoading(true);
     e.preventDefault();
@@ -92,6 +99,20 @@ const CollectionForm = ({
                   autoComplete="false"
                   value={collection.name}
                   onChange={handleChangeCollectionName}
+                />
+              </FormControl>
+            </GridItem>
+            <GridItem>
+              <FormControl isRequired width="100%">
+                <FormLabel>{$t("COLLECTION_SLUG")}</FormLabel>
+                <Input
+                  key="page-slug"
+                  size="lg"
+                  type="text"
+                  isRequired
+                  autoComplete="false"
+                  value={collection.slug}
+                  onChange={handleChangeCollectionSlug}
                 />
               </FormControl>
             </GridItem>

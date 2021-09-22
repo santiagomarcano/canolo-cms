@@ -1,6 +1,6 @@
+import React, { useContext, createContext, useState } from "react";
 import { doc } from "firebase/firestore";
 import useDocumentData from "hooks/useDocumentData";
-import React, { useContext, createContext, useState, useEffect } from "react";
 import { ReactElement } from "react";
 import { db } from "utils/firebase";
 

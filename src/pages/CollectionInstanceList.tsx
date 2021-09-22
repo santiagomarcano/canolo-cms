@@ -77,7 +77,7 @@ export default function CollectionInstanceList({ collection, location }: Props) 
             <Divider my={2} />
             {pages?.docs.map((page: Module) => (
               <React.Fragment key={page.id}>
-                <Link key={page.id} to={`/dashboard/${collection}/${page.id}`}>
+                <Link key={page.id} to={`/dashboard/${collection}/${page.id}`} state={{ slug: location.state.slug }}>
                   <Box
                     {...boxStyles}
                     background="white"

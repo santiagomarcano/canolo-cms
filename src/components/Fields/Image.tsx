@@ -119,7 +119,7 @@ const Image = ({ name, index, alias }: Props) => {
             </Flex>
           </GridItem>
           <GridItem>
-            <FormControl isRequired>
+            <FormControl>
               <FormLabel>{$t("ALT_TEXT")}</FormLabel>
               <Input
                 value={page.modules[index]?.props[name]?.alt || ""}

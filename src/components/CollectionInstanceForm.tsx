@@ -35,6 +35,7 @@ interface Props {
   id: string | null;
   collectionId: string;
   categories: Array<string>;
+  slug?: string;
 }
 
 interface ModuleHandlerEvent {
@@ -63,6 +64,7 @@ const CollectionInstanceForm = ({
   id = null,
   collectionId,
   categories,
+  slug,
 }: Props): ReactElement => {
   const navigate = useNavigate();
   const [page, dispatch] = usePage();
@@ -85,10 +87,11 @@ const CollectionInstanceForm = ({
     dispatch({ type: "PAGE_CATEGORIES", payload: { value: selected } });
   };
   async function handleSubmit(e: FormEvent) {
+    console.log('page is', page)
     setLoading(true);
     e.preventDefault();
     e.stopPropagation();
-    await createCollectionPage({ page, id, collectionId });
+    await createCollectionPage({ page, id, collectionId, slug });
     setLoading(false);
     navigate(`/dashboard/${collectionId}`);
   }

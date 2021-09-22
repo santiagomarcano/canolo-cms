@@ -20,6 +20,7 @@ interface PageProps extends RouteComponentProps {
   collection?: string;
   id?: string;
   location?: any;
+  slug?: string;
 }
 
 const CollectionInstance = ({ collection, id, location }: PageProps) => {
@@ -48,6 +49,7 @@ const CollectionInstance = ({ collection, id, location }: PageProps) => {
         <PageProvider value={state}>
           <CollectionInstanceForm
             type="update"
+            slug={location.state.slug}
             categories={categories}
             modules={modules?.docs as Array<Module>}
             onDelete={handleDelete}

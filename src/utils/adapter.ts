@@ -8,6 +8,8 @@ interface Field {
   type: string;
   order?: number;
   options?: Array<string>;
+  relation?: { name: string; id: string };
+  [index: string]: any;
 }
 
 interface Schema {
@@ -18,6 +20,7 @@ interface Schema {
 
 interface Page {
   name: string;
+  slug: string;
   state: string | boolean;
   lastUpdate: string;
   modules: Array<PageModule>;
@@ -54,9 +57,19 @@ export async function createSchema(schema: Schema, id: any) {
         alias: field.alias,
         order: field.order,
       };
-      if (field.options) {
-        schemaAsObject[field.name].options = field.options;
+      const optionalFields = ["options", "relation"];
+      for (let optionalField of optionalFields) {
+        if (field[optionalField]) {
+          console.log(field, optionalField);
+          schemaAsObject[field.name][optionalField] = field[optionalField];
+        }
       }
+      // if (field.options) {
+      //   schemaAsObject[field.name].options = field.options;
+      // }
+      // if (field.relation) {
+      //   schemaAsObject[field.name].relation = field.relation;
+      // }
     }
     schemaAsObject.meta = {
       name: schema.name,
@@ -90,6 +103,7 @@ export async function createCollection({
     const collectionRef = id ? doc(collections, id) : doc(collections);
     const formattedCollection = {
       name: structure.name,
+      slug: structure.slug,
       lastUpdate: new Date().toISOString(),
       modules: structure.modules.map(({ component, props }) => ({
         component,
@@ -115,6 +129,7 @@ export async function createPage({
     const pageRef = id ? doc(pages, id) : doc(pages);
     const formattedPage = {
       name: page.name,
+      slug: page.slug,
       state: page.state,
       lastUpdate: new Date().toISOString(),
       modules: page.modules.map(({ component, props, visibility }) => ({
@@ -130,33 +145,39 @@ export async function createPage({
 }
 
 const slugify = (text: string): string => {
-  return text
-    .toString()
-    .toLowerCase()
-    .replace(/\s+/g, "-") // Replace spaces with -
-    .replace(/[^\w\-]+/g, "") // Remove all non-word chars
-    .replace(/\-\-+/g, "-") // Replace multiple - with single -
-    .replace(/^-+/, "") // Trim - from start of text
-    .replace(/-+$/, ""); // Trim - from end of text
+  return (
+    "/" +
+    text
+      .toString()
+      .toLowerCase()
+      .replace(/\s+/g, "-") // Replace spaces with -
+      .replace(/[^\w\-]+/g, "") // Remove all non-word chars
+      .replace(/\-\-+/g, "-") // Replace multiple - with single -
+      .replace(/^-+/, "") // Trim - from start of text
+      .replace(/-+$/, "")
+  ); // Trim - from end of text
 };
 
 export async function createCollectionPage({
   page,
   id,
   collectionId,
+  slug,
 }: {
   page: Page;
   id: string | null;
   collectionId: string;
+  slug?: string;
 }) {
+  console.log(collectionId);
   try {
     const pages = collection(db, collectionId);
     const pageRef = id ? doc(pages, id) : doc(pages);
     const formattedPage = {
       name: page.name,
       state: page.state,
-      slug: slugify(page.name),
-      categories: page.categories,
+      slug: slug + slugify(page.name),
+      categories: page.categories || [],
       lastUpdate: new Date().toISOString(),
       modules: page.modules.map(({ component, props, visibility }) => ({
         component,

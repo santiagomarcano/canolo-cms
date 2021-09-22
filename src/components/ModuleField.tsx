@@ -13,6 +13,9 @@ import { FiMinus } from "react-icons/fi";
 import { $t } from "store/TranslationsContext";
 import { Field as FieldInterface } from "interfaces/declarations";
 import Tags from "./Fields/Tags";
+import { collection } from "firebase/firestore";
+import useCollection from "hooks/useCollection";
+import { db } from "utils/firebase";
 
 interface FieldProps {
   name: string;
@@ -46,7 +49,11 @@ const ModuleField = ({
   handleField,
   handleRemoveField,
 }: FieldProps): ReactElement => {
+  const [collections] = useCollection(collection(db, "collections"), {
+    docs: [],
+  });
   const OPTIONS = $t("OPTIONS");
+  const COLLECTION_RELATION = $t("COLLECTION_RELATION");
   return (
     <Grid
       templateColumns={["1fr", "1fr", "1fr", "2fr 2fr 2fr 2fr 1fr"]}
@@ -150,7 +157,10 @@ const ModuleField = ({
           </Select>
         </FormControl>
       </GridItem>
-      <GridItem gridColumnStart={["1", "1", "1", "5"]} gridRowStart={["6", "6", "6", "1"]}>
+      <GridItem
+        gridColumnStart={["1", "1", "1", "5"]}
+        gridRowStart={["6", "6", "6", "1"]}
+      >
         <FormLabel></FormLabel>
         <Flex flex="1" width="100%" justifyContent="flex-end">
           <IconButton
@@ -163,7 +173,10 @@ const ModuleField = ({
         </Flex>
       </GridItem>
       {type === "Options" && (
-        <GridItem gridColumnStart={["1", "1", "1"]} gridColumnEnd={["1", "1", "1", "6"]}>
+        <GridItem
+          gridColumnStart={["1", "1", "1"]}
+          gridColumnEnd={["1", "1", "1", "6"]}
+        >
           <Tags
             alias={OPTIONS}
             name={OPTIONS}
@@ -178,6 +191,46 @@ const ModuleField = ({
               });
             }}
           />
+        </GridItem>
+      )}
+      {type === "Relation" && (
+        <GridItem
+          gridColumnStart={["1", "1", "1"]}
+          gridColumnEnd={["1", "1", "1", "6"]}
+        >
+          <FormControl id="type" isRequired>
+            <FormLabel>{COLLECTION_RELATION}</FormLabel>
+            <Select
+              size="lg"
+              onChange={({ target }: { target: HTMLSelectElement }) => {
+                const [selected]: HTMLOptionElement[] = Array.from(target.selectedOptions)
+                handleField({
+                  is: "relation",
+                  value: {
+                    id: selected?.value,
+                    name: selected?.getAttribute("data-name"),
+                  },
+                  index,
+                });
+              }}
+            >
+              {collections &&
+                collections?.docs.map(
+                  (collection: {
+                    id: string;
+                    data: () => { name: string };
+                  }) => (
+                    <option
+                      key={collection.id}
+                      value={collection.id}
+                      data-name={collection.data().name}
+                    >
+                      {collection.data().name}
+                    </option>
+                  )
+                )}
+            </Select>
+          </FormControl>
         </GridItem>
       )}
     </Grid>

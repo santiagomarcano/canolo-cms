@@ -122,7 +122,7 @@ const Autocomplete = ({
           borderWidth={1}
           p={2}
           maxHeight={150}
-          height={150}
+          height={100}
           overflow="scroll"
         >
           {((values &&

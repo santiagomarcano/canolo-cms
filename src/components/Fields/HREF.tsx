@@ -17,18 +17,12 @@ interface Props {
   alias: string;
 }
 
-const Link = ({ name, index, alias }: Props) => {
+const HREF = ({ name, index, alias }: Props) => {
   const [page, dispatch] = usePage();
   const handleChangeText = ({ target }: { target: HTMLInputElement }) => {
     dispatch({
       type: "MODULE_PROP",
-      payload: { name, value: target.value, index, key: "text" },
-    });
-  };
-  const handleChangeHREF = ({ target }: { target: HTMLInputElement }) => {
-    dispatch({
-      type: "MODULE_PROP",
-      payload: { name, value: target.value, index, key: "href" },
+      payload: { name, value: target.value, index },
     });
   };
   return (
@@ -37,18 +31,10 @@ const Link = ({ name, index, alias }: Props) => {
       <Divider />
       <HStack width="100%">
         <FormControl isRequired>
-          <FormLabel>{$t("TEXT")}</FormLabel>
-          <Input
-            value={page.modules[index]?.props[name]?.text || ""}
-            onChange={handleChangeText}
-            pattern="^[ A-Za-z0-9_@./#&+-]*$"
-          />
-        </FormControl>
-        <FormControl isRequired>
           <FormLabel>{$t("HREF")}</FormLabel>
           <Input
-            value={page.modules[index]?.props[name]?.href || ""}
-            onChange={handleChangeHREF}
+            value={page.modules[index]?.props[name] || ""}
+            onChange={handleChangeText}
           />
         </FormControl>
       </HStack>
@@ -56,4 +42,4 @@ const Link = ({ name, index, alias }: Props) => {
   );
 };
 
-export default Link;
+export default HREF;

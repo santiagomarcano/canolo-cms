@@ -26,6 +26,12 @@ const reducer = (state: any, action: Action) => {
       next.name = value;
       return next;
     }
+    case "PAGE_SLUG": {
+      const { value } = action.payload;
+      const next = { ...state };
+      next.slug = value;
+      return next;
+    }
     case "PAGE_STATUS": {
       const { value } = action.payload;
       const next = { ...state };

@@ -48,6 +48,7 @@ import NetlifyBadge from "components/NetlifyBadge";
 
 interface LinkItemProps {
   name: string;
+  slug?: string;
   icon: IconType;
   pathname: string;
 }
@@ -77,6 +78,7 @@ const links = (collections: Array<any>) => {
         return {
           pathname: `/dashboard/${collection.id}`,
           name: collection.data().name,
+          slug: collection.data().slug,
           icon: FiArchive,
         };
       }),
@@ -189,6 +191,7 @@ const SidebarContent = ({ onClose, user, ...rest }: SidebarProps) => {
             }
             pathname={link.pathname}
             name={link.name}
+            slug={link.slug}
           >
             {link.name}
           </NavItem>
@@ -230,14 +233,18 @@ interface NavItemProps extends FlexProps {
   children: ReactText;
   pathname: string;
   name: string;
+  slug?: string | undefined;
 }
-const NavItem = ({ icon, children, pathname, name, ...rest }: NavItemProps) => {
+const NavItem = ({ icon, children, pathname, name, slug, ...rest }: NavItemProps) => {
+  if (slug) {
+    console.log('Nav item has slug', slug)
+  }
   return (
     <Link
       to={pathname}
       style={{ textDecoration: "none" }}
       replace
-      state={{ name }}
+      state={{ name, slug }}
     >
       <Flex
         align="center"

@@ -38,6 +38,7 @@ const ModuleFieldType = ({ type, index, modules }: Props) => {
                 index={index}
                 module={value.type}
                 options={value.options}
+                relation={value.relation}
               />
             </VStack>
           );

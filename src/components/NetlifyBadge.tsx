@@ -6,9 +6,12 @@ interface Props {}
 const NetlifyBadge = ({}: Props): ReactElement => {
   const [src, setSrc] = useState(process.env.REACT_APP_NETLIFY_BADGE);
   useEffect(() => {
-    setInterval(() => {
+    let interval = setInterval(() => {
       setSrc(`${process.env.REACT_APP_NETLIFY_BADGE}?dummy=${Math.random() * 100}`);
     }, 1000);
+    return () => {
+        clearInterval(interval);
+    }
   }, []);
 
   return <img src={src} crossOrigin="anonymous" />;

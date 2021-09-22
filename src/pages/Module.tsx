@@ -20,7 +20,8 @@ const formatFields = (fields: any) => {
       alias: fields[key]?.alias,
       type: fields[key]?.type,
       order: fields[key].order,
-      options: fields[key].options
+      options: fields[key].options || null,
+      relation: fields[key].relation || null,
     }))
     .filter((i) => i.name !== "meta")
     .sort((a, b) => a.order - b.order);

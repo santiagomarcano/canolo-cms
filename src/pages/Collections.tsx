@@ -16,7 +16,6 @@ interface Props extends RouteComponentProps {
 
 export default function Collections({ location }: Props) {
   const [collections, loading] = useCollection(collection(db, "collections"));
-
   return (
     <Structure name={location.state.name}>
       <Loader state={!loading}>

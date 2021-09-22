@@ -19,6 +19,11 @@ const NewCollectionInstance = ({ collection }: PageProps) => {
     [collection],
     {}
   );
+  const [{ categories }, loadingCategories] = useDocumentData(
+    doc(db, "categories/value"),
+    [],
+    { initialValue: {} }
+  );
   const [modules] = useCollection(firebaseCollection(db, "modules"));
   return (
     <Structure>
@@ -32,7 +37,7 @@ const NewCollectionInstance = ({ collection }: PageProps) => {
               type="new"
               modules={modules?.docs as Array<any>}
               id={null}
-              categories={[]}
+              categories={categories}
             />
           </PageProvider>
         ) : (

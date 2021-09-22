@@ -17,7 +17,7 @@ import {
   AccordionItem,
   AccordionPanel,
   Box,
-  Text
+  Text,
 } from "@chakra-ui/react";
 import ModuleSelector from "components/ModuleSelector";
 import { FiEye, FiEyeOff, FiPlus } from "react-icons/fi";
@@ -33,7 +33,6 @@ interface Props {
   modules: Array<Module>;
   type: string;
   onDelete?: any;
-  isEdit?: boolean;
   id: string | null;
 }
 
@@ -60,7 +59,6 @@ const PageForm = ({
   modules,
   type,
   onDelete,
-  isEdit = false,
   id = null,
 }: Props): ReactElement => {
   const navigate = useNavigate();
@@ -79,6 +77,9 @@ const PageForm = ({
   };
   const handleChangePageName = ({ target }: { target: HTMLInputElement }) => {
     dispatch({ type: "PAGE_NAME", payload: { value: target.value } });
+  };
+   const handleChangePageSlug = ({ target }: { target: HTMLInputElement }) => {
+    dispatch({ type: "PAGE_SLUG", payload: { value: target.value } });
   };
   const handleStateChange = ({ target }: { target: HTMLSelectElement }) => {
     dispatch({ type: "PAGE_STATUS", payload: { value: target.value } });
@@ -122,6 +123,20 @@ const PageForm = ({
                   <option value={0}>{$t("DRAFT")}</option>
                   <option value={1}>{$t("PUBLISHED")}</option>
                 </Select>
+              </FormControl>
+            </GridItem>
+            <GridItem gridColumnStart={1} gridColumnEnd={3}>
+              <FormControl isRequired width="100%">
+                <FormLabel>{$t("PAGE_SLUG")}</FormLabel>
+                <Input
+                  key="page-name"
+                  size="lg"
+                  type="text"
+                  isRequired
+                  autoComplete="false"
+                  value={page.slug}
+                  onChange={handleChangePageSlug}
+                />
               </FormControl>
             </GridItem>
           </Grid>
@@ -173,7 +188,11 @@ const PageForm = ({
                           >
                             {getAlias(module, modules) || SELECT_MODULE}
                             <Flex alignItems="center">
-                              {module.props.side && <Text fontSize="xs" as="i" mr={2}>({module.props.side})</Text>}
+                              {module.props.side && (
+                                <Text fontSize="xs" as="i" mr={2}>
+                                  ({module.props.side})
+                                </Text>
+                              )}
                               <Box mr={2}>
                                 {Number(module.visibility) ? (
                                   <FiEye />
