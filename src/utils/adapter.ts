@@ -169,7 +169,7 @@ export async function createCollectionPage({
   collectionId: string;
   slug?: string;
 }) {
-  console.log(collectionId);
+  console.log("SLUG SHOULD BE ON CREATE", slug);
   try {
     const pages = collection(db, collectionId);
     const pageRef = id ? doc(pages, id) : doc(pages);

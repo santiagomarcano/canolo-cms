@@ -37,6 +37,9 @@ const Relation = ({ name, index, alias, values, relation }: Props) => {
       payload: { name, value, index },
     });
   };
+  if (!relation) {
+    return <div>No se puede relacionar una colección sin registros</div>
+  }
   return (
     <Stack width="100%" p={15}>
       <FieldHeader name={name} alias={alias} />

@@ -52,7 +52,7 @@ export default function CollectionInstanceList({ collection, location }: Props) 
       <Loader state={!loading}>
         <>
           <Flex justifyContent="flex-end">
-            <Link to={`/dashboard/${collection}/new`}>
+            <Link to={`/dashboard/${collection}/new`} state={{ slug: location.state.slug }}>
               <Button colorScheme="blue">{$t("CREATE_NEW")}</Button>
             </Link>
           </Flex>

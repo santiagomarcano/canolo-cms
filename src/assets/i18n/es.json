@@ -67,7 +67,7 @@
     "DELETE_COLLECTION_SUCCESSFULL": "La colección ha sido eliminada satisfactoriamente",
     "DELETE_MODULE_CONFIRMATION": "¿Está seguro que desea eliminar el módulo?\nEste cambio es irreversible",
     "DELETE_MODULE_SUCCESSFULL": "El módulo ha sido eliminado satisfactoriamente",
-    "HREF": "Hipervínculo",
+    "HREF": "Valor",
     "VALUE": "Valor",
     "ORDER": "Orden",
     "SELECT_MODULE": "Selecciona módulo",
@@ -102,5 +102,6 @@
     "REDIRECT_IN": "Será redireccionado en:",
     "RELATION": "Relación",
     "COLLECTION_RELATION": "Coleccion a relacionar",
-    "PAGE_SLUG": "Slug"
+    "PAGE_SLUG": "Slug",
+    "CANT_MAKE_RELATION": "No se puede relacionar una colección sin registros"
 }

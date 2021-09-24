@@ -11,9 +11,10 @@ import useDocumentData from "hooks/useDocumentData";
 
 interface PageProps extends RouteComponentProps {
   collection?: string;
+  location?: any;
 }
 
-const NewCollectionInstance = ({ collection }: PageProps) => {
+const NewCollectionInstance = ({ collection, location }: PageProps) => {
   const [structure] = useDocumentData(
     doc(db, `collections/${collection}`),
     [collection],
@@ -35,6 +36,7 @@ const NewCollectionInstance = ({ collection }: PageProps) => {
             <CollectionInstanceForm
               collectionId={collection || ""}
               type="new"
+              slug={location.state.slug}
               modules={modules?.docs as Array<any>}
               id={null}
               categories={categories}

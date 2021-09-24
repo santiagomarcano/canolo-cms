@@ -43,6 +43,7 @@ const CollectionInstance = ({ collection, id, location }: PageProps) => {
       navigate(`/dashboard/${collection}`);
     }
   };
+  console.log('state is', location.state)
   return (
     <Structure name={state?.name}>
       <Loader state={!loading && !loadingCategories}>

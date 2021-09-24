@@ -236,9 +236,7 @@ interface NavItemProps extends FlexProps {
   slug?: string | undefined;
 }
 const NavItem = ({ icon, children, pathname, name, slug, ...rest }: NavItemProps) => {
-  if (slug) {
-    console.log('Nav item has slug', slug)
-  }
+
   return (
     <Link
       to={pathname}

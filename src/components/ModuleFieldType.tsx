@@ -1,5 +1,6 @@
 import React, { useMemo } from "react";
-import { Stack, VStack } from "@chakra-ui/react";
+import { Stack, VStack, Text } from "@chakra-ui/react";
+import { $t } from "store/TranslationsContext";
 
 interface Props {
   type: any;
@@ -8,6 +9,7 @@ interface Props {
 }
 
 const ModuleFieldType = ({ type, index, modules }: Props) => {
+  const CANT_MAKE_RELATION = $t("CANT_MAKE_RELATION")
   const module = useMemo(
     () => modules.find((module: any) => module.data().meta.name === type)?.data(),
     [type]
@@ -24,6 +26,18 @@ const ModuleFieldType = ({ type, index, modules }: Props) => {
           const {
             default: Component,
           } = require(`components/Fields/${value.type}.tsx`);
+          if (value.type === 'Relation' && !value.rations) {
+            return <VStack
+              key={key}
+              width="100%"
+              border="1px solid"
+              borderColor="gray.200"
+              borderRadius="5"
+              padding={2}
+            >
+              <Text>{CANT_MAKE_RELATION}</Text>
+            </VStack>
+          }
           return (
             <VStack
               key={key}

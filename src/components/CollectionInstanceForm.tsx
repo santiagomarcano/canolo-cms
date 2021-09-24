@@ -87,13 +87,12 @@ const CollectionInstanceForm = ({
     dispatch({ type: "PAGE_CATEGORIES", payload: { value: selected } });
   };
   async function handleSubmit(e: FormEvent) {
-    console.log('page is', page)
     setLoading(true);
     e.preventDefault();
     e.stopPropagation();
     await createCollectionPage({ page, id, collectionId, slug });
     setLoading(false);
-    navigate(`/dashboard/${collectionId}`);
+    navigate(`/dashboard/${collectionId}`, { state: { slug } });
   }
   return (
     <form onSubmit={handleSubmit}>
