@@ -29,6 +29,7 @@ import {
   FiCodesandbox,
   FiArchive,
   FiImage,
+  FiCopy,
 } from "react-icons/fi";
 import { IconType } from "react-icons";
 import { ReactText } from "react";
@@ -70,6 +71,7 @@ const links = (collections: Array<any>) => {
     },
     { name: $t("PAGES"), icon: FiLayout, pathname: "/dashboard/pages" },
     { name: $t("CATEGORIES"), icon: FiGrid, pathname: "/dashboard/categories" },
+    { name: $t("SNIPPETS"), icon: FiCopy, pathname: "/dashboard/snippets" },
   ];
   if (collections?.length > 0 || collections) {
     LinkItems = [
@@ -163,6 +165,8 @@ const SidebarContent = ({ onClose, user, ...rest }: SidebarProps) => {
       w={{ base: "full", md: 60 }}
       pos="fixed"
       h="full"
+      // maxHeight="80vh"
+      overflow="scroll"
       {...rest}
     >
       <Flex h="20" alignItems="center" mx="8" justifyContent="space-between">
@@ -171,59 +175,57 @@ const SidebarContent = ({ onClose, user, ...rest }: SidebarProps) => {
         </Text>
         <CloseButton display={{ base: "flex", md: "none" }} onClick={onClose} />
       </Flex>
-      {links(collections?.docs)
-        .filter((link) => {
-          if (
-            onlyAdminRoutes.includes(link.pathname) &&
-            user.email === process.env.REACT_APP_ADMIN_EMAIL
-          )
-            return true;
-          if (!onlyAdminRoutes.includes(link.pathname)) return true;
-        })
-        .map((link) => (
-          <NavItem
-            key={link.name}
-            icon={link.icon}
-            border={
-              location.pathname === link.pathname
-                ? "1px solid lightgray"
-                : "none"
-            }
-            pathname={link.pathname}
-            name={link.name}
-            slug={link.slug}
-          >
-            {link.name}
-          </NavItem>
-        ))}
-      <Container
-        flexDirection="column"
-        position="absolute"
-        bottom={5}
-        width="100%"
-        px={4}
-      >
-        <ScaleFade initialScale={0.9} in={publish}>
-          <Flex flexDirection="column">
-            <Text fontSize="sm" color="gray.500" width="100%">
-              <span>{$t("LAST_PUBLISH")}:</span>
-            </Text>{" "}
-            <Text fontSize="sm" color="gray.500" width="100%">
-              {getDateTime(publish?.date)}
-            </Text>
-            <Button
-              colorScheme="green"
-              onClick={() => triggerBuild(PUBLISH_MESSAGE)}
-              my={2}
-              size="lg"
-              width="100%"
-            >
-              {$t("PUBLISH")}
-            </Button>
-            <NetlifyBadge />
-          </Flex>
-        </ScaleFade>
-      </Container>
+      <Flex flexDirection="column" justifyContent="space-between">
+        <Flex flexDirection="column" height="65vh" overflow="scroll">
+          {links(collections?.docs)
+            .filter((link) => {
+              if (
+                onlyAdminRoutes.includes(link.pathname) &&
+                user.email === process.env.REACT_APP_ADMIN_EMAIL
+              )
+                return true;
+              if (!onlyAdminRoutes.includes(link.pathname)) return true;
+            })
+            .map((link) => (
+              <NavItem
+                key={link.name}
+                icon={link.icon}
+                border={
+                  location.pathname === link.pathname
+                    ? "1px solid lightgray"
+                    : "none"
+                }
+                pathname={link.pathname}
+                name={link.name}
+                slug={link.slug}
+              >
+                {link.name}
+              </NavItem>
+            ))}
+        </Flex>
+        <Container flexDirection="column" width="100%" px={4}>
+          <ScaleFade initialScale={0.9} in={publish}>
+            <Flex flexDirection="column">
+              <Text fontSize="sm" color="gray.500" width="100%">
+                <span>{$t("LAST_PUBLISH")}:</span>
+              </Text>{" "}
+              <Text fontSize="sm" color="gray.500" width="100%">
+                {getDateTime(publish?.date)}
+              </Text>
+              <Button
+                colorScheme="green"
+                onClick={() => triggerBuild(PUBLISH_MESSAGE)}
+                my={2}
+                size="lg"
+                width="100%"
+              >
+                {$t("PUBLISH")}
+              </Button>
+              <NetlifyBadge />
+            </Flex>
+          </ScaleFade>
+        </Container>
+      </Flex>
     </Box>
   );
 };
@@ -235,8 +237,14 @@ interface NavItemProps extends FlexProps {
   name: string;
   slug?: string | undefined;
 }
-const NavItem = ({ icon, children, pathname, name, slug, ...rest }: NavItemProps) => {
-
+const NavItem = ({
+  icon,
+  children,
+  pathname,
+  name,
+  slug,
+  ...rest
+}: NavItemProps) => {
   return (
     <Link
       to={pathname}

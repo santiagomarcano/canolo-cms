@@ -26,15 +26,21 @@ interface Props {
   canRemove?: boolean;
 }
 
-const getColumns = (canRemove: boolean, showVisibility: boolean): Array<string> => {
+const getColumns = (
+  canRemove: boolean,
+  showVisibility: boolean
+): Array<string> => {
+  if (!canRemove && !showVisibility) {
+    return ["1fr"];
+  }
   if (!canRemove) {
-    return ['repeat(2, 1fr)']
+    return ["repeat(2, 1fr)"];
   }
   if (showVisibility) {
-    return ["10fr 10fr 1fr"]
+    return ["10fr 10fr 1fr"];
   }
-  return ['10fr 1fr']
-}
+  return ["10fr 1fr"];
+};
 
 const ModuleSelector = ({
   handleModule,
@@ -73,7 +79,15 @@ const ModuleSelector = ({
               });
             }}
           >
-            {options.map((option: any, index: number) => (
+            {[
+              ...options,
+              {
+                data: () => ({
+                  meta: { name: "Snippet", alias: "Snippet", id: "Snippet" },
+                }),
+                id: "Snippet",
+              },
+            ].map((option: any, index: number) => (
               <option value={option.data().meta.name} key={option.id}>
                 {option.data().meta.alias}
               </option>

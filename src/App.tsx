@@ -21,6 +21,9 @@ import { auth } from "utils/firebase";
 import { useEffect } from "react";
 import { CircularProgress, Flex } from "@chakra-ui/react";
 import NotFound from "pages/NotFound";
+import Snippets from "pages/Snippets";
+import NewSnippet from "pages/NewSnippet";
+import Snippet from "pages/Snippet";
 
 interface DashboardProps extends RouteComponentProps {
   children: ReactChild[] | ReactChild;
@@ -81,6 +84,9 @@ const App = () => {
           <Collection path="collections/:collection" />
           <Gallery path="gallery" />
           <Categories path="categories" />
+          <Snippets path="snippets" />
+          <NewSnippet path="new-snippet" />
+          <Snippet path="snippets/:snippet" />
         </PrivateDashboard>
         <Login path="/" />
       </Router>

@@ -28,6 +28,7 @@ import ModuleFieldType from "components/ModuleFieldType";
 import { usePage } from "store/PageContext";
 import Button from "components/Button";
 import { useNavigate } from "@reach/router";
+import { doc, getDoc } from "@firebase/firestore";
 
 interface Props {
   modules: Array<Module>;
@@ -50,6 +51,10 @@ const itemStyles = {
 };
 
 const getAlias = (module: any, modules: any) => {
+  if (module.name) {
+    console.log(getDoc(module.id))
+    return module.name;
+  }
   return modules
     .find((m: any) => module.component === m?.data().meta.name)
     ?.data().meta?.alias;
@@ -78,7 +83,7 @@ const PageForm = ({
   const handleChangePageName = ({ target }: { target: HTMLInputElement }) => {
     dispatch({ type: "PAGE_NAME", payload: { value: target.value } });
   };
-   const handleChangePageSlug = ({ target }: { target: HTMLInputElement }) => {
+  const handleChangePageSlug = ({ target }: { target: HTMLInputElement }) => {
     dispatch({ type: "PAGE_SLUG", payload: { value: target.value } });
   };
   const handleStateChange = ({ target }: { target: HTMLSelectElement }) => {
@@ -187,20 +192,22 @@ const PageForm = ({
                             alignItems="center"
                           >
                             {getAlias(module, modules) || SELECT_MODULE}
-                            <Flex alignItems="center">
-                              {module.props.side && (
-                                <Text fontSize="xs" as="i" mr={2}>
-                                  ({module.props.side})
-                                </Text>
-                              )}
-                              <Box mr={2}>
-                                {Number(module.visibility) ? (
-                                  <FiEye />
-                                ) : (
-                                  <FiEyeOff />
+                            {module.props && (
+                              <Flex alignItems="center">
+                                {module?.props.side && (
+                                  <Text fontSize="xs" as="i" mr={2}>
+                                    ({module?.props.side})
+                                  </Text>
                                 )}
-                              </Box>
-                            </Flex>
+                                <Box mr={2}>
+                                  {Number(module.visibility) ? (
+                                    <FiEye />
+                                  ) : (
+                                    <FiEyeOff />
+                                  )}
+                                </Box>
+                              </Flex>
+                            )}
                           </Flex>
                         </Box>
                         <AccordionIcon />

@@ -21,6 +21,8 @@ export interface Module {
 }
 
 export interface PageModule {
+  id: string;
+  name: string;
   component: string;
   visibility: string | number;
   props: {};

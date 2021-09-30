@@ -1,6 +1,11 @@
 import React, { useMemo } from "react";
-import { Stack, VStack, Text } from "@chakra-ui/react";
+import {
+  Stack,
+  VStack,
+  Text,
+} from "@chakra-ui/react";
 import { $t } from "store/TranslationsContext";
+import SnippetField from "./Fields/SnippetField";
 
 interface Props {
   type: any;
@@ -9,34 +14,40 @@ interface Props {
 }
 
 const ModuleFieldType = ({ type, index, modules }: Props) => {
-  const CANT_MAKE_RELATION = $t("CANT_MAKE_RELATION")
+  const CANT_MAKE_RELATION = $t("CANT_MAKE_RELATION");
   const module = useMemo(
-    () => modules.find((module: any) => module.data().meta.name === type)?.data(),
+    () =>
+      modules.find((module: any) => module.data().meta.name === type)?.data(),
     [type]
   );
+  if (type === "Snippet") {
+    return <SnippetField index={index} />;
+  }
   if (!module) {
-    return <></>
+    return <></>;
   }
   return (
     <Stack width="100%">
-      {Object.entries(module)
-        .filter(([key]) => key !== 'meta')
+      {[...Object.entries(module)]
+        .filter(([key]) => key !== "meta")
         .sort((a: any, b: any) => a[1].order - b[1].order)
         .map(([key, value]: [key: string, value: any]) => {
           const {
             default: Component,
           } = require(`components/Fields/${value.type}.tsx`);
-          if (value.type === 'Relation' && !value.rations) {
-            return <VStack
-              key={key}
-              width="100%"
-              border="1px solid"
-              borderColor="gray.200"
-              borderRadius="5"
-              padding={2}
-            >
-              <Text>{CANT_MAKE_RELATION}</Text>
-            </VStack>
+          if (value.type === "Relation" && !value.rations) {
+            return (
+              <VStack
+                key={key}
+                width="100%"
+                border="1px solid"
+                borderColor="gray.200"
+                borderRadius="5"
+                padding={2}
+              >
+                <Text>{CANT_MAKE_RELATION}</Text>
+              </VStack>
+            );
           }
           return (
             <VStack

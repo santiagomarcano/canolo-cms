@@ -12,6 +12,7 @@ interface Props {
   onClick?: MouseEventHandler;
   disabled?: boolean;
   mr?: string | number;
+  mt?: string | number;
   colorScheme?: string;
 }
 

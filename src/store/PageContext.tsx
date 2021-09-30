@@ -44,6 +44,19 @@ const reducer = (state: any, action: Action) => {
       next.categories = value;
       return next;
     }
+    case "SET_SNIPPET": {
+      const { index, value, name } = action.payload;
+      const next = [...state.modules];
+      next[index] = {
+        component: 'Snippet',
+        id: value,
+        name,
+      }
+      return {
+        ...state,
+        modules: next
+      }
+    }
     case "MODULE": {
       const { index, value, is } = action.payload;
       const next = [...state.modules];

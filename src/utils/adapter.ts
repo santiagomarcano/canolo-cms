@@ -126,18 +126,36 @@ export async function createPage({
 }) {
   try {
     const pages = collection(db, "pages");
+    const snippets = collection(db, "snippets");
     const pageRef = id ? doc(pages, id) : doc(pages);
+
     const formattedPage = {
       name: page.name,
       slug: page.slug,
       state: page.state,
       lastUpdate: new Date().toISOString(),
-      modules: page.modules.map(({ component, props, visibility }) => ({
-        component,
-        visibility,
-        props,
-      })),
+      modules: page.modules.map(
+        ({ component, props, visibility, id, name }) => {
+          if (component === "Snippet") {
+            console.log(doc(snippets, id));
+            console.log("name is", name);
+            return {
+              component,
+              id: doc(snippets, id),
+              name,
+              visibility,
+              props: {},
+            };
+          }
+          return {
+            component,
+            visibility,
+            props,
+          };
+        }
+      ),
     };
+    console.log(formattedPage);
     await setDoc(pageRef, formattedPage);
   } catch (err) {
     alert(err);
@@ -169,7 +187,6 @@ export async function createCollectionPage({
   collectionId: string;
   slug?: string;
 }) {
-  console.log("SLUG SHOULD BE ON CREATE", slug);
   try {
     const pages = collection(db, collectionId);
     const pageRef = id ? doc(pages, id) : doc(pages);
@@ -211,4 +228,26 @@ export async function backupAll() {
       };
     })
   );
+}
+
+export async function createSnippet({
+  snippet,
+  id,
+}: {
+  snippet: Page;
+  id: string | null;
+}) {
+  try {
+    const data = snippet.modules[0];
+    const snippets = collection(db, "snippets");
+    const snippetRef = id ? doc(snippets, id) : doc(snippets);
+    const formattedSnippet = {
+      name: snippet.name,
+      component: data.component,
+      props: data.props,
+    };
+    await setDoc(snippetRef, formattedSnippet);
+  } catch (err) {
+    alert(err);
+  }
 }

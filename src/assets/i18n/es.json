@@ -103,5 +103,8 @@
     "RELATION": "Relación",
     "COLLECTION_RELATION": "Coleccion a relacionar",
     "PAGE_SLUG": "Slug",
-    "CANT_MAKE_RELATION": "No se puede relacionar una colección sin registros"
+    "CANT_MAKE_RELATION": "No se puede relacionar una colección sin registros",
+    "NEW_SNIPPET": "Nuevo snippet",
+    "SNIPPETS": "Snippets",
+    "SELECT_SNIPPET": "Selecciona snippet"
 }
