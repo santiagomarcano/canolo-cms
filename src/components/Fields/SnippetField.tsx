@@ -26,7 +26,7 @@ const SnippetField = ({ index }: { index: number }) => {
         <Select
           size="lg"
           placeholder={$t("SELECT_OPTION")}
-          value={page.modules[index].id}
+          value={page.modules[index].ref?.id}
           isRequired
           onChange={handleChange}
         >

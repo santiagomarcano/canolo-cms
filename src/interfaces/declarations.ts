@@ -22,6 +22,7 @@ export interface Module {
 
 export interface PageModule {
   id: string;
+  ref: any;
   name: string;
   component: string;
   visibility: string | number;

@@ -51,6 +51,7 @@ const reducer = (state: any, action: Action) => {
         component: 'Snippet',
         id: value,
         name,
+        visibility: state.modules[index].visibility
       }
       return {
         ...state,

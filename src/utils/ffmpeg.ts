@@ -33,7 +33,7 @@ export const toSHA = async (file: File) => {
   const arrayBuffer = await file.arrayBuffer();
   const hashBuffer = await crypto.subtle.digest("SHA-256", arrayBuffer);
   return toHash(hashBuffer);
-}
+};
 
 export const resizeBatch = async ({ file }: { file: File }): Promise<any> => {
   // Available sizes to resize
@@ -43,17 +43,24 @@ export const resizeBatch = async ({ file }: { file: File }): Promise<any> => {
   try {
     for await (let size of sizes) {
       console.log("Creating size", size);
-      const resized = await resize({
-        file,
-        size: { width: size, height: -1 },
-        hash,
-      });
-      resizedImages.push(resized);
+      try {
+        const resized = await resize({
+          file,
+          size: { width: size, height: -1 },
+          hash,
+        });
+        resizedImages.push(resized);
+      } catch (err) {
+        alert(
+          "Problemas redimensionando la imágen. Intenta cambiar el formato de la imágen."
+        );
+        break;
+      }
     }
     return { images: resizedImages, name: file.name };
   } catch (err) {
-    alert(err);
     // return null
+    console.error(err);
   }
 };
 
@@ -86,9 +93,9 @@ const resize = async ({ file, size, hash }: Resize): Promise<any> => {
     );
     ffmpeg.FS("unlink", "output.png");
     return resizedFile;
-  } catch (err) {
-    alert(err);
-    return err;
+  } catch (err: any) {
+    // alert(err);
+    throw new Error(err);
     //  return null;
   }
 };

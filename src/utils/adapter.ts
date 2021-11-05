@@ -82,6 +82,7 @@ export async function createSchema(schema: Schema, id: any) {
 }
 
 export async function createCategories(categories: Array<string>) {
+  console.log(categories);
   const col = collection(db, "categories");
   try {
     const valuesDoc = doc(col, "value");
@@ -128,20 +129,17 @@ export async function createPage({
     const pages = collection(db, "pages");
     const snippets = collection(db, "snippets");
     const pageRef = id ? doc(pages, id) : doc(pages);
-
     const formattedPage = {
       name: page.name,
       slug: page.slug,
       state: page.state,
       lastUpdate: new Date().toISOString(),
       modules: page.modules.map(
-        ({ component, props, visibility, id, name }) => {
+        ({ component, props, visibility, ref, name, id }) => {
           if (component === "Snippet") {
-            console.log(doc(snippets, id));
-            console.log("name is", name);
             return {
               component,
-              id: doc(snippets, id),
+              ref: doc(snippets, ref?.id || id),
               name,
               visibility,
               props: {},
@@ -155,7 +153,6 @@ export async function createPage({
         }
       ),
     };
-    console.log(formattedPage);
     await setDoc(pageRef, formattedPage);
   } catch (err) {
     alert(err);
@@ -190,18 +187,33 @@ export async function createCollectionPage({
   try {
     const pages = collection(db, collectionId);
     const pageRef = id ? doc(pages, id) : doc(pages);
+    const snippets = collection(db, "snippets");
     const formattedPage = {
       name: page.name,
       state: page.state,
       slug: slug + slugify(page.name),
       categories: page.categories || [],
       lastUpdate: new Date().toISOString(),
-      modules: page.modules.map(({ component, props, visibility }) => ({
-        component,
-        visibility,
-        props,
-      })),
+      modules: page.modules.map(
+        ({ component, props, visibility, ref, name, id }) => {
+          if (component === "Snippet") {
+            return {
+              component,
+              ref: doc(snippets, ref?.id || id),
+              name,
+              visibility,
+              props: {},
+            };
+          }
+          return {
+            component,
+            visibility,
+            props,
+          };
+        }
+      ),
     };
+    console.log(formattedPage);
     await setDoc(pageRef, formattedPage);
   } catch (err) {
     alert(err);

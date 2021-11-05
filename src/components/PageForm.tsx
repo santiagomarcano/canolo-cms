@@ -52,7 +52,7 @@ const itemStyles = {
 
 const getAlias = (module: any, modules: any) => {
   if (module.name) {
-    console.log(getDoc(module.id))
+    // console.log(getDoc(module.id))
     return module.name;
   }
   return modules
