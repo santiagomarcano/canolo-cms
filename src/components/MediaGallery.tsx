@@ -18,6 +18,7 @@ import Dropzone from "components/Dropzone";
 import { $t } from "store/TranslationsContext";
 import { useMemo } from "react";
 import { FiSearch, FiTrash } from "react-icons/fi";
+import { sizes } from "utils/ffmpeg";
 
 interface Props {
   selected?: Array<string> | string;
@@ -50,10 +51,15 @@ const MediaGallery = ({
   const handleFilter = ({ target }: { target: HTMLInputElement }) => {
     setFilter(target.value.toLowerCase());
   };
-  const handleDelete = async (ref: any) => {
+  const handleDelete = async (reference: any) => {
     const confirmation = window.confirm(SURE_DELETE);
     if (confirmation) {
-      await deleteObject(ref);
+      for await (let size of sizes) {
+        const imageRef = ref(storage, 
+          reference.fullPath.replace(`-size{300}.png`, `-size{${size === 10 ? 'thumbnail' : size}}.png`)
+        );
+        await deleteObject(imageRef);
+      }
       setTrigger(Math.random());
     }
   };

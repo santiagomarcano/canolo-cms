@@ -4,8 +4,11 @@ import StarterKit from "@tiptap/starter-kit";
 import Link from "@tiptap/extension-link";
 import "assets/styles/tiptap.css";
 import { useEffect } from "react";
+// import TextStyle from '@tiptap/extension-text-style'
+// import { Color } from "@tiptap/extension-color";
 
 const MenuBar = ({ editor }) => {
+  console.log(editor)
   if (!editor) {
     return null;
   }

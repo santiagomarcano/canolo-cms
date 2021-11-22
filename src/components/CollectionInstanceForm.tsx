@@ -109,7 +109,6 @@ const CollectionInstanceForm = ({
                   isRequired
                   autoComplete="false"
                   value={page.name}
-                  pattern="^[ A-Za-z0-9]*$"
                   onChange={handleChangePageName}
                 />
               </FormControl>

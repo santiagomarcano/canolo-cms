@@ -111,7 +111,6 @@ const PageForm = ({
                   type="text"
                   isRequired
                   autoComplete="false"
-                  pattern="^[ A-Za-z0-9_@./#&+-]*$"
                   value={page.name}
                   onChange={handleChangePageName}
                 />

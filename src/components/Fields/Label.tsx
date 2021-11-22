@@ -43,7 +43,6 @@ const Label = ({ name, index, alias }: Props) => {
           <Input
             value={page.modules[index]?.props[name]?.content || ""}
             onChange={handleChangeText}
-            pattern="^[ A-Za-z0-9_@./#&+-]*$"
           />
         </FormControl>
         <FormControl isRequired>
