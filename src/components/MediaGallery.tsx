@@ -124,7 +124,8 @@ const MediaGallery = ({
           return (
             <>
               {files.map(({ url, meta, ref }, index) => {
-                const urlPlaceholder = url.replace("300", "{size}");
+                console.log('URL IS', url)
+                const urlPlaceholder = url.replace("%7B300%7D", "%7B{size}%7D");
                 const sha256 = ref.name
                   .replace("-size{300}.png", "")
                   .replace("-svg", "");

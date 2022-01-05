@@ -20,61 +20,64 @@ const Dropzone = ({ onUploadFinished }: Props) => {
   const [progressPhase, setProgressPhase] = useState("");
   const onDrop = useCallback(async (acceptedFiles) => {
     const file = acceptedFiles?.[0];
-    if (!file) return;
-    // SVG Files
-    if (file.type === "image/svg+xml" || file.type.includes("svg")) {
-      setProgressPhase("uploading");
-      setLoading(true);
-      const hash = await toSHA(file);
-      const storageRef = ref(storage, `images/${hash}-svg`);
-      await uploadBytes(storageRef, file, {
-        cacheControl: "public,max-age=300",
-        contentType: "image/svg+xml",
-        customMetadata: {
-          originalName: file.name,
-          uploadedAt: String(Date.now()),
-        },
-      });
-      setLoading(false);
-      setProgressPhase("");
-      onUploadFinished();
-      return;
-    }
-    // Resize image files (png, tif, jpeg)
-    if (allowedTypes.includes(file.type)) {
-      setFfmpegState(true);
-      setLoading(true);
-      try {
-        setProgressPhase("resizing");
-        const { images, name: originalName } = await resizeBatch({
-          file,
-        });
-        const promises = [];
-        for (let image of images) {
-          const storageRef = ref(storage, `images/${image.name}`);
-          promises.push(
-            uploadBytes(storageRef, image, {
-              cacheControl: "public,max-age=300",
-              contentType: "image/png",
-              customMetadata: {
-                originalName,
-                uploadedAt: String(Date.now()),
-              },
-            })
-          );
-        }
+    console.log(acceptedFiles.length)
+    for await (let file of acceptedFiles) {
+      // if (!file) return;
+      // SVG Files
+      if (file.type === "image/svg+xml" || file.type.includes("svg")) {
         setProgressPhase("uploading");
-        await Promise.all(promises);
-        setFfmpegState(false);
+        setLoading(true);
+        const hash = await toSHA(file);
+        const storageRef = ref(storage, `images/${hash}-svg`);
+        await uploadBytes(storageRef, file, {
+          cacheControl: "public,max-age=300",
+          contentType: "image/svg+xml",
+          customMetadata: {
+            originalName: file.name,
+            uploadedAt: String(Date.now()),
+          },
+        });
         setLoading(false);
         setProgressPhase("");
         onUploadFinished();
-      } catch (err) {
-        console.error(err);
+        // return;
       }
-      return;
+      // Resize image files (png, tif, jpeg)
+      if (allowedTypes.includes(file.type)) {
+        setFfmpegState(true);
+        setLoading(true);
+        try {
+          setProgressPhase("resizing");
+          const { images, name: originalName } = await resizeBatch({
+            file,
+          });
+          const promises = [];
+          for (let image of images) {
+            const storageRef = ref(storage, `images/${image.name}`);
+            promises.push(
+              uploadBytes(storageRef, image, {
+                cacheControl: "public,max-age=300",
+                contentType: "image/png",
+                customMetadata: {
+                  originalName,
+                  uploadedAt: String(Date.now()),
+                },
+              })
+            );
+          }
+          setProgressPhase("uploading");
+          await Promise.all(promises);
+          setFfmpegState(false);
+          setLoading(false);
+          setProgressPhase("");
+          onUploadFinished();
+        } catch (err) {
+          console.error(err);
+        }
+        // return;
+      }
+      // alert(IMAGE_TYPES_ALLOWED);
     }
-    alert(IMAGE_TYPES_ALLOWED);
   }, []);
   const { getRootProps, getInputProps } = useDropzone({ onDrop });
   return (

@@ -124,7 +124,6 @@ const Image = ({ name, index, alias }: Props) => {
               <Input
                 value={page.modules[index]?.props[name]?.alt || ""}
                 onChange={handleChange}
-                pattern="^[ A-Za-z0-9_@./#&+-]*$"
               />
             </FormControl>
           </GridItem>
