@@ -80,6 +80,7 @@ export default function CollectionInstanceList({
             placeholder={$t("SEARCH_BY_NAME")}
             value={filter}
             onChange={handleFilter}
+            py={5}
           />
           <Divider my={5} />
           <UnorderedList m={0}>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Structure from "layouts/Dashboard";
 import { $t } from "store/TranslationsContext";
 import useCollection from "hooks/useCollection";
@@ -12,6 +12,7 @@ import {
   Text,
   GridItem,
   Grid,
+  Input
 } from "@chakra-ui/react";
 import { Module } from "interfaces/declarations";
 import { collection } from "firebase/firestore";
@@ -46,6 +47,14 @@ const getPublishColor = (date: string, lastUpdate: string): string => {
 export default function Pages({ location }: PageProps) {
   const [pages, loading] = useCollection(collection(db, "pages"));
   const publish = usePublish();
+  const [filter, setFilter] = useState("");
+  const handleFilter = (e: any) => {
+    setFilter(e.target.value);
+  };
+  const filterList = (page: any) => {
+    const name = page?.data().name;
+    return name.match(new RegExp(filter, "ig"));
+  };
   return (
     <Structure name={location?.state?.name}>
       <Loader state={!loading}>
@@ -55,6 +64,13 @@ export default function Pages({ location }: PageProps) {
               <Button colorScheme="blue">{$t("NEW_PAGE")}</Button>
             </Link>
           </Flex>
+          <Divider my={5} />
+          <Input
+            placeholder={$t("SEARCH_BY_NAME")}
+            value={filter}
+            onChange={handleFilter}
+            py={5}
+          />
           <Divider my={5} />
           <UnorderedList m={0}>
             <Box background="gray.200" {...boxStyles}>
@@ -74,7 +90,7 @@ export default function Pages({ location }: PageProps) {
               </Grid>
             </Box>
             <Divider my={2} />
-            {pages?.docs.map((page: Module) => (
+            {pages?.docs.filter(filterList).map((page: Module) => (
               <React.Fragment key={page.id}>
                 <Link key={page.id} to={`/dashboard/pages/${page.id}`}>
                   <Box
