@@ -107,8 +107,8 @@ const Image = ({ name, index, alias }: Props) => {
                     objectFit="cover"
                     borderRadius={5}
                     src={page.modules[index]?.props[name]?.src.replace(
-                      "{size}",
-                      "300"
+                      "%7B{size}%7D",
+                      "{300}"
                     )}
                     crossOrigin="anonymous"
                   />
